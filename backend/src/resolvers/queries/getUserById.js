@@ -1,4 +1,4 @@
-export const queries = {
+export default {
     Query: {
         /*     posts: (_, args, context, info) => {
                  return context.prisma.query.posts(
@@ -13,7 +13,7 @@ export const queries = {
                      info,
                  )
              },*/
-        user: (_, args, context, info) => {
+        getUserById: (_, args, context, info) => {
             return context.prisma.query.user(
                 {
                     where: {
