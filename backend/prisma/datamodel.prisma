@@ -1,14 +1,14 @@
 type User {
   id: ID! @id
   name: String!
-  posts: [Post!]!
 }
-
-type Post {
+type Vinyl {
   id: ID! @id
-  title: String!
-  content: String!
-  published: Boolean! @default(value: false)
-  author: User!
-  test: String!
+  name: String!
+  artists: [Artist!]! @relation(name: "ArtistsVinyl")
+}
+type Artist {
+  id: ID! @id
+  name: String!
+  vinyls: [Vinyl]  @relation(name: "ArtistsVinyl")
 }

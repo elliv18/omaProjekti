@@ -1,16 +1,28 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "license": "MIT",
   "scripts": {
-    "start:dev": "yarn prisma delete -f && yarn prisma reset -f && yarn prisma deploy --force && node src/index.js"
+    "start:dev": "yarn prisma delete -f && yarn prisma reset -f && yarn prisma deploy --force && node src/index.ts",
+    "start:nodemon": "nodemon --watch 'src/**/*' -e js,ts,tsx --exec 'ts-node' ./src/ "
   },
   "dependencies": {
+    "@types/node": "^13.7.1",
     "graphql-cli": "^3.0.14",
     "graphql-yoga": "^1.18.3",
-    "prisma-binding": "^2.3.16",
+    "merge-graphql-schemas": "^1.7.0",
     "prisma": "^1.34.10",
+    "prisma-binding": "^2.3.16",
     "prisma-client-lib": "^1.34.10"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4",
+    "typescript": "^3.7.5",
+    "onchange": "^6.1.0",
+    "prettier": "^1.18.2",
+    "tslint": "^5.20.0",
+    "tslint-config-airbnb": "^5.11.2",
+    "tslint-config-prettier": "^1.18.0"
   }
 }

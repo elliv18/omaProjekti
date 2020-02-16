@@ -16,8 +16,9 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 export type Maybe<T> = T | undefined | null;
 
 export interface Exists {
-  post: (where?: PostWhereInput) => Promise<boolean>;
+  artist: (where?: ArtistWhereInput) => Promise<boolean>;
   user: (where?: UserWhereInput) => Promise<boolean>;
+  vinyl: (where?: VinylWhereInput) => Promise<boolean>;
 }
 
 export interface Node {}
@@ -39,25 +40,25 @@ export interface Prisma {
    * Queries
    */
 
-  post: (where: PostWhereUniqueInput) => PostNullablePromise;
-  posts: (args?: {
-    where?: PostWhereInput;
-    orderBy?: PostOrderByInput;
+  artist: (where: ArtistWhereUniqueInput) => ArtistNullablePromise;
+  artists: (args?: {
+    where?: ArtistWhereInput;
+    orderBy?: ArtistOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
-  }) => FragmentableArray<Post>;
-  postsConnection: (args?: {
-    where?: PostWhereInput;
-    orderBy?: PostOrderByInput;
+  }) => FragmentableArray<Artist>;
+  artistsConnection: (args?: {
+    where?: ArtistWhereInput;
+    orderBy?: ArtistOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
     first?: Int;
     last?: Int;
-  }) => PostConnectionPromise;
+  }) => ArtistConnectionPromise;
   user: (where: UserWhereUniqueInput) => UserNullablePromise;
   users: (args?: {
     where?: UserWhereInput;
@@ -77,28 +78,47 @@ export interface Prisma {
     first?: Int;
     last?: Int;
   }) => UserConnectionPromise;
+  vinyl: (where: VinylWhereUniqueInput) => VinylNullablePromise;
+  vinyls: (args?: {
+    where?: VinylWhereInput;
+    orderBy?: VinylOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => FragmentableArray<Vinyl>;
+  vinylsConnection: (args?: {
+    where?: VinylWhereInput;
+    orderBy?: VinylOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => VinylConnectionPromise;
   node: (args: { id: ID_Output }) => Node;
 
   /**
    * Mutations
    */
 
-  createPost: (data: PostCreateInput) => PostPromise;
-  updatePost: (args: {
-    data: PostUpdateInput;
-    where: PostWhereUniqueInput;
-  }) => PostPromise;
-  updateManyPosts: (args: {
-    data: PostUpdateManyMutationInput;
-    where?: PostWhereInput;
+  createArtist: (data: ArtistCreateInput) => ArtistPromise;
+  updateArtist: (args: {
+    data: ArtistUpdateInput;
+    where: ArtistWhereUniqueInput;
+  }) => ArtistPromise;
+  updateManyArtists: (args: {
+    data: ArtistUpdateManyMutationInput;
+    where?: ArtistWhereInput;
   }) => BatchPayloadPromise;
-  upsertPost: (args: {
-    where: PostWhereUniqueInput;
-    create: PostCreateInput;
-    update: PostUpdateInput;
-  }) => PostPromise;
-  deletePost: (where: PostWhereUniqueInput) => PostPromise;
-  deleteManyPosts: (where?: PostWhereInput) => BatchPayloadPromise;
+  upsertArtist: (args: {
+    where: ArtistWhereUniqueInput;
+    create: ArtistCreateInput;
+    update: ArtistUpdateInput;
+  }) => ArtistPromise;
+  deleteArtist: (where: ArtistWhereUniqueInput) => ArtistPromise;
+  deleteManyArtists: (where?: ArtistWhereInput) => BatchPayloadPromise;
   createUser: (data: UserCreateInput) => UserPromise;
   updateUser: (args: {
     data: UserUpdateInput;
@@ -115,6 +135,22 @@ export interface Prisma {
   }) => UserPromise;
   deleteUser: (where: UserWhereUniqueInput) => UserPromise;
   deleteManyUsers: (where?: UserWhereInput) => BatchPayloadPromise;
+  createVinyl: (data: VinylCreateInput) => VinylPromise;
+  updateVinyl: (args: {
+    data: VinylUpdateInput;
+    where: VinylWhereUniqueInput;
+  }) => VinylPromise;
+  updateManyVinyls: (args: {
+    data: VinylUpdateManyMutationInput;
+    where?: VinylWhereInput;
+  }) => BatchPayloadPromise;
+  upsertVinyl: (args: {
+    where: VinylWhereUniqueInput;
+    create: VinylCreateInput;
+    update: VinylUpdateInput;
+  }) => VinylPromise;
+  deleteVinyl: (where: VinylWhereUniqueInput) => VinylPromise;
+  deleteManyVinyls: (where?: VinylWhereInput) => BatchPayloadPromise;
 
   /**
    * Subscriptions
@@ -124,12 +160,15 @@ export interface Prisma {
 }
 
 export interface Subscription {
-  post: (
-    where?: PostSubscriptionWhereInput
-  ) => PostSubscriptionPayloadSubscription;
+  artist: (
+    where?: ArtistSubscriptionWhereInput
+  ) => ArtistSubscriptionPayloadSubscription;
   user: (
     where?: UserSubscriptionWhereInput
   ) => UserSubscriptionPayloadSubscription;
+  vinyl: (
+    where?: VinylSubscriptionWhereInput
+  ) => VinylSubscriptionPayloadSubscription;
 }
 
 export interface ClientConstructor<T> {
@@ -140,27 +179,23 @@ export interface ClientConstructor<T> {
  * Types
  */
 
-export type PostOrderByInput =
+export type VinylOrderByInput = "id_ASC" | "id_DESC" | "name_ASC" | "name_DESC";
+
+export type ArtistOrderByInput =
   | "id_ASC"
   | "id_DESC"
-  | "title_ASC"
-  | "title_DESC"
-  | "content_ASC"
-  | "content_DESC"
-  | "published_ASC"
-  | "published_DESC"
-  | "test_ASC"
-  | "test_DESC";
+  | "name_ASC"
+  | "name_DESC";
 
 export type UserOrderByInput = "id_ASC" | "id_DESC" | "name_ASC" | "name_DESC";
 
 export type MutationType = "CREATED" | "UPDATED" | "DELETED";
 
-export type PostWhereUniqueInput = AtLeastOne<{
+export type ArtistWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
-export interface PostWhereInput {
+export interface VinylWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -175,55 +210,68 @@ export interface PostWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  title?: Maybe<String>;
-  title_not?: Maybe<String>;
-  title_in?: Maybe<String[] | String>;
-  title_not_in?: Maybe<String[] | String>;
-  title_lt?: Maybe<String>;
-  title_lte?: Maybe<String>;
-  title_gt?: Maybe<String>;
-  title_gte?: Maybe<String>;
-  title_contains?: Maybe<String>;
-  title_not_contains?: Maybe<String>;
-  title_starts_with?: Maybe<String>;
-  title_not_starts_with?: Maybe<String>;
-  title_ends_with?: Maybe<String>;
-  title_not_ends_with?: Maybe<String>;
-  content?: Maybe<String>;
-  content_not?: Maybe<String>;
-  content_in?: Maybe<String[] | String>;
-  content_not_in?: Maybe<String[] | String>;
-  content_lt?: Maybe<String>;
-  content_lte?: Maybe<String>;
-  content_gt?: Maybe<String>;
-  content_gte?: Maybe<String>;
-  content_contains?: Maybe<String>;
-  content_not_contains?: Maybe<String>;
-  content_starts_with?: Maybe<String>;
-  content_not_starts_with?: Maybe<String>;
-  content_ends_with?: Maybe<String>;
-  content_not_ends_with?: Maybe<String>;
-  published?: Maybe<Boolean>;
-  published_not?: Maybe<Boolean>;
-  author?: Maybe<UserWhereInput>;
-  test?: Maybe<String>;
-  test_not?: Maybe<String>;
-  test_in?: Maybe<String[] | String>;
-  test_not_in?: Maybe<String[] | String>;
-  test_lt?: Maybe<String>;
-  test_lte?: Maybe<String>;
-  test_gt?: Maybe<String>;
-  test_gte?: Maybe<String>;
-  test_contains?: Maybe<String>;
-  test_not_contains?: Maybe<String>;
-  test_starts_with?: Maybe<String>;
-  test_not_starts_with?: Maybe<String>;
-  test_ends_with?: Maybe<String>;
-  test_not_ends_with?: Maybe<String>;
-  AND?: Maybe<PostWhereInput[] | PostWhereInput>;
-  OR?: Maybe<PostWhereInput[] | PostWhereInput>;
-  NOT?: Maybe<PostWhereInput[] | PostWhereInput>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  artists_every?: Maybe<ArtistWhereInput>;
+  artists_some?: Maybe<ArtistWhereInput>;
+  artists_none?: Maybe<ArtistWhereInput>;
+  AND?: Maybe<VinylWhereInput[] | VinylWhereInput>;
+  OR?: Maybe<VinylWhereInput[] | VinylWhereInput>;
+  NOT?: Maybe<VinylWhereInput[] | VinylWhereInput>;
 }
+
+export interface ArtistWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  vinyls_every?: Maybe<VinylWhereInput>;
+  vinyls_some?: Maybe<VinylWhereInput>;
+  vinyls_none?: Maybe<VinylWhereInput>;
+  AND?: Maybe<ArtistWhereInput[] | ArtistWhereInput>;
+  OR?: Maybe<ArtistWhereInput[] | ArtistWhereInput>;
+  NOT?: Maybe<ArtistWhereInput[] | ArtistWhereInput>;
+}
+
+export type UserWhereUniqueInput = AtLeastOne<{
+  id: Maybe<ID_Input>;
+}>;
 
 export interface UserWhereInput {
   id?: Maybe<ID_Input>;
@@ -254,131 +302,76 @@ export interface UserWhereInput {
   name_not_starts_with?: Maybe<String>;
   name_ends_with?: Maybe<String>;
   name_not_ends_with?: Maybe<String>;
-  posts_every?: Maybe<PostWhereInput>;
-  posts_some?: Maybe<PostWhereInput>;
-  posts_none?: Maybe<PostWhereInput>;
   AND?: Maybe<UserWhereInput[] | UserWhereInput>;
   OR?: Maybe<UserWhereInput[] | UserWhereInput>;
   NOT?: Maybe<UserWhereInput[] | UserWhereInput>;
 }
 
-export type UserWhereUniqueInput = AtLeastOne<{
+export type VinylWhereUniqueInput = AtLeastOne<{
   id: Maybe<ID_Input>;
 }>;
 
-export interface PostCreateInput {
+export interface ArtistCreateInput {
   id?: Maybe<ID_Input>;
-  title: String;
-  content: String;
-  published?: Maybe<Boolean>;
-  author: UserCreateOneWithoutPostsInput;
-  test: String;
+  name: String;
+  vinyls?: Maybe<VinylCreateManyWithoutArtistsInput>;
 }
 
-export interface UserCreateOneWithoutPostsInput {
-  create?: Maybe<UserCreateWithoutPostsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
+export interface VinylCreateManyWithoutArtistsInput {
+  create?: Maybe<
+    VinylCreateWithoutArtistsInput[] | VinylCreateWithoutArtistsInput
+  >;
+  connect?: Maybe<VinylWhereUniqueInput[] | VinylWhereUniqueInput>;
 }
 
-export interface UserCreateWithoutPostsInput {
+export interface VinylCreateWithoutArtistsInput {
   id?: Maybe<ID_Input>;
   name: String;
 }
 
-export interface PostUpdateInput {
-  title?: Maybe<String>;
-  content?: Maybe<String>;
-  published?: Maybe<Boolean>;
-  author?: Maybe<UserUpdateOneRequiredWithoutPostsInput>;
-  test?: Maybe<String>;
-}
-
-export interface UserUpdateOneRequiredWithoutPostsInput {
-  create?: Maybe<UserCreateWithoutPostsInput>;
-  update?: Maybe<UserUpdateWithoutPostsDataInput>;
-  upsert?: Maybe<UserUpsertWithoutPostsInput>;
-  connect?: Maybe<UserWhereUniqueInput>;
-}
-
-export interface UserUpdateWithoutPostsDataInput {
+export interface ArtistUpdateInput {
   name?: Maybe<String>;
+  vinyls?: Maybe<VinylUpdateManyWithoutArtistsInput>;
 }
 
-export interface UserUpsertWithoutPostsInput {
-  update: UserUpdateWithoutPostsDataInput;
-  create: UserCreateWithoutPostsInput;
-}
-
-export interface PostUpdateManyMutationInput {
-  title?: Maybe<String>;
-  content?: Maybe<String>;
-  published?: Maybe<Boolean>;
-  test?: Maybe<String>;
-}
-
-export interface UserCreateInput {
-  id?: Maybe<ID_Input>;
-  name: String;
-  posts?: Maybe<PostCreateManyWithoutAuthorInput>;
-}
-
-export interface PostCreateManyWithoutAuthorInput {
-  create?: Maybe<PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput>;
-  connect?: Maybe<PostWhereUniqueInput[] | PostWhereUniqueInput>;
-}
-
-export interface PostCreateWithoutAuthorInput {
-  id?: Maybe<ID_Input>;
-  title: String;
-  content: String;
-  published?: Maybe<Boolean>;
-  test: String;
-}
-
-export interface UserUpdateInput {
-  name?: Maybe<String>;
-  posts?: Maybe<PostUpdateManyWithoutAuthorInput>;
-}
-
-export interface PostUpdateManyWithoutAuthorInput {
-  create?: Maybe<PostCreateWithoutAuthorInput[] | PostCreateWithoutAuthorInput>;
-  delete?: Maybe<PostWhereUniqueInput[] | PostWhereUniqueInput>;
-  connect?: Maybe<PostWhereUniqueInput[] | PostWhereUniqueInput>;
-  set?: Maybe<PostWhereUniqueInput[] | PostWhereUniqueInput>;
-  disconnect?: Maybe<PostWhereUniqueInput[] | PostWhereUniqueInput>;
+export interface VinylUpdateManyWithoutArtistsInput {
+  create?: Maybe<
+    VinylCreateWithoutArtistsInput[] | VinylCreateWithoutArtistsInput
+  >;
+  delete?: Maybe<VinylWhereUniqueInput[] | VinylWhereUniqueInput>;
+  connect?: Maybe<VinylWhereUniqueInput[] | VinylWhereUniqueInput>;
+  set?: Maybe<VinylWhereUniqueInput[] | VinylWhereUniqueInput>;
+  disconnect?: Maybe<VinylWhereUniqueInput[] | VinylWhereUniqueInput>;
   update?: Maybe<
-    | PostUpdateWithWhereUniqueWithoutAuthorInput[]
-    | PostUpdateWithWhereUniqueWithoutAuthorInput
+    | VinylUpdateWithWhereUniqueWithoutArtistsInput[]
+    | VinylUpdateWithWhereUniqueWithoutArtistsInput
   >;
   upsert?: Maybe<
-    | PostUpsertWithWhereUniqueWithoutAuthorInput[]
-    | PostUpsertWithWhereUniqueWithoutAuthorInput
+    | VinylUpsertWithWhereUniqueWithoutArtistsInput[]
+    | VinylUpsertWithWhereUniqueWithoutArtistsInput
   >;
-  deleteMany?: Maybe<PostScalarWhereInput[] | PostScalarWhereInput>;
+  deleteMany?: Maybe<VinylScalarWhereInput[] | VinylScalarWhereInput>;
   updateMany?: Maybe<
-    PostUpdateManyWithWhereNestedInput[] | PostUpdateManyWithWhereNestedInput
+    VinylUpdateManyWithWhereNestedInput[] | VinylUpdateManyWithWhereNestedInput
   >;
 }
 
-export interface PostUpdateWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput;
-  data: PostUpdateWithoutAuthorDataInput;
+export interface VinylUpdateWithWhereUniqueWithoutArtistsInput {
+  where: VinylWhereUniqueInput;
+  data: VinylUpdateWithoutArtistsDataInput;
 }
 
-export interface PostUpdateWithoutAuthorDataInput {
-  title?: Maybe<String>;
-  content?: Maybe<String>;
-  published?: Maybe<Boolean>;
-  test?: Maybe<String>;
+export interface VinylUpdateWithoutArtistsDataInput {
+  name?: Maybe<String>;
 }
 
-export interface PostUpsertWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput;
-  update: PostUpdateWithoutAuthorDataInput;
-  create: PostCreateWithoutAuthorInput;
+export interface VinylUpsertWithWhereUniqueWithoutArtistsInput {
+  where: VinylWhereUniqueInput;
+  update: VinylUpdateWithoutArtistsDataInput;
+  create: VinylCreateWithoutArtistsInput;
 }
 
-export interface PostScalarWhereInput {
+export interface VinylScalarWhereInput {
   id?: Maybe<ID_Input>;
   id_not?: Maybe<ID_Input>;
   id_in?: Maybe<ID_Input[] | ID_Input>;
@@ -393,80 +386,168 @@ export interface PostScalarWhereInput {
   id_not_starts_with?: Maybe<ID_Input>;
   id_ends_with?: Maybe<ID_Input>;
   id_not_ends_with?: Maybe<ID_Input>;
-  title?: Maybe<String>;
-  title_not?: Maybe<String>;
-  title_in?: Maybe<String[] | String>;
-  title_not_in?: Maybe<String[] | String>;
-  title_lt?: Maybe<String>;
-  title_lte?: Maybe<String>;
-  title_gt?: Maybe<String>;
-  title_gte?: Maybe<String>;
-  title_contains?: Maybe<String>;
-  title_not_contains?: Maybe<String>;
-  title_starts_with?: Maybe<String>;
-  title_not_starts_with?: Maybe<String>;
-  title_ends_with?: Maybe<String>;
-  title_not_ends_with?: Maybe<String>;
-  content?: Maybe<String>;
-  content_not?: Maybe<String>;
-  content_in?: Maybe<String[] | String>;
-  content_not_in?: Maybe<String[] | String>;
-  content_lt?: Maybe<String>;
-  content_lte?: Maybe<String>;
-  content_gt?: Maybe<String>;
-  content_gte?: Maybe<String>;
-  content_contains?: Maybe<String>;
-  content_not_contains?: Maybe<String>;
-  content_starts_with?: Maybe<String>;
-  content_not_starts_with?: Maybe<String>;
-  content_ends_with?: Maybe<String>;
-  content_not_ends_with?: Maybe<String>;
-  published?: Maybe<Boolean>;
-  published_not?: Maybe<Boolean>;
-  test?: Maybe<String>;
-  test_not?: Maybe<String>;
-  test_in?: Maybe<String[] | String>;
-  test_not_in?: Maybe<String[] | String>;
-  test_lt?: Maybe<String>;
-  test_lte?: Maybe<String>;
-  test_gt?: Maybe<String>;
-  test_gte?: Maybe<String>;
-  test_contains?: Maybe<String>;
-  test_not_contains?: Maybe<String>;
-  test_starts_with?: Maybe<String>;
-  test_not_starts_with?: Maybe<String>;
-  test_ends_with?: Maybe<String>;
-  test_not_ends_with?: Maybe<String>;
-  AND?: Maybe<PostScalarWhereInput[] | PostScalarWhereInput>;
-  OR?: Maybe<PostScalarWhereInput[] | PostScalarWhereInput>;
-  NOT?: Maybe<PostScalarWhereInput[] | PostScalarWhereInput>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  AND?: Maybe<VinylScalarWhereInput[] | VinylScalarWhereInput>;
+  OR?: Maybe<VinylScalarWhereInput[] | VinylScalarWhereInput>;
+  NOT?: Maybe<VinylScalarWhereInput[] | VinylScalarWhereInput>;
 }
 
-export interface PostUpdateManyWithWhereNestedInput {
-  where: PostScalarWhereInput;
-  data: PostUpdateManyDataInput;
+export interface VinylUpdateManyWithWhereNestedInput {
+  where: VinylScalarWhereInput;
+  data: VinylUpdateManyDataInput;
 }
 
-export interface PostUpdateManyDataInput {
-  title?: Maybe<String>;
-  content?: Maybe<String>;
-  published?: Maybe<Boolean>;
-  test?: Maybe<String>;
+export interface VinylUpdateManyDataInput {
+  name?: Maybe<String>;
+}
+
+export interface ArtistUpdateManyMutationInput {
+  name?: Maybe<String>;
+}
+
+export interface UserCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+}
+
+export interface UserUpdateInput {
+  name?: Maybe<String>;
 }
 
 export interface UserUpdateManyMutationInput {
   name?: Maybe<String>;
 }
 
-export interface PostSubscriptionWhereInput {
+export interface VinylCreateInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+  artists?: Maybe<ArtistCreateManyWithoutVinylsInput>;
+}
+
+export interface ArtistCreateManyWithoutVinylsInput {
+  create?: Maybe<
+    ArtistCreateWithoutVinylsInput[] | ArtistCreateWithoutVinylsInput
+  >;
+  connect?: Maybe<ArtistWhereUniqueInput[] | ArtistWhereUniqueInput>;
+}
+
+export interface ArtistCreateWithoutVinylsInput {
+  id?: Maybe<ID_Input>;
+  name: String;
+}
+
+export interface VinylUpdateInput {
+  name?: Maybe<String>;
+  artists?: Maybe<ArtistUpdateManyWithoutVinylsInput>;
+}
+
+export interface ArtistUpdateManyWithoutVinylsInput {
+  create?: Maybe<
+    ArtistCreateWithoutVinylsInput[] | ArtistCreateWithoutVinylsInput
+  >;
+  delete?: Maybe<ArtistWhereUniqueInput[] | ArtistWhereUniqueInput>;
+  connect?: Maybe<ArtistWhereUniqueInput[] | ArtistWhereUniqueInput>;
+  set?: Maybe<ArtistWhereUniqueInput[] | ArtistWhereUniqueInput>;
+  disconnect?: Maybe<ArtistWhereUniqueInput[] | ArtistWhereUniqueInput>;
+  update?: Maybe<
+    | ArtistUpdateWithWhereUniqueWithoutVinylsInput[]
+    | ArtistUpdateWithWhereUniqueWithoutVinylsInput
+  >;
+  upsert?: Maybe<
+    | ArtistUpsertWithWhereUniqueWithoutVinylsInput[]
+    | ArtistUpsertWithWhereUniqueWithoutVinylsInput
+  >;
+  deleteMany?: Maybe<ArtistScalarWhereInput[] | ArtistScalarWhereInput>;
+  updateMany?: Maybe<
+    | ArtistUpdateManyWithWhereNestedInput[]
+    | ArtistUpdateManyWithWhereNestedInput
+  >;
+}
+
+export interface ArtistUpdateWithWhereUniqueWithoutVinylsInput {
+  where: ArtistWhereUniqueInput;
+  data: ArtistUpdateWithoutVinylsDataInput;
+}
+
+export interface ArtistUpdateWithoutVinylsDataInput {
+  name?: Maybe<String>;
+}
+
+export interface ArtistUpsertWithWhereUniqueWithoutVinylsInput {
+  where: ArtistWhereUniqueInput;
+  update: ArtistUpdateWithoutVinylsDataInput;
+  create: ArtistCreateWithoutVinylsInput;
+}
+
+export interface ArtistScalarWhereInput {
+  id?: Maybe<ID_Input>;
+  id_not?: Maybe<ID_Input>;
+  id_in?: Maybe<ID_Input[] | ID_Input>;
+  id_not_in?: Maybe<ID_Input[] | ID_Input>;
+  id_lt?: Maybe<ID_Input>;
+  id_lte?: Maybe<ID_Input>;
+  id_gt?: Maybe<ID_Input>;
+  id_gte?: Maybe<ID_Input>;
+  id_contains?: Maybe<ID_Input>;
+  id_not_contains?: Maybe<ID_Input>;
+  id_starts_with?: Maybe<ID_Input>;
+  id_not_starts_with?: Maybe<ID_Input>;
+  id_ends_with?: Maybe<ID_Input>;
+  id_not_ends_with?: Maybe<ID_Input>;
+  name?: Maybe<String>;
+  name_not?: Maybe<String>;
+  name_in?: Maybe<String[] | String>;
+  name_not_in?: Maybe<String[] | String>;
+  name_lt?: Maybe<String>;
+  name_lte?: Maybe<String>;
+  name_gt?: Maybe<String>;
+  name_gte?: Maybe<String>;
+  name_contains?: Maybe<String>;
+  name_not_contains?: Maybe<String>;
+  name_starts_with?: Maybe<String>;
+  name_not_starts_with?: Maybe<String>;
+  name_ends_with?: Maybe<String>;
+  name_not_ends_with?: Maybe<String>;
+  AND?: Maybe<ArtistScalarWhereInput[] | ArtistScalarWhereInput>;
+  OR?: Maybe<ArtistScalarWhereInput[] | ArtistScalarWhereInput>;
+  NOT?: Maybe<ArtistScalarWhereInput[] | ArtistScalarWhereInput>;
+}
+
+export interface ArtistUpdateManyWithWhereNestedInput {
+  where: ArtistScalarWhereInput;
+  data: ArtistUpdateManyDataInput;
+}
+
+export interface ArtistUpdateManyDataInput {
+  name?: Maybe<String>;
+}
+
+export interface VinylUpdateManyMutationInput {
+  name?: Maybe<String>;
+}
+
+export interface ArtistSubscriptionWhereInput {
   mutation_in?: Maybe<MutationType[] | MutationType>;
   updatedFields_contains?: Maybe<String>;
   updatedFields_contains_every?: Maybe<String[] | String>;
   updatedFields_contains_some?: Maybe<String[] | String>;
-  node?: Maybe<PostWhereInput>;
-  AND?: Maybe<PostSubscriptionWhereInput[] | PostSubscriptionWhereInput>;
-  OR?: Maybe<PostSubscriptionWhereInput[] | PostSubscriptionWhereInput>;
-  NOT?: Maybe<PostSubscriptionWhereInput[] | PostSubscriptionWhereInput>;
+  node?: Maybe<ArtistWhereInput>;
+  AND?: Maybe<ArtistSubscriptionWhereInput[] | ArtistSubscriptionWhereInput>;
+  OR?: Maybe<ArtistSubscriptionWhereInput[] | ArtistSubscriptionWhereInput>;
+  NOT?: Maybe<ArtistSubscriptionWhereInput[] | ArtistSubscriptionWhereInput>;
 }
 
 export interface UserSubscriptionWhereInput {
@@ -480,60 +561,32 @@ export interface UserSubscriptionWhereInput {
   NOT?: Maybe<UserSubscriptionWhereInput[] | UserSubscriptionWhereInput>;
 }
 
+export interface VinylSubscriptionWhereInput {
+  mutation_in?: Maybe<MutationType[] | MutationType>;
+  updatedFields_contains?: Maybe<String>;
+  updatedFields_contains_every?: Maybe<String[] | String>;
+  updatedFields_contains_some?: Maybe<String[] | String>;
+  node?: Maybe<VinylWhereInput>;
+  AND?: Maybe<VinylSubscriptionWhereInput[] | VinylSubscriptionWhereInput>;
+  OR?: Maybe<VinylSubscriptionWhereInput[] | VinylSubscriptionWhereInput>;
+  NOT?: Maybe<VinylSubscriptionWhereInput[] | VinylSubscriptionWhereInput>;
+}
+
 export interface NodeNode {
   id: ID_Output;
 }
 
-export interface Post {
-  id: ID_Output;
-  title: String;
-  content: String;
-  published: Boolean;
-  test: String;
-}
-
-export interface PostPromise extends Promise<Post>, Fragmentable {
-  id: () => Promise<ID_Output>;
-  title: () => Promise<String>;
-  content: () => Promise<String>;
-  published: () => Promise<Boolean>;
-  author: <T = UserPromise>() => T;
-  test: () => Promise<String>;
-}
-
-export interface PostSubscription
-  extends Promise<AsyncIterator<Post>>,
-    Fragmentable {
-  id: () => Promise<AsyncIterator<ID_Output>>;
-  title: () => Promise<AsyncIterator<String>>;
-  content: () => Promise<AsyncIterator<String>>;
-  published: () => Promise<AsyncIterator<Boolean>>;
-  author: <T = UserSubscription>() => T;
-  test: () => Promise<AsyncIterator<String>>;
-}
-
-export interface PostNullablePromise
-  extends Promise<Post | null>,
-    Fragmentable {
-  id: () => Promise<ID_Output>;
-  title: () => Promise<String>;
-  content: () => Promise<String>;
-  published: () => Promise<Boolean>;
-  author: <T = UserPromise>() => T;
-  test: () => Promise<String>;
-}
-
-export interface User {
+export interface Artist {
   id: ID_Output;
   name: String;
 }
 
-export interface UserPromise extends Promise<User>, Fragmentable {
+export interface ArtistPromise extends Promise<Artist>, Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
-  posts: <T = FragmentableArray<Post>>(args?: {
-    where?: PostWhereInput;
-    orderBy?: PostOrderByInput;
+  vinyls: <T = FragmentableArray<Vinyl>>(args?: {
+    where?: VinylWhereInput;
+    orderBy?: VinylOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -542,14 +595,14 @@ export interface UserPromise extends Promise<User>, Fragmentable {
   }) => T;
 }
 
-export interface UserSubscription
-  extends Promise<AsyncIterator<User>>,
+export interface ArtistSubscription
+  extends Promise<AsyncIterator<Artist>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
   name: () => Promise<AsyncIterator<String>>;
-  posts: <T = Promise<AsyncIterator<PostSubscription>>>(args?: {
-    where?: PostWhereInput;
-    orderBy?: PostOrderByInput;
+  vinyls: <T = Promise<AsyncIterator<VinylSubscription>>>(args?: {
+    where?: VinylWhereInput;
+    orderBy?: VinylOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -558,14 +611,14 @@ export interface UserSubscription
   }) => T;
 }
 
-export interface UserNullablePromise
-  extends Promise<User | null>,
+export interface ArtistNullablePromise
+  extends Promise<Artist | null>,
     Fragmentable {
   id: () => Promise<ID_Output>;
   name: () => Promise<String>;
-  posts: <T = FragmentableArray<Post>>(args?: {
-    where?: PostWhereInput;
-    orderBy?: PostOrderByInput;
+  vinyls: <T = FragmentableArray<Vinyl>>(args?: {
+    where?: VinylWhereInput;
+    orderBy?: VinylOrderByInput;
     skip?: Int;
     after?: String;
     before?: String;
@@ -574,25 +627,76 @@ export interface UserNullablePromise
   }) => T;
 }
 
-export interface PostConnection {
-  pageInfo: PageInfo;
-  edges: PostEdge[];
+export interface Vinyl {
+  id: ID_Output;
+  name: String;
 }
 
-export interface PostConnectionPromise
-  extends Promise<PostConnection>,
+export interface VinylPromise extends Promise<Vinyl>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  artists: <T = FragmentableArray<Artist>>(args?: {
+    where?: ArtistWhereInput;
+    orderBy?: ArtistOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface VinylSubscription
+  extends Promise<AsyncIterator<Vinyl>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+  artists: <T = Promise<AsyncIterator<ArtistSubscription>>>(args?: {
+    where?: ArtistWhereInput;
+    orderBy?: ArtistOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface VinylNullablePromise
+  extends Promise<Vinyl | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+  artists: <T = FragmentableArray<Artist>>(args?: {
+    where?: ArtistWhereInput;
+    orderBy?: ArtistOrderByInput;
+    skip?: Int;
+    after?: String;
+    before?: String;
+    first?: Int;
+    last?: Int;
+  }) => T;
+}
+
+export interface ArtistConnection {
+  pageInfo: PageInfo;
+  edges: ArtistEdge[];
+}
+
+export interface ArtistConnectionPromise
+  extends Promise<ArtistConnection>,
     Fragmentable {
   pageInfo: <T = PageInfoPromise>() => T;
-  edges: <T = FragmentableArray<PostEdge>>() => T;
-  aggregate: <T = AggregatePostPromise>() => T;
+  edges: <T = FragmentableArray<ArtistEdge>>() => T;
+  aggregate: <T = AggregateArtistPromise>() => T;
 }
 
-export interface PostConnectionSubscription
-  extends Promise<AsyncIterator<PostConnection>>,
+export interface ArtistConnectionSubscription
+  extends Promise<AsyncIterator<ArtistConnection>>,
     Fragmentable {
   pageInfo: <T = PageInfoSubscription>() => T;
-  edges: <T = Promise<AsyncIterator<PostEdgeSubscription>>>() => T;
-  aggregate: <T = AggregatePostSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<ArtistEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateArtistSubscription>() => T;
 }
 
 export interface PageInfo {
@@ -618,37 +722,61 @@ export interface PageInfoSubscription
   endCursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface PostEdge {
-  node: Post;
+export interface ArtistEdge {
+  node: Artist;
   cursor: String;
 }
 
-export interface PostEdgePromise extends Promise<PostEdge>, Fragmentable {
-  node: <T = PostPromise>() => T;
+export interface ArtistEdgePromise extends Promise<ArtistEdge>, Fragmentable {
+  node: <T = ArtistPromise>() => T;
   cursor: () => Promise<String>;
 }
 
-export interface PostEdgeSubscription
-  extends Promise<AsyncIterator<PostEdge>>,
+export interface ArtistEdgeSubscription
+  extends Promise<AsyncIterator<ArtistEdge>>,
     Fragmentable {
-  node: <T = PostSubscription>() => T;
+  node: <T = ArtistSubscription>() => T;
   cursor: () => Promise<AsyncIterator<String>>;
 }
 
-export interface AggregatePost {
+export interface AggregateArtist {
   count: Int;
 }
 
-export interface AggregatePostPromise
-  extends Promise<AggregatePost>,
+export interface AggregateArtistPromise
+  extends Promise<AggregateArtist>,
     Fragmentable {
   count: () => Promise<Int>;
 }
 
-export interface AggregatePostSubscription
-  extends Promise<AsyncIterator<AggregatePost>>,
+export interface AggregateArtistSubscription
+  extends Promise<AsyncIterator<AggregateArtist>>,
     Fragmentable {
   count: () => Promise<AsyncIterator<Int>>;
+}
+
+export interface User {
+  id: ID_Output;
+  name: String;
+}
+
+export interface UserPromise extends Promise<User>, Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface UserSubscription
+  extends Promise<AsyncIterator<User>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
+export interface UserNullablePromise
+  extends Promise<User | null>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
 }
 
 export interface UserConnection {
@@ -705,6 +833,60 @@ export interface AggregateUserSubscription
   count: () => Promise<AsyncIterator<Int>>;
 }
 
+export interface VinylConnection {
+  pageInfo: PageInfo;
+  edges: VinylEdge[];
+}
+
+export interface VinylConnectionPromise
+  extends Promise<VinylConnection>,
+    Fragmentable {
+  pageInfo: <T = PageInfoPromise>() => T;
+  edges: <T = FragmentableArray<VinylEdge>>() => T;
+  aggregate: <T = AggregateVinylPromise>() => T;
+}
+
+export interface VinylConnectionSubscription
+  extends Promise<AsyncIterator<VinylConnection>>,
+    Fragmentable {
+  pageInfo: <T = PageInfoSubscription>() => T;
+  edges: <T = Promise<AsyncIterator<VinylEdgeSubscription>>>() => T;
+  aggregate: <T = AggregateVinylSubscription>() => T;
+}
+
+export interface VinylEdge {
+  node: Vinyl;
+  cursor: String;
+}
+
+export interface VinylEdgePromise extends Promise<VinylEdge>, Fragmentable {
+  node: <T = VinylPromise>() => T;
+  cursor: () => Promise<String>;
+}
+
+export interface VinylEdgeSubscription
+  extends Promise<AsyncIterator<VinylEdge>>,
+    Fragmentable {
+  node: <T = VinylSubscription>() => T;
+  cursor: () => Promise<AsyncIterator<String>>;
+}
+
+export interface AggregateVinyl {
+  count: Int;
+}
+
+export interface AggregateVinylPromise
+  extends Promise<AggregateVinyl>,
+    Fragmentable {
+  count: () => Promise<Int>;
+}
+
+export interface AggregateVinylSubscription
+  extends Promise<AsyncIterator<AggregateVinyl>>,
+    Fragmentable {
+  count: () => Promise<AsyncIterator<Int>>;
+}
+
 export interface BatchPayload {
   count: Long;
 }
@@ -721,57 +903,48 @@ export interface BatchPayloadSubscription
   count: () => Promise<AsyncIterator<Long>>;
 }
 
-export interface PostSubscriptionPayload {
+export interface ArtistSubscriptionPayload {
   mutation: MutationType;
-  node: Post;
+  node: Artist;
   updatedFields: String[];
-  previousValues: PostPreviousValues;
+  previousValues: ArtistPreviousValues;
 }
 
-export interface PostSubscriptionPayloadPromise
-  extends Promise<PostSubscriptionPayload>,
+export interface ArtistSubscriptionPayloadPromise
+  extends Promise<ArtistSubscriptionPayload>,
     Fragmentable {
   mutation: () => Promise<MutationType>;
-  node: <T = PostPromise>() => T;
+  node: <T = ArtistPromise>() => T;
   updatedFields: () => Promise<String[]>;
-  previousValues: <T = PostPreviousValuesPromise>() => T;
+  previousValues: <T = ArtistPreviousValuesPromise>() => T;
 }
 
-export interface PostSubscriptionPayloadSubscription
-  extends Promise<AsyncIterator<PostSubscriptionPayload>>,
+export interface ArtistSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<ArtistSubscriptionPayload>>,
     Fragmentable {
   mutation: () => Promise<AsyncIterator<MutationType>>;
-  node: <T = PostSubscription>() => T;
+  node: <T = ArtistSubscription>() => T;
   updatedFields: () => Promise<AsyncIterator<String[]>>;
-  previousValues: <T = PostPreviousValuesSubscription>() => T;
+  previousValues: <T = ArtistPreviousValuesSubscription>() => T;
 }
 
-export interface PostPreviousValues {
+export interface ArtistPreviousValues {
   id: ID_Output;
-  title: String;
-  content: String;
-  published: Boolean;
-  test: String;
+  name: String;
 }
 
-export interface PostPreviousValuesPromise
-  extends Promise<PostPreviousValues>,
+export interface ArtistPreviousValuesPromise
+  extends Promise<ArtistPreviousValues>,
     Fragmentable {
   id: () => Promise<ID_Output>;
-  title: () => Promise<String>;
-  content: () => Promise<String>;
-  published: () => Promise<Boolean>;
-  test: () => Promise<String>;
+  name: () => Promise<String>;
 }
 
-export interface PostPreviousValuesSubscription
-  extends Promise<AsyncIterator<PostPreviousValues>>,
+export interface ArtistPreviousValuesSubscription
+  extends Promise<AsyncIterator<ArtistPreviousValues>>,
     Fragmentable {
   id: () => Promise<AsyncIterator<ID_Output>>;
-  title: () => Promise<AsyncIterator<String>>;
-  content: () => Promise<AsyncIterator<String>>;
-  published: () => Promise<AsyncIterator<Boolean>>;
-  test: () => Promise<AsyncIterator<String>>;
+  name: () => Promise<AsyncIterator<String>>;
 }
 
 export interface UserSubscriptionPayload {
@@ -818,6 +991,50 @@ export interface UserPreviousValuesSubscription
   name: () => Promise<AsyncIterator<String>>;
 }
 
+export interface VinylSubscriptionPayload {
+  mutation: MutationType;
+  node: Vinyl;
+  updatedFields: String[];
+  previousValues: VinylPreviousValues;
+}
+
+export interface VinylSubscriptionPayloadPromise
+  extends Promise<VinylSubscriptionPayload>,
+    Fragmentable {
+  mutation: () => Promise<MutationType>;
+  node: <T = VinylPromise>() => T;
+  updatedFields: () => Promise<String[]>;
+  previousValues: <T = VinylPreviousValuesPromise>() => T;
+}
+
+export interface VinylSubscriptionPayloadSubscription
+  extends Promise<AsyncIterator<VinylSubscriptionPayload>>,
+    Fragmentable {
+  mutation: () => Promise<AsyncIterator<MutationType>>;
+  node: <T = VinylSubscription>() => T;
+  updatedFields: () => Promise<AsyncIterator<String[]>>;
+  previousValues: <T = VinylPreviousValuesSubscription>() => T;
+}
+
+export interface VinylPreviousValues {
+  id: ID_Output;
+  name: String;
+}
+
+export interface VinylPreviousValuesPromise
+  extends Promise<VinylPreviousValues>,
+    Fragmentable {
+  id: () => Promise<ID_Output>;
+  name: () => Promise<String>;
+}
+
+export interface VinylPreviousValuesSubscription
+  extends Promise<AsyncIterator<VinylPreviousValues>>,
+    Fragmentable {
+  id: () => Promise<AsyncIterator<ID_Output>>;
+  name: () => Promise<AsyncIterator<String>>;
+}
+
 /*
 The `ID` scalar type represents a unique identifier, often used to refetch an object or as key for a cache. The ID type appears in a JSON response as a String; however, it is not intended to be human-readable. When expected as an input type, any string (such as `"4"`) or integer (such as `4`) input value will be accepted as an ID.
 */
@@ -830,14 +1047,14 @@ The `String` scalar type represents textual data, represented as UTF-8 character
 export type String = string;
 
 /*
-The `Boolean` scalar type represents `true` or `false`.
-*/
-export type Boolean = boolean;
-
-/*
 The `Int` scalar type represents non-fractional signed whole numeric values. Int can represent values between -(2^31) and 2^31 - 1.
 */
 export type Int = number;
+
+/*
+The `Boolean` scalar type represents `true` or `false`.
+*/
+export type Boolean = boolean;
 
 export type Long = string;
 
@@ -851,7 +1068,11 @@ export const models: Model[] = [
     embedded: false
   },
   {
-    name: "Post",
+    name: "Vinyl",
+    embedded: false
+  },
+  {
+    name: "Artist",
     embedded: false
   }
 ];

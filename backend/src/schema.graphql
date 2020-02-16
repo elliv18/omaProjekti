@@ -1,14 +1,13 @@
-# import Post from './generated/prisma.graphql'
+# import Vinyl from './generated/prisma.graphql'
+# import Artist from './generated/prisma.graphql'
 # import User from './generated/prisma.graphql'
 
+
 type Query {
-  posts(searchString: String): [Post!]!
   user(id: ID!): User
 }
 
 type Mutation {
-  createDraft(authorId: ID!, title: String!, content: String!, test: String!): Post
-  publish(id: ID!): Post
-  deletePost(id: ID!): Post
+  createArtist(name: String!): Artist
   signup(name: String!): User!
 }

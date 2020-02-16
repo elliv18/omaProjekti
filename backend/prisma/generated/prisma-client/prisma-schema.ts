@@ -2,12 +2,199 @@
   // Please don't change this file manually but run `prisma generate` to update it.
   // For more information, please read the docs: https://www.prisma.io/docs/prisma-client/
 
-export const typeDefs = /* GraphQL */ `type AggregatePost {
+export const typeDefs = /* GraphQL */ `type AggregateArtist {
   count: Int!
 }
 
 type AggregateUser {
   count: Int!
+}
+
+type AggregateVinyl {
+  count: Int!
+}
+
+type Artist {
+  id: ID!
+  name: String!
+  vinyls(where: VinylWhereInput, orderBy: VinylOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vinyl!]
+}
+
+type ArtistConnection {
+  pageInfo: PageInfo!
+  edges: [ArtistEdge]!
+  aggregate: AggregateArtist!
+}
+
+input ArtistCreateInput {
+  id: ID
+  name: String!
+  vinyls: VinylCreateManyWithoutArtistsInput
+}
+
+input ArtistCreateManyWithoutVinylsInput {
+  create: [ArtistCreateWithoutVinylsInput!]
+  connect: [ArtistWhereUniqueInput!]
+}
+
+input ArtistCreateWithoutVinylsInput {
+  id: ID
+  name: String!
+}
+
+type ArtistEdge {
+  node: Artist!
+  cursor: String!
+}
+
+enum ArtistOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+type ArtistPreviousValues {
+  id: ID!
+  name: String!
+}
+
+input ArtistScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [ArtistScalarWhereInput!]
+  OR: [ArtistScalarWhereInput!]
+  NOT: [ArtistScalarWhereInput!]
+}
+
+type ArtistSubscriptionPayload {
+  mutation: MutationType!
+  node: Artist
+  updatedFields: [String!]
+  previousValues: ArtistPreviousValues
+}
+
+input ArtistSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ArtistWhereInput
+  AND: [ArtistSubscriptionWhereInput!]
+  OR: [ArtistSubscriptionWhereInput!]
+  NOT: [ArtistSubscriptionWhereInput!]
+}
+
+input ArtistUpdateInput {
+  name: String
+  vinyls: VinylUpdateManyWithoutArtistsInput
+}
+
+input ArtistUpdateManyDataInput {
+  name: String
+}
+
+input ArtistUpdateManyMutationInput {
+  name: String
+}
+
+input ArtistUpdateManyWithoutVinylsInput {
+  create: [ArtistCreateWithoutVinylsInput!]
+  delete: [ArtistWhereUniqueInput!]
+  connect: [ArtistWhereUniqueInput!]
+  set: [ArtistWhereUniqueInput!]
+  disconnect: [ArtistWhereUniqueInput!]
+  update: [ArtistUpdateWithWhereUniqueWithoutVinylsInput!]
+  upsert: [ArtistUpsertWithWhereUniqueWithoutVinylsInput!]
+  deleteMany: [ArtistScalarWhereInput!]
+  updateMany: [ArtistUpdateManyWithWhereNestedInput!]
+}
+
+input ArtistUpdateManyWithWhereNestedInput {
+  where: ArtistScalarWhereInput!
+  data: ArtistUpdateManyDataInput!
+}
+
+input ArtistUpdateWithoutVinylsDataInput {
+  name: String
+}
+
+input ArtistUpdateWithWhereUniqueWithoutVinylsInput {
+  where: ArtistWhereUniqueInput!
+  data: ArtistUpdateWithoutVinylsDataInput!
+}
+
+input ArtistUpsertWithWhereUniqueWithoutVinylsInput {
+  where: ArtistWhereUniqueInput!
+  update: ArtistUpdateWithoutVinylsDataInput!
+  create: ArtistCreateWithoutVinylsInput!
+}
+
+input ArtistWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  vinyls_every: VinylWhereInput
+  vinyls_some: VinylWhereInput
+  vinyls_none: VinylWhereInput
+  AND: [ArtistWhereInput!]
+  OR: [ArtistWhereInput!]
+  NOT: [ArtistWhereInput!]
+}
+
+input ArtistWhereUniqueInput {
+  id: ID
 }
 
 type BatchPayload {
@@ -17,18 +204,24 @@ type BatchPayload {
 scalar Long
 
 type Mutation {
-  createPost(data: PostCreateInput!): Post!
-  updatePost(data: PostUpdateInput!, where: PostWhereUniqueInput!): Post
-  updateManyPosts(data: PostUpdateManyMutationInput!, where: PostWhereInput): BatchPayload!
-  upsertPost(where: PostWhereUniqueInput!, create: PostCreateInput!, update: PostUpdateInput!): Post!
-  deletePost(where: PostWhereUniqueInput!): Post
-  deleteManyPosts(where: PostWhereInput): BatchPayload!
+  createArtist(data: ArtistCreateInput!): Artist!
+  updateArtist(data: ArtistUpdateInput!, where: ArtistWhereUniqueInput!): Artist
+  updateManyArtists(data: ArtistUpdateManyMutationInput!, where: ArtistWhereInput): BatchPayload!
+  upsertArtist(where: ArtistWhereUniqueInput!, create: ArtistCreateInput!, update: ArtistUpdateInput!): Artist!
+  deleteArtist(where: ArtistWhereUniqueInput!): Artist
+  deleteManyArtists(where: ArtistWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateManyMutationInput!, where: UserWhereInput): BatchPayload!
   upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
+  createVinyl(data: VinylCreateInput!): Vinyl!
+  updateVinyl(data: VinylUpdateInput!, where: VinylWhereUniqueInput!): Vinyl
+  updateManyVinyls(data: VinylUpdateManyMutationInput!, where: VinylWhereInput): BatchPayload!
+  upsertVinyl(where: VinylWhereUniqueInput!, create: VinylCreateInput!, update: VinylUpdateInput!): Vinyl!
+  deleteVinyl(where: VinylWhereUniqueInput!): Vinyl
+  deleteManyVinyls(where: VinylWhereInput): BatchPayload!
 }
 
 enum MutationType {
@@ -48,296 +241,28 @@ type PageInfo {
   endCursor: String
 }
 
-type Post {
-  id: ID!
-  title: String!
-  content: String!
-  published: Boolean!
-  author: User!
-  test: String!
-}
-
-type PostConnection {
-  pageInfo: PageInfo!
-  edges: [PostEdge]!
-  aggregate: AggregatePost!
-}
-
-input PostCreateInput {
-  id: ID
-  title: String!
-  content: String!
-  published: Boolean
-  author: UserCreateOneWithoutPostsInput!
-  test: String!
-}
-
-input PostCreateManyWithoutAuthorInput {
-  create: [PostCreateWithoutAuthorInput!]
-  connect: [PostWhereUniqueInput!]
-}
-
-input PostCreateWithoutAuthorInput {
-  id: ID
-  title: String!
-  content: String!
-  published: Boolean
-  test: String!
-}
-
-type PostEdge {
-  node: Post!
-  cursor: String!
-}
-
-enum PostOrderByInput {
-  id_ASC
-  id_DESC
-  title_ASC
-  title_DESC
-  content_ASC
-  content_DESC
-  published_ASC
-  published_DESC
-  test_ASC
-  test_DESC
-}
-
-type PostPreviousValues {
-  id: ID!
-  title: String!
-  content: String!
-  published: Boolean!
-  test: String!
-}
-
-input PostScalarWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  content: String
-  content_not: String
-  content_in: [String!]
-  content_not_in: [String!]
-  content_lt: String
-  content_lte: String
-  content_gt: String
-  content_gte: String
-  content_contains: String
-  content_not_contains: String
-  content_starts_with: String
-  content_not_starts_with: String
-  content_ends_with: String
-  content_not_ends_with: String
-  published: Boolean
-  published_not: Boolean
-  test: String
-  test_not: String
-  test_in: [String!]
-  test_not_in: [String!]
-  test_lt: String
-  test_lte: String
-  test_gt: String
-  test_gte: String
-  test_contains: String
-  test_not_contains: String
-  test_starts_with: String
-  test_not_starts_with: String
-  test_ends_with: String
-  test_not_ends_with: String
-  AND: [PostScalarWhereInput!]
-  OR: [PostScalarWhereInput!]
-  NOT: [PostScalarWhereInput!]
-}
-
-type PostSubscriptionPayload {
-  mutation: MutationType!
-  node: Post
-  updatedFields: [String!]
-  previousValues: PostPreviousValues
-}
-
-input PostSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: PostWhereInput
-  AND: [PostSubscriptionWhereInput!]
-  OR: [PostSubscriptionWhereInput!]
-  NOT: [PostSubscriptionWhereInput!]
-}
-
-input PostUpdateInput {
-  title: String
-  content: String
-  published: Boolean
-  author: UserUpdateOneRequiredWithoutPostsInput
-  test: String
-}
-
-input PostUpdateManyDataInput {
-  title: String
-  content: String
-  published: Boolean
-  test: String
-}
-
-input PostUpdateManyMutationInput {
-  title: String
-  content: String
-  published: Boolean
-  test: String
-}
-
-input PostUpdateManyWithoutAuthorInput {
-  create: [PostCreateWithoutAuthorInput!]
-  delete: [PostWhereUniqueInput!]
-  connect: [PostWhereUniqueInput!]
-  set: [PostWhereUniqueInput!]
-  disconnect: [PostWhereUniqueInput!]
-  update: [PostUpdateWithWhereUniqueWithoutAuthorInput!]
-  upsert: [PostUpsertWithWhereUniqueWithoutAuthorInput!]
-  deleteMany: [PostScalarWhereInput!]
-  updateMany: [PostUpdateManyWithWhereNestedInput!]
-}
-
-input PostUpdateManyWithWhereNestedInput {
-  where: PostScalarWhereInput!
-  data: PostUpdateManyDataInput!
-}
-
-input PostUpdateWithoutAuthorDataInput {
-  title: String
-  content: String
-  published: Boolean
-  test: String
-}
-
-input PostUpdateWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput!
-  data: PostUpdateWithoutAuthorDataInput!
-}
-
-input PostUpsertWithWhereUniqueWithoutAuthorInput {
-  where: PostWhereUniqueInput!
-  update: PostUpdateWithoutAuthorDataInput!
-  create: PostCreateWithoutAuthorInput!
-}
-
-input PostWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  content: String
-  content_not: String
-  content_in: [String!]
-  content_not_in: [String!]
-  content_lt: String
-  content_lte: String
-  content_gt: String
-  content_gte: String
-  content_contains: String
-  content_not_contains: String
-  content_starts_with: String
-  content_not_starts_with: String
-  content_ends_with: String
-  content_not_ends_with: String
-  published: Boolean
-  published_not: Boolean
-  author: UserWhereInput
-  test: String
-  test_not: String
-  test_in: [String!]
-  test_not_in: [String!]
-  test_lt: String
-  test_lte: String
-  test_gt: String
-  test_gte: String
-  test_contains: String
-  test_not_contains: String
-  test_starts_with: String
-  test_not_starts_with: String
-  test_ends_with: String
-  test_not_ends_with: String
-  AND: [PostWhereInput!]
-  OR: [PostWhereInput!]
-  NOT: [PostWhereInput!]
-}
-
-input PostWhereUniqueInput {
-  id: ID
-}
-
 type Query {
-  post(where: PostWhereUniqueInput!): Post
-  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post]!
-  postsConnection(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): PostConnection!
+  artist(where: ArtistWhereUniqueInput!): Artist
+  artists(where: ArtistWhereInput, orderBy: ArtistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Artist]!
+  artistsConnection(where: ArtistWhereInput, orderBy: ArtistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ArtistConnection!
   user(where: UserWhereUniqueInput!): User
   users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  vinyl(where: VinylWhereUniqueInput!): Vinyl
+  vinyls(where: VinylWhereInput, orderBy: VinylOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Vinyl]!
+  vinylsConnection(where: VinylWhereInput, orderBy: VinylOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): VinylConnection!
   node(id: ID!): Node
 }
 
 type Subscription {
-  post(where: PostSubscriptionWhereInput): PostSubscriptionPayload
+  artist(where: ArtistSubscriptionWhereInput): ArtistSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
+  vinyl(where: VinylSubscriptionWhereInput): VinylSubscriptionPayload
 }
 
 type User {
   id: ID!
   name: String!
-  posts(where: PostWhereInput, orderBy: PostOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Post!]
 }
 
 type UserConnection {
@@ -347,17 +272,6 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  id: ID
-  name: String!
-  posts: PostCreateManyWithoutAuthorInput
-}
-
-input UserCreateOneWithoutPostsInput {
-  create: UserCreateWithoutPostsInput
-  connect: UserWhereUniqueInput
-}
-
-input UserCreateWithoutPostsInput {
   id: ID
   name: String!
 }
@@ -399,27 +313,10 @@ input UserSubscriptionWhereInput {
 
 input UserUpdateInput {
   name: String
-  posts: PostUpdateManyWithoutAuthorInput
 }
 
 input UserUpdateManyMutationInput {
   name: String
-}
-
-input UserUpdateOneRequiredWithoutPostsInput {
-  create: UserCreateWithoutPostsInput
-  update: UserUpdateWithoutPostsDataInput
-  upsert: UserUpsertWithoutPostsInput
-  connect: UserWhereUniqueInput
-}
-
-input UserUpdateWithoutPostsDataInput {
-  name: String
-}
-
-input UserUpsertWithoutPostsInput {
-  update: UserUpdateWithoutPostsDataInput!
-  create: UserCreateWithoutPostsInput!
 }
 
 input UserWhereInput {
@@ -451,15 +348,195 @@ input UserWhereInput {
   name_not_starts_with: String
   name_ends_with: String
   name_not_ends_with: String
-  posts_every: PostWhereInput
-  posts_some: PostWhereInput
-  posts_none: PostWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]
 }
 
 input UserWhereUniqueInput {
+  id: ID
+}
+
+type Vinyl {
+  id: ID!
+  name: String!
+  artists(where: ArtistWhereInput, orderBy: ArtistOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Artist!]
+}
+
+type VinylConnection {
+  pageInfo: PageInfo!
+  edges: [VinylEdge]!
+  aggregate: AggregateVinyl!
+}
+
+input VinylCreateInput {
+  id: ID
+  name: String!
+  artists: ArtistCreateManyWithoutVinylsInput
+}
+
+input VinylCreateManyWithoutArtistsInput {
+  create: [VinylCreateWithoutArtistsInput!]
+  connect: [VinylWhereUniqueInput!]
+}
+
+input VinylCreateWithoutArtistsInput {
+  id: ID
+  name: String!
+}
+
+type VinylEdge {
+  node: Vinyl!
+  cursor: String!
+}
+
+enum VinylOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+}
+
+type VinylPreviousValues {
+  id: ID!
+  name: String!
+}
+
+input VinylScalarWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  AND: [VinylScalarWhereInput!]
+  OR: [VinylScalarWhereInput!]
+  NOT: [VinylScalarWhereInput!]
+}
+
+type VinylSubscriptionPayload {
+  mutation: MutationType!
+  node: Vinyl
+  updatedFields: [String!]
+  previousValues: VinylPreviousValues
+}
+
+input VinylSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: VinylWhereInput
+  AND: [VinylSubscriptionWhereInput!]
+  OR: [VinylSubscriptionWhereInput!]
+  NOT: [VinylSubscriptionWhereInput!]
+}
+
+input VinylUpdateInput {
+  name: String
+  artists: ArtistUpdateManyWithoutVinylsInput
+}
+
+input VinylUpdateManyDataInput {
+  name: String
+}
+
+input VinylUpdateManyMutationInput {
+  name: String
+}
+
+input VinylUpdateManyWithoutArtistsInput {
+  create: [VinylCreateWithoutArtistsInput!]
+  delete: [VinylWhereUniqueInput!]
+  connect: [VinylWhereUniqueInput!]
+  set: [VinylWhereUniqueInput!]
+  disconnect: [VinylWhereUniqueInput!]
+  update: [VinylUpdateWithWhereUniqueWithoutArtistsInput!]
+  upsert: [VinylUpsertWithWhereUniqueWithoutArtistsInput!]
+  deleteMany: [VinylScalarWhereInput!]
+  updateMany: [VinylUpdateManyWithWhereNestedInput!]
+}
+
+input VinylUpdateManyWithWhereNestedInput {
+  where: VinylScalarWhereInput!
+  data: VinylUpdateManyDataInput!
+}
+
+input VinylUpdateWithoutArtistsDataInput {
+  name: String
+}
+
+input VinylUpdateWithWhereUniqueWithoutArtistsInput {
+  where: VinylWhereUniqueInput!
+  data: VinylUpdateWithoutArtistsDataInput!
+}
+
+input VinylUpsertWithWhereUniqueWithoutArtistsInput {
+  where: VinylWhereUniqueInput!
+  update: VinylUpdateWithoutArtistsDataInput!
+  create: VinylCreateWithoutArtistsInput!
+}
+
+input VinylWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  name: String
+  name_not: String
+  name_in: [String!]
+  name_not_in: [String!]
+  name_lt: String
+  name_lte: String
+  name_gt: String
+  name_gte: String
+  name_contains: String
+  name_not_contains: String
+  name_starts_with: String
+  name_not_starts_with: String
+  name_ends_with: String
+  name_not_ends_with: String
+  artists_every: ArtistWhereInput
+  artists_some: ArtistWhereInput
+  artists_none: ArtistWhereInput
+  AND: [VinylWhereInput!]
+  OR: [VinylWhereInput!]
+  NOT: [VinylWhereInput!]
+}
+
+input VinylWhereUniqueInput {
   id: ID
 }
 `
