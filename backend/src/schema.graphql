@@ -8,6 +8,12 @@ type Query {
 }
 
 type Mutation {
-  signup(name: String!): User!
   createArtist(name: String!): Artist
+  signUp(name: String!, email: String!, password: String!, passwordAgain: String! ) : User!
+  login(email: String!, password: String!) : LoginPayload!
 }
+
+type LoginPayload {
+  jwt: String
+}
+

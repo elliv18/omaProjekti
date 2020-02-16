@@ -1,10 +1,12 @@
 hooks:
   post-deploy:
-    - graphql get-schema -p prisma
+    - echo "Deployment finished"
+    - graphql get-schema --project prisma
+    - graphql prepare
 
 endpoint: http://prisma:3060
 datamodel: datamodel.prisma
 
 generate:
   - generator: typescript-client
-    output: ../dist/src/generated/prisma-client/
+    output: ../src/generated/prisma-client/

@@ -1,7 +1,10 @@
 import resolvers from './resolvers'
 const { GraphQLServer } = require('graphql-yoga')
 const { Prisma } = require('prisma-binding')
+import * as dotenv from "dotenv";
+dotenv.config();
 
+console.log('---ENV -- ', process.env.JWT_SECRET)
 
 
 

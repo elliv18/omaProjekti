@@ -1,9 +1,11 @@
-import signup from './createUser'
 import createArtist from './createArtist'
+import signUp from './signUp'
+import login from './login'
 
 export {
-    signup,
     createArtist,
+    signUp,
+    login
     /*  publish: (_, args, context, info) => {
           return context.prisma.mutation.updatePost(
               {
