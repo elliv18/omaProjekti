@@ -1,11 +1,13 @@
-import createArtist from './createArtist'
 import signUp from './signUp'
 import login from './login'
+import createArtist from './createArtist'
+import createVinyl from './createVinyl'
 
 export {
-    createArtist,
     signUp,
-    login
+    login,
+    createArtist,
+    createVinyl
     /*  publish: (_, args, context, info) => {
           return context.prisma.mutation.updatePost(
               {

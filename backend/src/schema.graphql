@@ -8,12 +8,14 @@ type Query {
 }
 
 type Mutation {
-  createArtist(name: String!): Artist
   signUp(name: String!, email: String!, password: String!, passwordAgain: String! ) : User!
   login(email: String!, password: String!) : LoginPayload!
+
+  createArtist(name: String!): Artist
+  createVinyl(type: VinylType!, name: String!, year: String, category: String, condition: ConditionType, artists: [String] ): Vinyl
+
 }
 
 type LoginPayload {
   jwt: String
 }
-

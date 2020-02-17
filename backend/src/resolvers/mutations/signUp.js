@@ -4,16 +4,16 @@ import * as bcrypt from "bcryptjs";
 import { prisma } from "../../generated/prisma-client";
 import { SALT_ROUNDS } from "../../environments";
 //import { JWT_SECRET, JWT_TIME } from "../../environment";
-const JWT_SECRET = "blahblah"
+import { prisma } from "../../generated/prisma-client";
+
 export default {
   Mutation: {
 
     signUp: async (_, args, context, info) => {
-      console.log('signUp: ', SALT_ROUNDS)
-      const isUser = await context.prisma.query.user({
-        where: {
-          email: args.email
-        }
+      console.log('signUp: ', prisma.user)
+      const isUser = await prisma.user({
+        email: args.email
+
       })
       if (isUser !== null) {
         throw new Error("Email already exist!");
@@ -23,19 +23,17 @@ export default {
         throw new Error("Password don't match!");
       }
 
-      const user = context.prisma.mutation.createUser(
+      const user = prisma.createUser(
         {
-          data: {
-            type: 'USER',
-            email: args.email,
-            password: await bcrypt.hash(args.password, 10),
-            name: args.name
-            /* author: {
-                 connect: {
-                     id: args.authorId,
-                 },
-             },*/
-          },
+          type: 'USER',
+          email: args.email,
+          password: await bcrypt.hash(args.password, 10),
+          name: args.name
+          /* author: {
+               connect: {
+                   id: args.authorId,
+               },
+           },*/
         },
         info,
       )

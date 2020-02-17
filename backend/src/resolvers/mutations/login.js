@@ -1,16 +1,15 @@
 import { sign } from "jsonwebtoken";
 //import logger from "../../misc/logger";
 import * as bcrypt from "bcryptjs";
-import { JWT_SECRET } from "../../environment";
-const JWT_SECRET = "blahblah"
+import { JWT_SECRET } from '../../environments';
+import { prisma } from "../../generated/prisma-client";
+
 export default {
     Mutation: {
-        login: async (_, args, context, info) => {
-            const user = await context.prisma.query.user({
-                where: {
-                    email: args.email
-                }
-            })
+        login: async (_, args, { currentUser }, info) => {
+            console.log('Login', currentUser)
+            const user = await prisma.user({ email: args.email })
+
             if (!user) {
                 throw new Error("Email not found!");
             }
@@ -22,7 +21,6 @@ export default {
             }
 
             const jwt = sign({ id: user.id, type: user.type }, JWT_SECRET);
-            console.log('JWT', jwt)
             // return { user }
             return { jwt }
 

@@ -1,6 +1,22 @@
+enum UserType {
+  ADMIN
+  USER
+}
+enum VinylType {
+  LP
+  SINGLE
+  SAVIKIEKKO
+}
+enum ConditionType {
+  EXCELLENT
+  GOOD
+  OKAY
+  POOR
+}
+
 type User {
   id: ID! @id
-  type: String!
+  type: UserType!
   name: String!,
   email: String! @unique,
   password: String!
@@ -8,10 +24,14 @@ type User {
 type Vinyl {
   id: ID! @id
   name: String!
-  artists: [Artist!]! @relation(name: "ArtistsVinyl")
+  year: String
+  type: VinylType!
+  category: String
+  condition: ConditionType
+  artists: [Artist] @relation(name: "ArtistsVinyl")
 }
 type Artist {
   id: ID! @id
-  name: String!
+  name: String! @unique
   vinyls: [Vinyl]  @relation(name: "ArtistsVinyl")
 }
