@@ -26,12 +26,17 @@ type Vinyl {
   name: String!
   year: String
   type: VinylType!
-  category: String
+  category: Category @relation(name: "CategoryVinyl")
   condition: ConditionType
-  artists: [Artist] @relation(name: "ArtistsVinyl")
+  artists: [Artist!]! @relation(name: "ArtistsVinyl")
 }
 type Artist {
   id: ID! @id
   name: String! @unique
   vinyls: [Vinyl]  @relation(name: "ArtistsVinyl")
+}
+type Category {
+  id: ID! @id
+  name: String!
+  vinyls: [Vinyl] @relation(name: "CategoryVinyl")
 }
