@@ -1,9 +1,3 @@
-hooks:
-  post-deploy:
-    - echo "Deployment finished"
-    - graphql get-schema --project prisma
-    - graphql prepare
-
 endpoint: http://prisma:3060
 datamodel: datamodel.prisma
 

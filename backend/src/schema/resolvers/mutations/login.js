@@ -1,31 +1,31 @@
 import { sign } from "jsonwebtoken";
 //import logger from "../../misc/logger";
 import * as bcrypt from "bcryptjs";
-import { JWT_SECRET } from '../../environments';
-import { prisma } from "../../generated/prisma-client";
+import { JWT_SECRET } from '../../../environments';
+import { prisma } from "../../../generated/prisma-client";
 
 export default {
-    Mutation: {
-        login: async (_, args, { currentUser }, info) => {
-            console.log('Login', currentUser)
-            const user = await prisma.user({ email: args.email })
+  Mutation: {
+    logIn: async (_, { input: { email, password } }, { currentUser }, info) => {
+      console.log('Login', currentUser)
+      const user = await prisma.user({ email: email })
 
-            if (!user) {
-                throw new Error("Email not found!");
-            }
+      if (!user) {
+        throw new Error("Email not found!");
+      }
 
-            const pwValid = await bcrypt.compare(args.password, user.password);
+      const pwValid = await bcrypt.compare(password, user.password);
 
-            if (!pwValid) {
-                throw new Error("Password is invalid!");
-            }
+      if (!pwValid) {
+        throw new Error("Password is invalid!");
+      }
 
-            const jwt = sign({ id: user.id, type: user.type }, JWT_SECRET);
-            // return { user }
-            return { jwt }
+      const jwt = sign({ id: user.id, type: user.type }, JWT_SECRET);
+      // return { user }
+      return { jwt }
 
-        }
     }
+  }
 };
 
 /*

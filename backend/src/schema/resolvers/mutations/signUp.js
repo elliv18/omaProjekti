@@ -1,43 +1,38 @@
 import { sign } from "jsonwebtoken";
 //import logger from "../../misc/logger";
 import * as bcrypt from "bcryptjs";
-import { prisma } from "../../generated/prisma-client";
-import { SALT_ROUNDS } from "../../environments";
+import { prisma } from "../../../generated/prisma-client";
+import { SALT_ROUNDS } from "../../../environments";
 //import { JWT_SECRET, JWT_TIME } from "../../environment";
-import { prisma } from "../../generated/prisma-client";
+import { prisma } from "../../../generated/prisma-client";
 
 export default {
   Mutation: {
 
-    signUp: async (_, args, context, info) => {
+    signUp: async (_, { input: { name, email, password, passwordAgain } }) => {
       console.log('signUp: ', prisma.user)
       const isUser = await prisma.user({
-        email: args.email
+        email: email
 
       })
       if (isUser !== null) {
         throw new Error("Email already exist!");
       }
 
-      if (args.password !== args.passwordAgain) {
+      if (password !== passwordAgain) {
         throw new Error("Password don't match!");
       }
 
-      const user = prisma.createUser(
+      const user = await prisma.createUser(
         {
           type: 'USER',
-          email: args.email,
-          password: await bcrypt.hash(args.password, 10),
-          name: args.name
-          /* author: {
-               connect: {
-                   id: args.authorId,
-               },
-           },*/
+          email: email,
+          password: await bcrypt.hash(password, 10),
+          name: name
+
         },
-        info,
       )
-      return user
+      return { user }
     }
 
   }

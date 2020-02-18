@@ -1,7 +1,6 @@
 # import Vinyl from './generated/prisma.graphql'
 # import Artist from './generated/prisma.graphql'
 # import User from './generated/prisma.graphql'
-# import Category from './generated/prisma.graphql'
 
 
 type Query {
@@ -14,7 +13,6 @@ type Mutation {
 
   createArtist(name: String!): Artist
   createVinyl(type: VinylType!, name: String!, year: String, category: String, condition: ConditionType, artists: [String!]! ): Vinyl
-  createCategory(name: String!): Category
 }
 
 type LoginPayload {

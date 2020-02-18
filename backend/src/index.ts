@@ -1,4 +1,4 @@
-import resolvers from "./resolvers";
+import { resolvers, typeDefs } from "./schema";
 import { JWT_SECRET } from "./environments";
 const { GraphQLServer } = require("graphql-yoga");
 const { Prisma } = require("prisma-binding");
@@ -8,7 +8,7 @@ dotenv.config();
 
 //console.log('---ENV -- ', process.env.JWT_SECRET)
 const server = new GraphQLServer({
-  typeDefs: "src/schema.graphql",
+  typeDefs,
   resolvers,
   resolverValidationOptions: {
     requireResolversForResolveType: false
@@ -19,8 +19,7 @@ const server = new GraphQLServer({
     if (auth != null) {
       try {
         currentUser = await jwt.verify(auth.replace("Bearer ", ""), JWT_SECRET);
-      } catch (e) {
-      }
+      } catch (e) {}
     }
     return { currentUser };
   }

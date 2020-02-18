@@ -10,8 +10,8 @@ const resolvers = [
     signUp,
     login,
     createArtist,
-    createVinyl,
-    createCategory
+    createCategory,
+    createVinyl
 
 ]
 export default mergeResolvers(resolvers)
