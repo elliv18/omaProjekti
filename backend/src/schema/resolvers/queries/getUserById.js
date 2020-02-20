@@ -1,27 +1,14 @@
+import { prisma } from "../../../generated/prisma-client";
+
 export default {
     Query: {
-        /*     posts: (_, args, context, info) => {
-                 return context.prisma.query.posts(
-                     {
-                         where: {
-                             OR: [
-                                 { title_contains: args.searchString },
-                                 { content_contains: args.searchString },
-                             ],
-                         },
-                     },
-                     info,
-                 )
-             },*/
-        getUserById: (_, args, context, info) => {
-            return context.prisma.query.user(
-                {
-                    where: {
-                        id: args.id,
-                    },
-                },
-                info,
-            )
+
+        getUserById: async (_, { input: { id } }) => {
+            const user = await prisma.user({
+                id: id
+            })
+
+            return { user }
         },
     }
 }

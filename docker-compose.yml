@@ -48,7 +48,24 @@ services:
       POSTGRES_PASSWORD: prisma
     volumes:
       - postgres:/var/lib/postgresql/data
+
+  frontend:
+    build:
+      context: ./
+      dockerfile: .dockerfiles/frontendDev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/opt/app
+      - /opt/app/node_modules/.cache/
+    environment:
+      NODE_ENV: development
+
+    restart: always
+
 volumes:
   postgres:
+
+
 
   
