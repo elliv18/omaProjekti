@@ -1,0 +1,43 @@
+
+[class*="root"] {
+    width: 90%;
+    margin: auto;
+    margin-top: 10%;
+    text-align: center;
+
+  }
+
+@media only screen and (min-width: 600px) {
+    .root {
+        width: 70%;
+        margin: auto;
+        text-align: center;
+        margin-top: 10%;
+    }
+    .form {
+        width: 100%;
+    }
+    .signUp {
+        padding: 10px;
+    }
+
+}
+
+.textField {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 100%;
+}
+.labelText {
+    font-size: 18px;
+}
+.errorText {
+    font-size: 18px;
+    color: red;
+}
+
+.loginButton {
+    margin-top: 50px;
+}

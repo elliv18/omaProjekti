@@ -1,19 +1,8 @@
 import getUserById from './getUserById'
-
+import validateJwt from './validateJwt'
+import getCurrentUser from './getCurrentUser'
 export {
-    getUserById
-    /*     posts: (_, args, context, info) => {
-             return context.prisma.query.posts(
-                 {
-                     where: {
-                         OR: [
-                             { title_contains: args.searchString },
-                             { content_contains: args.searchString },
-                         ],
-                     },
-                 },
-                 info,
-             )
-         },*/
-
+    getUserById,
+    validateJwt,
+    getCurrentUser
 }

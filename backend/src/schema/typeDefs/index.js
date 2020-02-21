@@ -2,6 +2,9 @@ import { mergeTypes } from "merge-graphql-schemas";
 import tables from './tables'
 //Quaries
 import getUserById from './query_getUserById_type'
+import validateJwt from './query_validateJwt_type'
+import getCurrentUser from './query_getCurrentUser'
+
 //Mutations
 import signUp from './mut_signUp_type'
 import logIn from './mut_logIn_type'
@@ -15,7 +18,9 @@ const types = [
     logIn,
     createCategory,
     createArtist,
-    createVinyl
+    createVinyl,
+    validateJwt,
+    getCurrentUser
 ]
 
 export default mergeTypes(types, { all: true })
