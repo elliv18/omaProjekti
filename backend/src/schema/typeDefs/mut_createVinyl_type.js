@@ -10,6 +10,8 @@ export default `
         category: String!
         condition: ConditionType
         artists: [String!]!
+        forSale: Boolean
+        price: String
     }
     type CreateVinylPayload {
         vinyl: Vinyl

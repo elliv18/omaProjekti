@@ -7,14 +7,14 @@ import Home from './pages/Home';
 import GET_CURRENT_USER from './graphql/resolvers/queries/getCurrentUser';
 import { withApollo } from 'react-apollo';
 import Signup from './pages/Signup';
+import CustomAppBar from './components/CustomAppbar'
+import LoadingSpinner from '@material-ui/core/CircularProgress';
+import Artists from './pages/Artists';
+import Vinyls from './pages/Vinyls';
 
-const initialState = {
-  authenticated: Cookies.get('jwt') ? true : false,
-  currentUser: null,
-  loading: true
-}
 
-class App extends React.Component {
+
+class App extends React.PureComponent {
 
   constructor(props) {
     super(props);
@@ -22,22 +22,24 @@ class App extends React.Component {
   }
 
   state = {
-    initialState
+    authenticated: Cookies.get('jwt') ? true : false,
+    currentUser: null,
+    loading: true
   }
 
 
-  async componenDidMount() {
+  componentDidMount() {
     const { authenticated } = this.state
     const { client } = this.props
     console.log('DID', authenticated)
 
     if (authenticated) {
-      await client.query({
+      client.query({
         query: GET_CURRENT_USER
       })
         .then(res => {
           console.log(res.data)
-          const CU = res.data.getCurrentUser.id
+          const CU = res.data.getCurrentUser
           if (CU !== undefined) {
             this.setState({ currentUser: CU })
           }
@@ -55,15 +57,16 @@ class App extends React.Component {
 
 
   render() {
+    const { authenticated, loading, currentUser } = this.state;
+    if (loading) return <LoadingSpinner />
 
-    const { loading, authenticated } = this.state;
-
-    if (loading && authenticated) return <div>Loading...</div>
-
-    console.log('App', authenticated)
     return (
-      <div>
-        <BrowserRouter>
+      <BrowserRouter>
+        <CustomAppBar
+          authenticated={authenticated}
+          setAuth={this.setAuth}
+        >
+
           {!authenticated ? <Redirect to="/login" /> : <Redirect to={"/home"} />}
 
           <CssBaseline />
@@ -73,20 +76,37 @@ class App extends React.Component {
                 <Login authenticated={authenticated} setAuth={this.setAuth} />
               )}
             />
-            <Route path="/home"
-              render={() => (
-                <Home authenticated={authenticated} setAuth={this.setAuth} />
-              )}
-            />
-
             <Route path="/signup"
               render={() => (
                 <Signup />
               )}
             />
+
+            <Route path="/home"
+              render={() => (
+                <Home
+                  authenticated={authenticated}
+                  currentUser={currentUser}
+                />
+              )}
+            />
+
+            <Route path="/artists"
+              render={() => (
+                < Artists />
+              )}
+            />
+
+            <Route path="/vinyls"
+              render={() => (
+                <Vinyls />
+              )}
+            />
+
           </Switch>
-        </BrowserRouter>
-      </div>
+        </CustomAppBar>
+
+      </BrowserRouter>
     );
   }
 }

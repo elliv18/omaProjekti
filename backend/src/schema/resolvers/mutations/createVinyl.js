@@ -5,8 +5,7 @@ import { USE_AUTH } from "../../../environments";
 
 export default {
     Mutation: {
-        createVinyl: async (_, { input: { name, year, type, category, condition, artists } }, { currentUser }, info) => {
-            const dbArtists = await prisma.artists()
+        createVinyl: async (_, { input: { name, year, type, category, condition, artists, forSale, price } }, { currentUser }, info) => {
             if (USE_AUTH == 'true') {
                 mustBeLoggedIn(currentUser)
             }
@@ -21,6 +20,15 @@ export default {
             });
 
             artistsTemp = { connect: temp }
+            /*
+                        if (forSale) {
+                            const vinyl = await prisma.vinyl({ name: name })
+                            await prisma.createForSale({
+                                vinyl: vinyl.id,
+                                price: price
+                            })
+                        }*/
+
 
             const vinyl = await prisma.createVinyl(
                 {
@@ -33,12 +41,8 @@ export default {
                     },
                     year: year,
                     condition: condition,
-                    artists: artistsTemp
-                    /* author: {
-                         connect: {
-                             id: authorId,
-                         },
-                     },*/
+                    artists: artistsTemp,
+                    forSale: forSale
                 },
                 info,
             )

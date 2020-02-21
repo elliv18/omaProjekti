@@ -1,10 +1,17 @@
 import { resolvers, typeDefs } from "./schema";
-import { JWT_SECRET } from "./environments";
+import { JWT_SECRET, DEVELOPMENT } from "./environments";
 const { GraphQLServer } = require("graphql-yoga");
 const { Prisma } = require("prisma-binding");
 import * as jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
+import createRootAdmin from "./helpers/createRootAdmin";
+import generateData from "./helpers/generateData";
 dotenv.config();
+var faker = require('faker')
+
+createRootAdmin()
+
+generateData(10)
 
 //console.log('---ENV -- ', process.env.JWT_SECRET)
 const server = new GraphQLServer({
@@ -19,8 +26,10 @@ const server = new GraphQLServer({
     if (auth != null) {
       try {
         currentUser = await jwt.verify(auth.replace("Bearer ", ""), JWT_SECRET);
-      } catch (e) {}
+      } catch (e) { }
     }
+    // console.log(faker.fake("{{name.lastName}}, {{name.firstName}} {{name.suffix}}"));
+
     return { currentUser };
   }
 });

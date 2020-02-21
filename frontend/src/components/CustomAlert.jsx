@@ -24,9 +24,12 @@ export default function CustomAlert(props) {
             className={classes.root}
             severity={props.status}
             action={
-                props.status === "success"
-                    ? <Link to="/login">Kirjaudu sisään</Link>
-                    : <Button className={classes.button} onClick={props.reset}>Yritä uudelleen</Button>}
+                !props.isLogin
+                    ? props.status === "success"
+                        ? <Link to="/login">Kirjaudu sisään</Link>
+                        : <Button className={classes.button} onClick={props.reset}>Yritä uudelleen</Button>
+                    : null
+            }
         >
             <AlertTitle>{props.msg}</AlertTitle>
             <div className={classes.msg}>

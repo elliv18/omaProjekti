@@ -1,11 +1,5 @@
 
-[class*="root"] {
-    width: 90%;
-    margin: auto;
-    margin-top: 10%;
-    text-align: center;
 
-  }
 
 @media only screen and (min-width: 600px) {
     .root {
@@ -21,6 +15,15 @@
         padding: 10px;
     }
 
+}
+
+@media only screen and (max-width: 600px) {
+    .root {
+        width: 90%;
+        margin: auto;
+        text-align: center;
+        margin-top: 10%;
+    }
 }
 
 .textField {

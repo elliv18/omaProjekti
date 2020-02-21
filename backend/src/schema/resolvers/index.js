@@ -1,5 +1,5 @@
 import queries from './queries'
-import { signUp, login, createArtist, createVinyl, createCategory } from './mutations'
+import { signUp, login, createArtist, createVinyl, createCategory, createForSale } from './mutations'
 import { getUserById, validateJwt, getCurrentUser } from './queries'
 const { mergeResolvers } = require('merge-graphql-schemas')
 
@@ -13,7 +13,8 @@ const resolvers = [
     login,
     createArtist,
     createCategory,
-    createVinyl
+    createVinyl,
+    createForSale
 
 ]
 export default mergeResolvers(resolvers)

@@ -1,7 +1,21 @@
 import React, { PureComponent } from 'react'
 import { withApollo } from 'react-apollo';
 import API from '../services/api'
-import { Button } from '@material-ui/core';
+import { Button, Paper, withStyles, Typography } from '@material-ui/core';
+import { AdminView, UserView } from '../components/home'
+const useStyles = {
+    root: {
+        width: '100%',
+        minHeight: '100%',
+        margin: 'auto',
+        padding: 8,
+        position: 'relative'
+    },
+    welcome: {
+        textAlign: 'center',
+        padding: 10
+    }
+}
 
 class Home extends PureComponent {
     constructor(props) {
@@ -19,25 +33,26 @@ class Home extends PureComponent {
         username: '',
         password: '',
         loading: false,
+        userType: this.props.currentUser.userType
     };
 
 
     render() {
+        const { classes, currentUser } = this.props
+        const { userType } = this.state
         console.log(this.props.authenticated)
 
         return (
-            <div>
-                <div>Home</div>
-                <Button variant="contained" onClick={() => {
-                    API.logout()
-                    this.props.setAuth(false)
-                }}
-                >
-                    logout
-                </Button>
-            </div>
+            <Paper elevation={7} className={classes.root}>
+                {userType === 'ADMIN'
+                    ? <AdminView />
+                    : <UserView />}
+            </Paper>
         )
     }
 }
 
-export default withApollo(Home)
+export default withStyles(useStyles)(withApollo(Home))
+
+
+

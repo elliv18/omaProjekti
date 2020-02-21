@@ -7,6 +7,7 @@ import { withApollo } from "react-apollo";
 import { LOGIN_MUTATION } from '../graphql/resolvers/mutations';
 import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom';
+import CustomAlert from '../components/CustomAlert';
 
 
 const initialStates = {
@@ -48,14 +49,18 @@ function Login({ client, authenticated, isAuthenticated, setAuth }) {
             })
     }
 
+    const canLogin = () => {
+        return states.email.length > 0 && states.pw.length > 0
+    }
 
 
+    const disabled = !canLogin()
     return (
 
         <div className="root">
             <Paper elevation={7} className={classes.paper}>
                 {states.errorMsg
-                    ? <strong className="errorText">{states.errorMsg}</strong>
+                    ? <CustomAlert msg={states.errorMsg} status="error" isLogin={true} />
                     : null}
                 <form className="form">
                     <label >
@@ -84,6 +89,7 @@ function Login({ client, authenticated, isAuthenticated, setAuth }) {
                         color="secondary"
                         fullWidth
                         onClick={login}
+                        disabled={disabled}
                     >
                         click
 

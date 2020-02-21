@@ -42,7 +42,8 @@ export default `
         type: VinylType!
         category: Category 
         condition: ConditionType
-        artists: [Artist!]! 
+        artists: [Artist!]!
+        forSale: Boolean
       }
 
     ########
@@ -63,6 +64,16 @@ export default `
         name: String!
         vinyls: [Vinyl]
       }
+
+      ########
+      # ForSale #
+      ########
+
+    type ForSale {
+      id: ID!
+      vinyl: [Vinyl]
+      price: String
+    }
 
  
 `;
