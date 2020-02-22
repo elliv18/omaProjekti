@@ -33,7 +33,7 @@ class Home extends PureComponent {
         username: '',
         password: '',
         loading: false,
-        userType: this.props.currentUser.userType
+        userType: this.props.currentUser.type
     };
 
 

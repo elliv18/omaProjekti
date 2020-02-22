@@ -4,6 +4,7 @@ import tables from './tables'
 import getUserById from './query_getUserById_type'
 import validateJwt from './query_validateJwt_type'
 import getCurrentUser from './query_getCurrentUser'
+import allVinyls from './query_allVinyls_type'
 
 //Mutations
 import signUp from './mut_signUp_type'
@@ -15,6 +16,7 @@ import createForSale from './mut_create_forSale_type'
 const types = [
     tables,
     getUserById,
+    allVinyls,
     signUp,
     logIn,
     createCategory,

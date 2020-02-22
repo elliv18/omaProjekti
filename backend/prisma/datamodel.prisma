@@ -26,7 +26,7 @@ type Vinyl {
   name: String!
   year: String
   type: VinylType!
-  category: Category @relation(name: "CategoryVinyl")
+  category: Category! @relation(name: "CategoryVinyl")
   condition: ConditionType
   artists: [Artist!]! @relation(name: "ArtistsVinyl")
   forSale: Boolean! @default(value: false)
@@ -39,7 +39,7 @@ type Artist {
 type Category {
   id: ID! @id
   name: String!
-  vinyls: [Vinyl] @relation(name: "CategoryVinyl")
+  vinyls: [Vinyl]! @relation(name: "CategoryVinyl")
 }
 type ForSale {
   id: ID! @id

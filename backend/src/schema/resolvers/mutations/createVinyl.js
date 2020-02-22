@@ -30,22 +30,19 @@ export default {
                         }*/
 
 
-            const vinyl = await prisma.createVinyl(
-                {
-                    type: type,
-                    name: name,
-                    category: {
-                        connect: {
-                            id: category
-                        }
-                    },
-                    year: year,
-                    condition: condition,
-                    artists: artistsTemp,
-                    forSale: forSale
+            const vinyl = await prisma.createVinyl({
+                type: type,
+                name: name,
+                category: {
+                    connect: { id: category }
                 },
-                info,
-            )
+                year: year,
+                condition: condition,
+                artists: artistsTemp,
+                forSale: forSale
+            })
+
+            console.log('CREATE VINYL', vinyl)
             return { vinyl }
         }
     }
