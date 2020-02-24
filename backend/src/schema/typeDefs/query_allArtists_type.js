@@ -5,7 +5,9 @@ export default `
 
     input AllArtistsInput {
         first: Int
-        after: String
+        after: String,
+        filter: String
     }
+
 `;
 

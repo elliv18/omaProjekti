@@ -52,7 +52,9 @@ export default `
     type Artist {
         id: ID!
         name: String!
-        vinyls: [Vinyl] 
+        vinyls: [Vinyl]
+        createdAt: String
+        updatedAt: String
       }
 
     ########

@@ -35,6 +35,8 @@ type Artist {
   id: ID! @id
   name: String! @unique
   vinyls: [Vinyl]  @relation(name: "ArtistsVinyl")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 type Category {
   id: ID! @id

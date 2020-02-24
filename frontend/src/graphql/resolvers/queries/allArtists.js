@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 const ALL_ARTISTS = gql`
-  query allArtists($first: Int, $after: String) {
-    allArtists (input: {first: $first, after: $after }) {
+  query allArtists($first: Int, $after: String, $filter: String) {
+    allArtists (input: {first: $first, after: $after, filter: $filter }) {
       id
       name
       vinyls{
@@ -16,6 +16,8 @@ const ALL_ARTISTS = gql`
           name
         }
       }
+      createdAt
+      updatedAt
     }
   }
 `;
