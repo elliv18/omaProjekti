@@ -51,7 +51,8 @@ export default `
     ########
     type Artist {
         id: ID!
-        name: String!
+        firstName: String!
+        lastName: String!
         vinyls: [Vinyl]
         createdAt: String
         updatedAt: String

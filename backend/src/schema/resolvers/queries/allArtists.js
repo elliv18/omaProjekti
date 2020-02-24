@@ -5,7 +5,10 @@ export default {
         allArtists: async (_, { input: { first, after, filter } }) => {
 
             const where = filter ? {
-                name_contains: filter.toLowerCase()
+                OR: [
+                    { firstName_contains: filter.toLowerCase() },
+                    { lastName_contains: filter.toLowerCase() }
+                ]
             } : {}
             const all = await prisma.artists({
                 where,

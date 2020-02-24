@@ -4,7 +4,8 @@ export default `
     }
 
     input CreateArtistInput {
-        name: String!
+        firstName: String!
+        lastName: String!
     }
     type CreateArtistPayload {
         artist: Artist

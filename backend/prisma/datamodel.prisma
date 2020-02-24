@@ -33,8 +33,9 @@ type Vinyl {
 }
 type Artist {
   id: ID! @id
-  name: String! @unique
-  vinyls: [Vinyl]  @relation(name: "ArtistsVinyl")
+  firstName: String!
+  lastName: String!
+  vinyls: [Vinyl]  @relation(name: "ArtistsVinyl", onDelete: CASCADE)
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

@@ -4,7 +4,7 @@ import { ALL_VINYLS } from '../graphql/resolvers/queries'
 import Loading from '../components/Loading'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails, ExpansionPanelActions, Button, Grid, makeStyles } from '@material-ui/core';
-import { Fade, Stagger } from 'react-animation-components'
+import helpers from '../helpers';
 
 const styles = makeStyles(theme => ({
     expansionPanel: {
@@ -51,60 +51,58 @@ const Vinyls = React.memo(function Vinyls(props) {
         <div>
             <div className={classes.title}>
                 <Typography variant="h5" >
-                    Myytävät tuotteet
+                    Levyt
                 </Typography>
             </div>
             <div className={classes.content}>
-                {data.allVinyls.map(row => {
+                {data.allVinyls.map((row, i) => {
                     return (
-                        <Stagger in chunk={7} key={row.id} duration={500}>
-                            <Fade>
-                                <ExpansionPanel elevation={3} className={classes.expansionPanel}>
-                                    <ExpansionPanelSummary
-                                        expandIcon={<ExpandMoreIcon />}
-                                    >
-                                        <Typography variant="h5">{row.name}</Typography>
-                                    </ExpansionPanelSummary>
+                        <ExpansionPanel elevation={3} key={i} className={classes.expansionPanel}>
+                            <ExpansionPanelSummary
+                                expandIcon={<ExpandMoreIcon />}
+                            >
+                                <Typography variant="h5">{row.name}</Typography>
+                            </ExpansionPanelSummary>
 
-                                    <ExpansionPanelDetails>
-                                        <Grid container>
-                                            <Grid item xs={12} md={4}>
-                                                <Typography variant="subtitle1">
-                                                    <b>Tyyppi:</b> {row.type}
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={4}>
-                                                <Typography variant="subtitle1">
-                                                    <b>Kunto: </b>{row.condition}
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item xs={12} md={4}>
-                                                <Typography variant="subtitle1">
-                                                    <b>Kategoria: </b>  {row.category.name}
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item xs={12}>
-                                                <br />
+                            <ExpansionPanelDetails>
+                                <Grid container>
+                                    <Grid item xs={12} md={4}>
+                                        <Typography variant="subtitle1">
+                                            <b>Tyyppi:</b> {row.type}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={4}>
+                                        <Typography variant="subtitle1">
+                                            <b>Kunto: </b>{row.condition}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12} md={4}>
+                                        <Typography variant="subtitle1">
+                                            <b>Kategoria: </b>  {row.category.name}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <br />
 
-                                                <Typography variant="subtitle1">
-                                                    <b>Artistit: </b>
-                                                    {row.artists.map((artist, i) => {
-                                                        const a = i + 1 === row.artists.length ? artist.name : artist.name + ", "
-                                                        return (a)
-                                                    })}
-                                                </Typography>
-                                                <hr />
+                                        <Typography variant="subtitle1">
+                                            <b>Artistit: </b>
+                                            {row.artists.map((artist, i) => {
+                                                const name = helpers.Capitalize(artist.firstName) + " " + helpers.Capitalize(artist.lastName)
+                                                const a = i + 1 === row.artists.length ? name : name + ", "
+                                                return (a)
+                                            })}
+                                        </Typography>
+                                        <hr />
 
-                                            </Grid>
-                                        </Grid>
-                                    </ExpansionPanelDetails>
-                                    <ExpansionPanelActions>
-                                        <Button fullWidth variant="outlined" color="secondary">Poista</Button>
-                                        <Button fullWidth variant="outlined" color="primary">Myyntiin</Button>
-                                    </ExpansionPanelActions>
-                                </ExpansionPanel>
-                            </Fade>
-                        </Stagger>
+                                    </Grid>
+                                </Grid>
+                            </ExpansionPanelDetails>
+                            <ExpansionPanelActions>
+                                <Button fullWidth variant="outlined" color="secondary">Poista</Button>
+                                <Button fullWidth variant="outlined" color="primary">Myyntiin</Button>
+                            </ExpansionPanelActions>
+                        </ExpansionPanel>
+
                     )
                 })}
             </div>

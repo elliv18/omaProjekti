@@ -16,6 +16,7 @@ import createCategory from './mut_createCategory_type'
 import createArtist from './mut_createArtist_type'
 import createVinyl from './mut_createVinyl_type'
 import createForSale from './mut_create_forSale_type'
+import deleteArtists from './mut_DeleteArtists'
 const types = [
     tables,
     getUserById,
@@ -30,7 +31,8 @@ const types = [
     createVinyl,
     validateJwt,
     getCurrentUser,
-    createForSale
+    createForSale,
+    deleteArtists
 ]
 
 export default mergeTypes(types, { all: true })

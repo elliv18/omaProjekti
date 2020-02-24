@@ -14,7 +14,8 @@ const ALL_VINYLS = gql`
       }
       artists{
         id,
-        name
+        firstName,
+        lastName
       }
     }
   }

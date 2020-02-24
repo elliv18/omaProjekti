@@ -5,13 +5,14 @@ import { mustBeLoggedIn } from "../../../helpers/auth";
 
 export default {
     Mutation: {
-        createArtist: async (_, { input: { name } }, { currentUser }) => {
+        createArtist: async (_, { input: { firstName, lastName } }, { currentUser }) => {
             if (USE_AUTH == 'true') {
                 mustBeLoggedIn(currentUser)
             }
 
             const artist = await prisma.createArtist({
-                name: name,
+                firstName: firstName,
+                lastName: lastName
             })
 
             return { artist }

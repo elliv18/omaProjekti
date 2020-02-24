@@ -16,7 +16,7 @@ export default {
             let temp = []
 
             artists.map(x => {
-                temp.push({ name: x });
+                temp.push({ id: x });
             });
 
             artistsTemp = { connect: temp }

@@ -24,7 +24,8 @@ export default async (amount) => {
 
             // make new artist'
             const artist = await prisma.createArtist({
-                name: faker.name.firstName().toLowerCase() + " " + faker.name.lastName().toLowerCase()
+                firstName: faker.name.firstName().toLowerCase(),
+                lastName: faker.name.lastName().toLowerCase()
             })
             process.stdout.write(".");
 
@@ -44,7 +45,7 @@ export default async (amount) => {
                 year: faker.date.future(),
                 condition: "GOOD",
                 artists: {
-                    connect: { name: artist.name }
+                    connect: { id: artist.id }
                 }
 
             })
@@ -62,7 +63,7 @@ export default async (amount) => {
                 year: faker.date.future(),
                 condition: "POOR",
                 artists: {
-                    connect: { name: artist.name }
+                    connect: { id: artist.id }
                 }
 
             })
