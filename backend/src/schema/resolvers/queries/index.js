@@ -2,9 +2,15 @@ import getUserById from './getUserById'
 import validateJwt from './validateJwt'
 import getCurrentUser from './getCurrentUser'
 import allVinyls from './allVinyls'
+import allCategories from './allCategories'
+import allArtists from './allArtists'
+import getCounts from './getCounts'
 export {
     getUserById,
     validateJwt,
     getCurrentUser,
-    allVinyls
+    allVinyls,
+    allCategories,
+    allArtists,
+    getCounts
 }

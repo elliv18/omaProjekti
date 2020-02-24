@@ -20,9 +20,7 @@ const Styles = {
     }
 }
 class UserView extends React.PureComponent {
-    constructor(props) {
-        super(props);
-    }
+
 
     render() {
         const { classes } = this.props

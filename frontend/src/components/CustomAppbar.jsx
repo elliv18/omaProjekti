@@ -1,10 +1,12 @@
 import React from 'react'
 import '../styles/AppbarStyle.css'
 import { Link, NavLink } from 'react-router-dom'
-import { IconButton, Drawer, List, ListItem, Divider, Button, AppBar, Toolbar, Typography, makeStyles, Hidden, Grid } from '@material-ui/core'
+import { IconButton, Drawer, List, ListItem, Divider, Button, AppBar, Typography, makeStyles, Hidden, Grid } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu';
 import drawerStyle from '../styles/drawerStyle'
 import Cookies from 'js-cookie'
+import { setAuthStates } from '../redux/actions'
+import { useDispatch } from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
     appbar: {
@@ -28,9 +30,10 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function CustomAppBar(props) {
+function CustomAppBar(props) {
     const [open, setOpen] = React.useState(false)
     const classes = useStyles()
+    const dispatch = useDispatch()
 
     const openDrawer = () => {
         setOpen(true)
@@ -40,7 +43,8 @@ export default function CustomAppBar(props) {
     }
     const logOut = () => {
         Cookies.remove('jwt')
-        props.setAuth(false)
+        localStorage.clear()
+        dispatch(setAuthStates(false, null))
     }
 
     return (
@@ -106,6 +110,7 @@ export default function CustomAppBar(props) {
     )
 }
 
+export default CustomAppBar
 
 
 

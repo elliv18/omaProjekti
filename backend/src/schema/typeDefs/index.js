@@ -5,6 +5,9 @@ import getUserById from './query_getUserById_type'
 import validateJwt from './query_validateJwt_type'
 import getCurrentUser from './query_getCurrentUser'
 import allVinyls from './query_allVinyls_type'
+import allCategories from './query_allCategories'
+import allArtists from './query_allArtists_type'
+import getCounts from './query_getCounts_type'
 
 //Mutations
 import signUp from './mut_signUp_type'
@@ -17,6 +20,9 @@ const types = [
     tables,
     getUserById,
     allVinyls,
+    allCategories,
+    allArtists,
+    getCounts,
     signUp,
     logIn,
     createCategory,

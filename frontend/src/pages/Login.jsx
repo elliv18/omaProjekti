@@ -8,6 +8,9 @@ import { LOGIN_MUTATION } from '../graphql/resolvers/mutations';
 import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom';
 import CustomAlert from '../components/CustomAlert';
+import { useDispatch } from 'react-redux'
+import { setAuthStates } from '../redux/actions';
+import { GET_CURRENT_USER } from '../graphql/resolvers/queries';
 
 
 const initialStates = {
@@ -15,9 +18,10 @@ const initialStates = {
     pw: '',
     errorMsg: null
 }
-function Login({ client, authenticated, isAuthenticated, setAuth }) {
+function Login({ client }) {
     const [states, setStates] = React.useState(initialStates)
     const classes = loginStyle()
+    const dispatch = useDispatch()
 
     const handleUsername = ({ target: { value } }) => {
         console.log(value)
@@ -28,7 +32,6 @@ function Login({ client, authenticated, isAuthenticated, setAuth }) {
     }
 
     const login = async () => {
-        console.log('email', states.email, 'pw', states.pw)
         await client.mutate({
             variables: {
                 email: states.email,
@@ -39,13 +42,22 @@ function Login({ client, authenticated, isAuthenticated, setAuth }) {
             .then(async res => {
                 const jwt = res.data.logIn.jwt
                 Cookies.set('jwt', jwt)
-                setAuth(true)
 
             })
             .catch(e => {
                 console.log(e)
                 let error = e.message.replace("GraphQL error:", "").trim()
                 setStates({ ...states, errorMsg: error, email: '', pw: '' })
+            })
+            .finally(async () => {
+                await client.query({
+                    query: GET_CURRENT_USER
+                })
+                    .then(res => {
+                        const cu = res.data.getCurrentUser
+                        dispatch(setAuthStates(true, cu))
+                    })
+                    .catch(e => console.log(e))
             })
     }
 

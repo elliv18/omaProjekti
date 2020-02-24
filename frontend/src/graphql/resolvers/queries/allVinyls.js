@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const ALL_VINYLS = gql`
+const ALL_VINYLS = gql`
   query {
     allVinyls {
       id
@@ -12,7 +12,12 @@ export const ALL_VINYLS = gql`
         id
         name
       }
-      
+      artists{
+        id,
+        name
+      }
     }
   }
 `;
+
+export default ALL_VINYLS

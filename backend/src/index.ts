@@ -7,11 +7,11 @@ import * as dotenv from "dotenv";
 import createRootAdmin from "./helpers/createRootAdmin";
 import generateData from "./helpers/generateData";
 dotenv.config();
-var faker = require('faker')
+var faker = require("faker");
 
-createRootAdmin()
+createRootAdmin();
 
-generateData(10)
+generateData(100);
 
 //console.log('---ENV -- ', process.env.JWT_SECRET)
 const server = new GraphQLServer({
@@ -26,7 +26,7 @@ const server = new GraphQLServer({
     if (auth != null) {
       try {
         currentUser = await jwt.verify(auth.replace("Bearer ", ""), JWT_SECRET);
-      } catch (e) { }
+      } catch (e) {}
     }
     // console.log(faker.fake("{{name.lastName}}, {{name.firstName}} {{name.suffix}}"));
 

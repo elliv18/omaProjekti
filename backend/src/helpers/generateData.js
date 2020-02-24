@@ -24,7 +24,7 @@ export default async (amount) => {
 
             // make new artist'
             const artist = await prisma.createArtist({
-                name: faker.name.firstName()
+                name: faker.name.firstName() + " " + faker.name.lastName()
             })
             process.stdout.write(".");
 
@@ -35,7 +35,7 @@ export default async (amount) => {
 
             await prisma.createVinyl({
                 type: "LP",
-                name: faker.name.firstName(),
+                name: faker.hacker.adjective() + " " + faker.random.words(2),
                 category: {
                     connect: {
                         id: category.id
@@ -53,7 +53,7 @@ export default async (amount) => {
 
             await prisma.createVinyl({
                 type: "SAVIKIEKKO",
-                name: faker.name.firstName(),
+                name: faker.hacker.adjective() + " " + faker.company.companyName(),
                 category: {
                     connect: {
                         id: category.id
