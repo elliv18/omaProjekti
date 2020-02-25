@@ -170,6 +170,7 @@ function NewVinyl(props) {
                         condition: data.condition, category: data.category, artists: data.artists
                     }
                 ]
+
                 props.setData([...temp, ...props.data])
                 props.handleClose()
             })

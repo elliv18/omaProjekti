@@ -2,8 +2,8 @@ import gql from "graphql-tag";
 
 
 const ADD_TO_SALE = gql`
-  mutation mutation($price: String!, $vinyl: [String!]!) {
-    createForSale(input: { price: $price, vinyl: $vinyl }) {
+  mutation mutation($price: String!, $vinyls: [String!]!) {
+    createForSale(input: { price: $price, vinyls: $vinyls }) {
         forSale {
             id,
             price

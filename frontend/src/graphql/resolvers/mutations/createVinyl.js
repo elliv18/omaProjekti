@@ -35,7 +35,11 @@ const ADD_VINYL = gql`
           firstName
           lastName
         }
-       
+       forSale,
+       sale {
+         id,
+         price
+       }
         
       }
     }
