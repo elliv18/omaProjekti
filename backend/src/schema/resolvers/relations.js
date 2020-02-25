@@ -20,5 +20,11 @@ export default {
         async vinyls(artist) {
             return await prisma.artist({ id: artist.id }).vinyls()
         }
+    },
+
+    ForSale: {
+        async vinyls(forSale) {
+            return await prisma.forSale({ id: forSale.id }).vinyls()
+        }
     }
 };

@@ -69,7 +69,7 @@ export default `
 
     type ForSale {
       id: ID!
-      vinyl: [Vinyl]
+      vinyls: [Vinyl]
       price: String
       createdAt: String
       updatedAt: String

@@ -159,7 +159,6 @@ function NewVinyl(props) {
                 category: category,
                 artists: artists,
                 type: type,
-                price: price,
                 forSale: forSale
             }
         })
