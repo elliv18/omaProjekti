@@ -3,18 +3,17 @@ import { withApollo } from 'react-apollo'
 import { ALL_ARTISTS } from '../graphql/resolvers/queries'
 import Loading from '../components/Loading'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails, ExpansionPanelActions, Button, Grid, makeStyles, IconButton, TextField, Tooltip, Popover } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails, ExpansionPanelActions, Button, Grid, makeStyles, IconButton, TextField, Tooltip } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import helpers from '../helpers'
-import TextyAnim from 'rc-texty'
 import Moment from 'react-moment';
 import LoadingSpinner from '@material-ui/core/CircularProgress';
 import ShowDataDialog from '../components/ShowDataDialog';
-import WarningIcon from '@material-ui/icons/Warning';
 import { DELETE_ARTISTS } from '../graphql/resolvers/mutations';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import NewArtist from '../components/NewArtist';
+import DeleteConfirm from '../components/DeleteConfirm';
 
 const styles = makeStyles(theme => ({
     '@global': {
@@ -366,7 +365,7 @@ const Artists = React.memo(function Artists(props) {
             {open.newArtist ? <NewArtist open={open.newArtist} handleClose={closeNewDialog} /> : null}
             {popOverStates.anchorEl !== null
                 ? <DeleteConfirm
-                    title={"Haluatko varmasti poistaa artistin?"}
+                    title={"Haluatko varmasti poistaa"}
                     states={popOverStates}
                     handleClose={closeDeleteConfirm}
                     deleteArtists={deleteArtists}
@@ -378,35 +377,11 @@ const Artists = React.memo(function Artists(props) {
 
 export default withApollo(Artists)
 
-const styles2 = makeStyles(theme => ({
-    popOver: {
-    },
-    buttonGrid: {
-        padding: theme.spacing(2)
-    },
-    title: {
-        padding: theme.spacing(2),
-        backgroundColor: '#ebb42a'
-    }
-}))
-
-function DeleteConfirm(props) {
-    const open = Boolean(props.states.anchorEl);
-    const id = open ? 'simple-popover' : undefined;
-    const classes = styles2()
-    const [disabled, setDisabled] = React.useState(true)
 
 
-    React.useEffect(() => {
-        const timer = setTimeout(() => {
-            setDisabled(false)
-        }, 4000);
-        return () => clearTimeout(timer);
-    }, []);
 
 
-    return (
-        <Popover
+/*<Popover
             open={open}
             id={id}
             anchorEl={props.states.anchorEl}
@@ -433,6 +408,8 @@ function DeleteConfirm(props) {
                                 </Typography>
                             </Grid>
                             <Grid item xs={2} />
+                            <hr />
+
                             <Grid item xs={10}>
                                 <Typography variant="subtitle1" >
                                     <strong>{props.states.name}</strong>
@@ -447,6 +424,7 @@ function DeleteConfirm(props) {
                             </Grid>
                         </Grid>
                     </Grid>
+
 
                     <Grid item xs={6} className={classes.buttonGrid}>
                         <Button
@@ -477,9 +455,7 @@ function DeleteConfirm(props) {
 
             </div>
 
-        </Popover >
-    )
-}
+        </Popover >*/
 
 /*
 <Grid container>

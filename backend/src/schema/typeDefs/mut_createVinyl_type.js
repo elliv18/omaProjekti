@@ -6,9 +6,9 @@ export default `
     input CreateVinylInput {
         name: String!
         year: String
-        type: VinylType!
+        type: String!
         category: String!
-        condition: ConditionType
+        condition: String
         artists: [String!]!
         forSale: Boolean
         price: String

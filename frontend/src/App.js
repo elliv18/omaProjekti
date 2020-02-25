@@ -11,6 +11,7 @@ import Vinyls from './pages/Vinyls';
 import { setAuthStates } from './redux/actions'
 import { connect } from 'react-redux'
 import ErrorPage from './pages/Errorpage';
+import Categories from './pages/Categories';
 
 
 
@@ -49,6 +50,13 @@ class App extends React.PureComponent {
             <Route exact path="/"
               render={() => (
                 <Home currentUser={currentUser} />
+
+              )}
+            />
+
+            <Route path="/categories"
+              render={() => (
+                <Categories />
 
               )}
             />

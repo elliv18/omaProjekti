@@ -7,17 +7,6 @@ export default `
         ADMIN
         USER
       }
-    enum VinylType {
-        LP
-        SINGLE
-        SAVIKIEKKO
-      }
-    enum ConditionType {
-        EXCELLENT
-        GOOD
-        OKAY
-        POOR
-      }
 
     ########
     # User #
@@ -29,6 +18,8 @@ export default `
         name: String!,
         email: String!
         password: String!
+        createdAt: String
+        updatedAt: String
       }
 
     ########
@@ -39,11 +30,13 @@ export default `
         id: ID!
         name: String!
         year: String
-        type: VinylType!
+        type: String!
         category: Category 
-        condition: ConditionType
+        condition: String
         artists: [Artist!]!
         forSale: Boolean
+        createdAt: String
+        updatedAt: String
       }
 
     ########
@@ -66,6 +59,8 @@ export default `
         id: ID!
         name: String!
         vinyls: [Vinyl]
+        createdAt: String
+        updatedAt: String
       }
 
       ########
@@ -76,6 +71,8 @@ export default `
       id: ID!
       vinyl: [Vinyl]
       price: String
+      createdAt: String
+      updatedAt: String
     }
 
  

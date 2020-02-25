@@ -69,7 +69,7 @@ function CustomAppBar(props) {
                         <Grid item xs={6} sm={9} className={classes.pages}>
                             {props.authenticated
                                 ? <React.Fragment>
-                                    <Link to="/home">
+                                    <Link to="/">
                                         <Button>
                                             Home
                                     </Button>
@@ -82,6 +82,11 @@ function CustomAppBar(props) {
                                     <Link to="/vinyls">
                                         <Button>
                                             Vinyls
+                                    </Button>
+                                    </Link>
+                                    <Link to="/categories">
+                                        <Button>
+                                            Categories
                                     </Button>
                                     </Link>
                                 </React.Fragment>
@@ -135,7 +140,7 @@ function CustomDrawer(props) {
 
             <List>
 
-                <ListItem component={NavLink} to="/home" button={true}>
+                <ListItem component={NavLink} to="/" button={true}>
                     <Typography variant="h6">
                         Home
                     </Typography>
@@ -157,6 +162,14 @@ function CustomDrawer(props) {
                     </Typography>
                 </ListItem>
                 <Divider />
+
+                <ListItem component={NavLink} to="/categories" button={true}>
+                    <Typography variant="h6">
+                        Categories
+                    </Typography>
+                </ListItem>
+                <Divider />
+
 
             </List>
         </Drawer>

@@ -2,17 +2,7 @@ enum UserType {
   ADMIN
   USER
 }
-enum VinylType {
-  LP
-  SINGLE
-  SAVIKIEKKO
-}
-enum ConditionType {
-  EXCELLENT
-  GOOD
-  OKAY
-  POOR
-}
+
 
 type User {
   id: ID! @id
@@ -20,16 +10,20 @@ type User {
   name: String!,
   email: String! @unique,
   password: String!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 type Vinyl {
   id: ID! @id
   name: String!
   year: String
-  type: VinylType!
+  type: String!
   category: Category! @relation(name: "CategoryVinyl")
-  condition: ConditionType
+  condition: String
   artists: [Artist!]! @relation(name: "ArtistsVinyl")
   forSale: Boolean! @default(value: false)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 type Artist {
   id: ID! @id
@@ -43,9 +37,13 @@ type Category {
   id: ID! @id
   name: String!
   vinyls: [Vinyl]! @relation(name: "CategoryVinyl")
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 type ForSale {
   id: ID! @id
   vinyl: [Vinyl]
   price: String
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }

@@ -1,15 +1,14 @@
 import React from 'react'
 import { withApollo } from 'react-apollo'
-import { ALL_VINYLS } from '../graphql/resolvers/queries'
-import Loading from '../components/Loading'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails, ExpansionPanelActions, Button, Grid, makeStyles, IconButton, Tooltip, TextField, Select, MenuItem } from '@material-ui/core';
-import helpers from '../helpers';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
-import NewVinyl from '../components/NewVinyl';
+import { ALL_CATEGORIES } from '../graphql/resolvers/queries'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import { Typography, Tooltip, TextField, Grid, Select, makeStyles, MenuItem, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, Button, ExpansionPanelDetails, Collapse, IconButton } from '@material-ui/core'
 import LoadingSpinner from '@material-ui/core/CircularProgress';
-import InfiniteScroll from 'react-infinite-scroll-component';
-
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Moment from 'react-moment';
+import Loading from '../components/Loading'
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import NewCategory from '../components/NewCategory'
 
 const styles = makeStyles(theme => ({
     expansionPanel: {
@@ -81,57 +80,46 @@ const styles = makeStyles(theme => ({
     }
 
 }))
-const Vinyls = React.memo(function Vinyls(props) {
+
+
+const Categories = React.memo(function Categories(props) {
+
     const [data, setData] = React.useState([])
-    const classes = styles()
+    const [showVinyls, setSowVinyls] = React.useState(false)
+    const [sortBy, setSortBy] = React.useState('createdAt_DESC')
     const [open, setOpen] = React.useState({
         new: false,
         data: []
     })
+
     const [hasMore, setHasMore] = React.useState(true)
-    const [sortBy, setSortBy] = React.useState("createdAt_DESC")
 
+    const classes = styles()
 
-
-    const fetch = React.useCallback(async (filter, orderBy) => {
-        console.log('Fetch', sortBy)
-        await props.client.query({
-            query: ALL_VINYLS,
+    const fetch = React.useCallback((filter, sortBy) => {
+        props.client.query({
+            query: ALL_CATEGORIES,
             variables: {
-                first: 30,
+                sortBy: sortBy,
+                first: 20,
                 filter: filter,
-                sortBy: orderBy
-            },
+            }
         })
             .then(res => {
-                if (res.data.allVinyls.length > 0)
-                    setData(res.data.allVinyls)
+                console.log(res.data)
+                setData(res.data.allCategories)
             })
-    }, [props.client, sortBy])
+            .catch(e => console.log(e))
+    }, [props.client])
 
     React.useEffect(() => {
         fetch()
     }, [fetch])
 
-    const onFetchMore = () => {
-        props.client.query({
-            query: ALL_VINYLS,
-            variables: {
-                first: 30,
-                after: data[data.length - 1].id
-            }
-        })
-            .then(res => {
 
-                let temp = data.slice()
-                const data2 = res.data.allVinyls
-                console.log(data2)
-                temp.push(...data2)
-                setData(temp)
-                if (data2.length === 0)
-                    setHasMore(false)
-            })
-            .catch(e => console.log(e))
+
+    const handleShow = () => {
+        setSowVinyls(!showVinyls)
     }
 
     const openNew = () => {
@@ -141,27 +129,38 @@ const Vinyls = React.memo(function Vinyls(props) {
         setOpen({ new: false })
     }
 
-    const handleSearch = ({ target: { value } }) => {
-        /*  let newList = data.allArtists.filter(filter => {
-              return filter.name.toLowerCase().includes(value)
-          })*/
-        if (value.length >= 3) {
-            fetch(value)
-        }
-        else {
-            fetch()
-        }
-
-    }
-
     const handleSort = event => {
-        console.log(event.target.value)
         setSortBy(event.target.value)
         fetch("", event.target.value)
-    }
-    if (data.length === 0) { return <Loading open={true} /> }
-    console.log('DATA', data)
 
+    }
+
+
+    const onFetchMore = () => {
+        console.log('MORE', sortBy)
+        props.client.query({
+            query: ALL_CATEGORIES,
+            variables: {
+                sortBy: sortBy,
+                first: 30,
+                after: data[data.length - 1].id,
+            }
+        })
+            .then(res => {
+
+                let temp = data.slice()
+                const data2 = res.data.allCategories
+                console.log(data2)
+                temp.push(...data2)
+                setData(temp)
+                if (data2.length === 0)
+                    setHasMore(false)
+            })
+            .catch(e => console.log(e))
+    }
+    if (data.length === 0) return <Loading open={true} />
+
+    console.log('DATA', data)
 
     return (
         <div>
@@ -173,7 +172,7 @@ const Vinyls = React.memo(function Vinyls(props) {
                                 fullWidth
                                 margin="dense"
                                 InputProps={{ classes: { input: classes.input1 } }}
-                                onChange={handleSearch}
+                                // onChange={handleSearch}
                                 variant="outlined"
                                 placeholder="Search..."
                             />
@@ -188,8 +187,6 @@ const Vinyls = React.memo(function Vinyls(props) {
                         >
                             <MenuItem value={"createdAt_DESC"}>Uusin (lisätty)</MenuItem>
                             <MenuItem value={"createdAt_ASC"}>Vanhin (lisätty)</MenuItem>
-                            <MenuItem value={"year_ASC"}>Vanhin levy</MenuItem>
-                            <MenuItem value={"year_DESC"}>Uusin levy</MenuItem>
                             <MenuItem value={"name_ASC"}>Nimi (a-ö)</MenuItem>
                             <MenuItem value={"name_DESC"}>Nimi (ö-a)</MenuItem>
                         </Select>
@@ -208,7 +205,7 @@ const Vinyls = React.memo(function Vinyls(props) {
 
                     endMessage={
                         <Typography variant="h6">
-                            Jee, kaikki artistit on jo listattu
+                            Jee, kaikki  kategoriat on jo listattu
                         </Typography>
                     }
                 >
@@ -221,13 +218,13 @@ const Vinyls = React.memo(function Vinyls(props) {
                                     <Grid container>
                                         <Grid item xs={12} md={2}>
                                             <Typography variant="h6" className={classes.center}>
-                                                <strong>Levyn nimi: </strong>
+                                                <strong>Categoria: </strong>
                                             </Typography>
                                         </Grid>
 
                                         <Grid item xs={12} md={10}>
                                             <Typography variant="h6">
-                                                {row.name}
+                                                {row.name + i}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -235,48 +232,74 @@ const Vinyls = React.memo(function Vinyls(props) {
                                 </ExpansionPanelSummary>
 
                                 <ExpansionPanelDetails>
-                                    <Grid container>
-                                        <Grid item xs={12} md={2}>
-                                            <Typography variant="subtitle1">
-                                                <b>Tyyppi:</b> {row.type}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} md={2}>
-                                            <Typography variant="subtitle1">
-                                                <b>Kunto: </b>{row.condition}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <Typography variant="subtitle1">
-                                                <b>Kategoria: </b>  {row.category.name}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} md={3}>
-                                            <Typography variant="subtitle1">
-                                                <b>Vuosi </b>  {row.year}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} md={2}>
-                                            <Typography variant="subtitle1">
-                                                <b>Myynnissä: </b>  {row.forSale}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <br />
 
-                                            <Typography variant="subtitle1">
-                                                <b>Artistit: </b>
-                                                {row.artists.map((artist, i) => {
-                                                    const name = helpers.Capitalize(artist.firstName) + " " + helpers.Capitalize(artist.lastName)
-                                                    const a = i + 1 === row.artists.length ? name : name + ", "
-                                                    return (a)
-                                                })}
+                                    <Grid container justify="center" alignItems="center">
+                                        <Grid item md={3} xs={12} >
+                                            <Typography variant="subtitle2">
+                                                <strong>Kategoria lisätty: </strong>
+                                                <Moment format="DD-MM-YYYY HH:mm">
+                                                    {row.createdAt}
+                                                </Moment>
                                             </Typography>
-                                            <hr />
-
                                         </Grid>
+
+                                        <Grid item md={3} xs={12} >
+                                            <Typography variant="subtitle2">
+                                                <strong>Kategoria päivitetty: </strong>
+                                                <Moment format="DD-MM-YYYY HH:mm">
+                                                    {row.updatedAt}
+                                                </Moment>
+                                            </Typography>
+                                        </Grid>
+                                        <hr />
+                                        <Grid item md={5} xs={12}>
+                                            <Button
+                                                fullWidth
+                                                variant="contained"
+                                                color="secondary"
+                                                onClick={handleShow}
+                                            >
+                                                Näytä levyt
+                                            </Button>
+                                        </Grid>
+                                        <Collapse in={showVinyls}>
+                                            {row.vinyls.map((vinyl, i) => {
+                                                return (
+
+                                                    <Grid item xs={12} key={i} className={classes.vinyls} >
+                                                        <br />
+                                                        <hr />
+                                                        <Grid container justify="center" alignItems="baseline">
+                                                            <Grid item xs={12} md={4}  >
+                                                                <Typography variant="h6">
+                                                                    <b>Levyn nimi: </b>
+                                                                </Typography>
+                                                            </Grid>
+                                                            <Grid item xs={12} md={8}>
+                                                                <Typography variant="subtitle1">
+                                                                    {i + 1 === row.vinyls.length ? vinyl.name : vinyl.name + ", "}
+                                                                </Typography>
+                                                            </Grid>
+
+                                                            <Grid item xs={6} md={4}>
+                                                                <Typography variant="h6">
+                                                                    <b>Levyn tyyppi</b>
+                                                                </Typography>
+                                                            </Grid>
+                                                            <Grid item xs={6} md={8}>
+                                                                <Typography variant="h6">
+                                                                    {vinyl.type}
+                                                                </Typography>
+                                                            </Grid>
+
+                                                        </Grid>
+                                                    </Grid>
+                                                )
+                                            })}
+                                        </Collapse>
                                     </Grid>
                                 </ExpansionPanelDetails>
+
                                 <ExpansionPanelActions>
                                     <Button fullWidth variant="outlined" color="secondary">Poista</Button>
                                     <Button fullWidth variant="outlined" color="primary">Myyntiin</Button>
@@ -291,9 +314,10 @@ const Vinyls = React.memo(function Vinyls(props) {
                 <AddCircleIcon fontSize="large" />
             </IconButton>
 
-            {open.new ? <NewVinyl open={open.new} handleClose={closeNew} setData={setData} data={data} /> : null}
+            {open.new ? <NewCategory open={open.new} handleClose={closeNew} setData={setData} data={data} /> : null}
+
         </div>
     )
 })
 
-export default withApollo(Vinyls)
+export default withApollo(Categories)

@@ -12,6 +12,8 @@ export default {
             if (vinyl.length === 0) {
                 throw new Error("Anna vähintään yksi levy!")
             }
+
+            console.log('createForSale', vinyl, price)
             var vinylTemp = []; // temp
             let temp = []
 
