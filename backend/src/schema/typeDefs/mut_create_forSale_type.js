@@ -5,7 +5,7 @@ export default `
 
     input CreateForSaleInput {
         price: String
-        vinyls: [String!]!
+        vinyls: [String]
     }
     type CreateForSalePayload {
         forSale: ForSale

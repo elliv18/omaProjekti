@@ -17,6 +17,7 @@ query allVinyls($first: Int, $after: String, $filter: String, $sortBy: String) {
         firstName,
         lastName
       }
+      forSale
     }
   }
 `;

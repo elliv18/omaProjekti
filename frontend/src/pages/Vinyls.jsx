@@ -258,7 +258,7 @@ const Vinyls = React.memo(function Vinyls(props) {
                                         </Grid>
                                         <Grid item xs={12} md={2}>
                                             <Typography variant="subtitle1">
-                                                <b>Myynnissä: </b>  {row.forSale}
+                                                <b>Myynnissä: </b>  {row.forSale.toString()}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={12}>

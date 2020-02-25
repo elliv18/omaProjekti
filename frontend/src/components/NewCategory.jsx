@@ -1,10 +1,7 @@
 import React from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, makeStyles } from '@material-ui/core'
-import Select from 'react-select'
 import { withApollo } from 'react-apollo'
-import { ALL_ARTISTS, ALL_CATEGORIES } from '../graphql/resolvers/queries'
-import helpers from '../helpers'
-import { ADD_VINYL, ADD_CATEGORY } from '../graphql/resolvers/mutations'
+import { ADD_CATEGORY } from '../graphql/resolvers/mutations'
 
 const styles = makeStyles(theme => ({
     root: {

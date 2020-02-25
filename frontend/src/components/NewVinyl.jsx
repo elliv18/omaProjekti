@@ -4,7 +4,7 @@ import Select from 'react-select'
 import { withApollo } from 'react-apollo'
 import { ALL_ARTISTS, ALL_CATEGORIES } from '../graphql/resolvers/queries'
 import helpers from '../helpers'
-import { ADD_VINYL } from '../graphql/resolvers/mutations'
+import { ADD_VINYL, ADD_TO_FORSALE } from '../graphql/resolvers/mutations'
 
 const styles = makeStyles(theme => ({
     root: {
@@ -164,15 +164,30 @@ function NewVinyl(props) {
         })
             .then(res => {
                 const data = res.data.createVinyl.vinyl
+
+                if (newVinylStates.forSale) {
+                    let tempVinyls = []
+                    tempVinyls.push(data.id)
+                    console.log('** ON SALE **', tempVinyls)
+                    props.client.mutate({
+                        mutation: ADD_TO_FORSALE,
+                        variables: {
+                            price: price,
+                            vinyls: tempVinyls
+                        }
+                    })
+                        .then(res => {
+                            console.log('SALE', res)
+                        })
+                        .catch(e => console.log(e))
+                }
                 const temp = [
                     {
                         id: data.id, name: data.name, year: data.year, type: data.type,
-                        condition: data.condition, category: data.category, artists: data.artists
+                        condition: data.condition, category: data.category, artists: data.artists, forSale: data.forSale
                     }
                 ]
-                if (newVinylStates.forSale) {
-                    console.log('** ON SALE **')
-                }
+                console.log('TEMP*', temp)
                 props.setData([...temp, ...props.data])
                 props.handleClose()
             })
@@ -221,7 +236,7 @@ function NewVinyl(props) {
                         </Typography>
                         <Collapse in={newVinylStates.forSale}>
 
-                            <TextField margin="dense" label="Levyn hinta" fullWidth variant="outlined" />
+                            <TextField margin="dense" label="Levyn hinta" fullWidth variant="outlined" onChange={handlePriceChange} />
                         </Collapse>
 
                     </form>
