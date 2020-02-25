@@ -170,7 +170,9 @@ function NewVinyl(props) {
                         condition: data.condition, category: data.category, artists: data.artists
                     }
                 ]
-
+                if (newVinylStates.forSale) {
+                    console.log('** ON SALE **')
+                }
                 props.setData([...temp, ...props.data])
                 props.handleClose()
             })

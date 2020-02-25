@@ -9,7 +9,6 @@ const ADD_VINYL = gql`
     $condition: String
     $artists: [String!]!
     $forSale: Boolean
-    $price: String
   ) {
     createVinyl(
       input: {
