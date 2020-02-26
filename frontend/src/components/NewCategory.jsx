@@ -46,6 +46,8 @@ function NewCategory(props) {
             .catch(e => console.log(e))
     }
 
+
+
     return (
         <Dialog
             fullWidth

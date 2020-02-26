@@ -209,9 +209,15 @@ function NewVinyl(props) {
                     <form>
 
                         <Select placeholder="Levyn tyyppi" options={types} onChange={handleTypeChange} />
+                        <br />
                         <TextField margin="dense" label="Levyn nimi" fullWidth variant="outlined" onChange={handleNameChange} />
+                        <br />
+                        <br />
                         <Select placeholder="Levyn kunto" options={conditions} onChange={handleConditionChange} />
+                        <br />
                         <Select placeholder="Levyn vuosi" options={years} onChange={handleYearChange} />
+                        <br />
+
                         <Select
                             isMulti
                             placeholder="Artisti(t)"
@@ -219,12 +225,15 @@ function NewVinyl(props) {
                             onChange={handleArtistChange}
                             onInputChange={handleArtistInput}
                         />
+                        <br />
+
                         <Select
                             placeholder="Category"
                             options={categories}
                             onChange={handleCategoryChange}
                             onInputChange={handleCategoryInput}
                         />
+                        <br />
 
                         <Typography variant="h6">
                             Listaa myyntiin

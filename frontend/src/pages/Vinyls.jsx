@@ -3,12 +3,14 @@ import { withApollo } from 'react-apollo'
 import { ALL_VINYLS } from '../graphql/resolvers/queries'
 import Loading from '../components/Loading'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails, ExpansionPanelActions, Button, Grid, makeStyles, IconButton, Tooltip, TextField, Select, MenuItem } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails, ExpansionPanelActions, Button, Grid, makeStyles, IconButton, Tooltip, TextField, Select, MenuItem, Popover } from '@material-ui/core';
 import helpers from '../helpers';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import NewVinyl from '../components/NewVinyl';
 import LoadingSpinner from '@material-ui/core/CircularProgress';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { ADD_TO_FORSALE } from '../graphql/resolvers/mutations';
+import Api from '../helpers/Api';
 
 
 const styles = makeStyles(theme => ({
@@ -78,7 +80,8 @@ const styles = makeStyles(theme => ({
     },
     center: {
         textAlign: 'center'
-    }
+    },
+
 
 }))
 const Vinyls = React.memo(function Vinyls(props) {
@@ -86,11 +89,11 @@ const Vinyls = React.memo(function Vinyls(props) {
     const classes = styles()
     const [open, setOpen] = React.useState({
         new: false,
+        anchorEl: null,
         data: []
     })
     const [hasMore, setHasMore] = React.useState(true)
     const [sortBy, setSortBy] = React.useState("createdAt_DESC")
-
 
 
     const fetch = React.useCallback(async (filter, orderBy) => {
@@ -140,6 +143,14 @@ const Vinyls = React.memo(function Vinyls(props) {
     const closeNew = () => {
         setOpen({ new: false })
     }
+    const openPrice = (value, id) => {
+        console.log('open', id)
+        setOpen({ anchorEl: value, data: id })
+
+    }
+    const closePrice = () => {
+        setOpen({ anchorEl: null })
+    }
 
     const handleSearch = ({ target: { value } }) => {
         /*  let newList = data.allArtists.filter(filter => {
@@ -153,6 +164,16 @@ const Vinyls = React.memo(function Vinyls(props) {
         }
 
     }
+
+    /*  const listForSale = () => {
+          props.client.mutate({
+              mutation: ADD_TO_FORSALE,
+              variables: {
+                  vinyls: saleVinyls,
+                  price: price
+              }
+          })
+      }*/
 
     const handleSort = event => {
         console.log(event.target.value)
@@ -213,9 +234,12 @@ const Vinyls = React.memo(function Vinyls(props) {
                     }
                 >
                     {data.map((row, i) => {
+                        const backColor = row.forSale ? '#82ed91' : 'none'
                         return (
                             <ExpansionPanel elevation={3} key={i} className={classes.expansionPanel}>
                                 <ExpansionPanelSummary
+                                    style={{ backgroundColor: backColor }}
+
                                     expandIcon={<ExpandMoreIcon />}
                                 >
                                     <Grid container>
@@ -279,7 +303,14 @@ const Vinyls = React.memo(function Vinyls(props) {
                                 </ExpansionPanelDetails>
                                 <ExpansionPanelActions>
                                     <Button fullWidth variant="outlined" color="secondary">Poista</Button>
-                                    <Button fullWidth variant="outlined" color="primary">Myyntiin</Button>
+                                    <Button
+                                        fullWidth
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={event => openPrice(event.currentTarget, row.id)}
+                                    >
+                                        Myyntiin
+                                     </Button>
                                 </ExpansionPanelActions>
                             </ExpansionPanel>
 
@@ -290,10 +321,94 @@ const Vinyls = React.memo(function Vinyls(props) {
             <IconButton className={classes.add} onClick={openNew}>
                 <AddCircleIcon fontSize="large" />
             </IconButton>
-
+            {open.anchorEl ? <AskPrice client={props.client} anchorEl={open.anchorEl} handleClose={closePrice} id={open.data} /> : null}
             {open.new ? <NewVinyl open={open.new} handleClose={closeNew} setData={setData} data={data} /> : null}
         </div>
     )
 })
 
 export default withApollo(Vinyls)
+
+function AskPrice(props) {
+    const open = Boolean(props.anchorEl);
+    const id = open ? 'simple-popover' : undefined;
+    const [price, setPrice] = React.useState('')
+
+    let editedIds = []
+    editedIds.push(props.id)
+
+    const handlePrice = event => {
+        setPrice(event.target.value)
+    }
+
+    const addForSale = () => {
+        props.client.mutate({
+            mutation: ADD_TO_FORSALE,
+            variables: {
+                vinyls: editedIds,
+                price: price
+            }
+        })
+            .then(res => {
+                console.log('froSale res', res.data.createForSale.forSale)
+                props.handleClose()
+            })
+            .catch(e => console.log(e))
+    }
+
+
+
+    console.log('pop', editedIds)
+    return (
+
+        <Popover
+            open={open}
+            id={id}
+            anchorEl={props.anchorEl}
+            onClose={props.handleClose}
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+            }}
+            transformOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+            }}
+        >
+            <Grid container style={{ padding: 15 }}>
+                <Grid item xs={12}>
+                    <TextField
+                        fullWidth
+                        variant="outlined"
+                        margin="dense"
+                        label="hinta levyille"
+                        onChange={handlePrice}
+                    />
+                </Grid>
+                <br />
+                <Grid item xs={6}>
+                    <Button
+                        variant="outlined"
+                        fullWidth
+                        color="primary"
+                        disabled={price.length === 0}
+                        onClick={addForSale}
+                    >
+
+                        Vahvista
+                      </Button>
+                </Grid>
+                <Grid item xs={6}>
+                    <Button
+                        color="secondary"
+                        variant="outlined"
+                        fullWidth
+                    >
+                        Peruuta
+                      </Button>
+                </Grid>
+            </Grid>
+
+        </Popover>
+    )
+}
