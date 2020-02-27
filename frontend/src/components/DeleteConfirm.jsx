@@ -19,7 +19,8 @@ const styles2 = makeStyles(theme => ({
 }))*/
 
 export default function DeleteConfirm(props) {
-    const open = Boolean(props.states.anchorEl);
+    console.log('confirm', props)
+    const open = Boolean(props.anchorEl);
     const id = open ? 'simple-popover' : undefined;
     const [disabled, setDisabled] = React.useState(true)
 
@@ -31,35 +32,43 @@ export default function DeleteConfirm(props) {
         return () => clearTimeout(timer);
     }, []);
 
-
     return (
         <Popover
             open={open}
             id={id}
-            anchorEl={props.states.anchorEl}
+            anchorEl={props.anchorEl}
             onClose={props.handleClose}
             anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
+                vertical: 'center',
+                horizontal: 'left',
             }}
             transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: 'center',
+                horizontal: 'right',
             }}
         >
             <Alert
                 severity="warning"
             >
 
-                <AlertTitle>{props.title}<strong> {props.states.name}</strong> ?</AlertTitle>
+                <AlertTitle>
+                    <strong>{props.title}?</strong>
+                    {props.names.map(name => {
+                        return <p key={name}>{name}</p>
+                    })}
+
+                </AlertTitle>
                 <TextyAnim style={{ color: 'red' }}>
-                    Huom! Poistaminen poistaa myös kaikki tämän artistin levyt!
+                    {props.warning}
                 </TextyAnim>
                 <hr />
                 <Grid container>
                     <Grid item xs={6}>
                         <Button variant="outlined" fullWidth color="primary" disabled={disabled}
-                            onClick={() => props.deleteArtists(props.states.id)}
+                            onClick={() => {
+                                props.delete(props.ids)
+                                props.handleClose()
+                            }}
                         >
                             Vahvista
                         </Button>

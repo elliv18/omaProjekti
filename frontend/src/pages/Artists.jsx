@@ -128,7 +128,7 @@ const Artists = React.memo(function Artists(props) {
     const [data, setData] = React.useState([])
     const [hasMore, setHasMore] = React.useState(true)
     const [popOverStates, setPopOverStates] = React.useState({
-        anchorEl: null
+        anchorElDelete: null
     })
     const [open, setOpen] = React.useState({
         dataDialog: false,
@@ -177,17 +177,18 @@ const Artists = React.memo(function Artists(props) {
 
     const openDeleteConfirm = (event, name, id) => {
         //setAnchorEl(event.currentTarget);
+        let names = [name]
 
         setPopOverStates({
-            anchorEl: event.currentTarget,
-            id: id,
-            name: name
+            anchorElDelete: event.currentTarget,
+            ids: id,
+            names: names
         })
     };
     const closeDeleteConfirm = () => {
         console.log('CLOSE')
         setPopOverStates({
-            anchorEl: null,
+            anchorElDelete: null,
         })
     };
     const handleSearch = ({ target: { value } }) => {
@@ -363,12 +364,13 @@ const Artists = React.memo(function Artists(props) {
             </div>
             {open.dataDialog ? <ShowDataDialog open={open.dataDialog} data={open.data} handleClose={closeDataDialog} /> : null}
             {open.newArtist ? <NewArtist open={open.newArtist} handleClose={closeNewDialog} /> : null}
-            {popOverStates.anchorEl !== null
+            {popOverStates.anchorElDelete !== null
                 ? <DeleteConfirm
+                    warning={"Huom! Poistaminen poistaa myös kaikki tämän artistin levyt!"}
                     title={"Haluatko varmasti poistaa"}
                     states={popOverStates}
                     handleClose={closeDeleteConfirm}
-                    deleteArtists={deleteArtists}
+                    delete={deleteArtists}
                 />
                 : null}
         </div>

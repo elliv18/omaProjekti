@@ -3,14 +3,23 @@ import { withApollo } from 'react-apollo'
 import { ALL_VINYLS } from '../graphql/resolvers/queries'
 import Loading from '../components/Loading'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails, ExpansionPanelActions, Button, Grid, makeStyles, IconButton, Tooltip, TextField, Select, MenuItem, Popover } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails, ExpansionPanelActions, Button, Grid, makeStyles, Tooltip, TextField, Select, MenuItem, Popover, FormControlLabel, Checkbox, Fab } from '@material-ui/core';
 import helpers from '../helpers';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import NewVinyl from '../components/NewVinyl';
 import LoadingSpinner from '@material-ui/core/CircularProgress';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { ADD_TO_FORSALE } from '../graphql/resolvers/mutations';
-import Api from '../helpers/Api';
+
+
+import SpeedDial from '@material-ui/lab/SpeedDial';
+import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
+import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
+import EuroIcon from '@material-ui/icons/EuroSymbol';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteConfirm from '../components/DeleteConfirm';
+import EditIcon from '@material-ui/icons/Edit';
+import TextyAnim from 'rc-texty';
+import { Alert } from '@material-ui/lab';
 
 
 const styles = makeStyles(theme => ({
@@ -56,8 +65,8 @@ const styles = makeStyles(theme => ({
     add: {
         position: 'absolute',
         bottom: 32,
-        left: 16,
-        color: 'green'
+        right: 32,
+        // color: 'green'
     },
     infiniteScroll: {
         width: '100%',
@@ -84,16 +93,25 @@ const styles = makeStyles(theme => ({
 
 
 }))
+
+
 const Vinyls = React.memo(function Vinyls(props) {
-    const [data, setData] = React.useState([])
     const classes = styles()
-    const [open, setOpen] = React.useState({
-        new: false,
-        anchorEl: null,
-        data: []
-    })
+
     const [hasMore, setHasMore] = React.useState(true)
     const [sortBy, setSortBy] = React.useState("createdAt_DESC")
+    const [data, setData] = React.useState([])
+
+
+    const [states, setStates] = React.useState({
+        openNew: false,
+        anchorElPrice: null,
+        anchorElDelete: null,
+        openSpeedDial: false,
+        hidden: false,
+        ids: [],
+        names: []
+    })
 
 
     const fetch = React.useCallback(async (filter, orderBy) => {
@@ -107,9 +125,10 @@ const Vinyls = React.memo(function Vinyls(props) {
             },
         })
             .then(res => {
-                if (res.data.allVinyls.length > 0)
-                    setData(res.data.allVinyls)
+                //    console.log('res', res.data.allVinyls)
+                setData(res.data.allVinyls)
             })
+            .catch(e => console.log(e))
     }, [props.client, sortBy])
 
     React.useEffect(() => {
@@ -138,19 +157,29 @@ const Vinyls = React.memo(function Vinyls(props) {
     }
 
     const openNew = () => {
-        setOpen({ new: true })
+        //  setOpen({ new: true, speedDial: false })
+        setStates({ ...states, openNew: true })
     }
-    const closeNew = () => {
-        setOpen({ new: false })
-    }
-    const openPrice = (value, id) => {
-        console.log('open', id)
-        setOpen({ anchorEl: value, data: id })
+    /*   const closeNew = () => {
+          // setOpen({ new: false, speedDial: false })
+   
+       }*/
 
-    }
-    const closePrice = () => {
-        setOpen({ anchorEl: null })
-    }
+
+    /*
+        const handleVisibility = () => {
+            setOpen({ hidden: prevHidden => !open.prevHidden });
+        };
+    */
+    const handleOpenSpeedDial = () => {
+        //  setOpen({ speedDial: true });
+        setStates({ ...states, openSpeedDial: true })
+    };
+
+    const handleCloseSpeedDial = () => {
+        setStates({ ...states, openSpeedDial: false })
+        //  setOpen({ speedDial: false });
+    };
 
     const handleSearch = ({ target: { value } }) => {
         /*  let newList = data.allArtists.filter(filter => {
@@ -165,23 +194,84 @@ const Vinyls = React.memo(function Vinyls(props) {
 
     }
 
-    /*  const listForSale = () => {
-          props.client.mutate({
-              mutation: ADD_TO_FORSALE,
-              variables: {
-                  vinyls: saleVinyls,
-                  price: price
-              }
-          })
-      }*/
+    const handleCheckBox = (id, value, name) => {
+
+        const currentIndexId = states.ids.indexOf(id);
+        const currentIndexNames = states.names.indexOf(id);
+
+        const newCheckedIds = [...states.ids];
+        const newCheckedNames = [...states.names];
+
+        if (currentIndexId === -1) {
+            newCheckedIds.push(id);
+            newCheckedNames.push(name)
+        } else {
+            newCheckedIds.splice(currentIndexId, 1);
+            newCheckedNames.splice(currentIndexNames, 1);
+
+        }
+
+        setStates({
+            ...states,
+            ids: newCheckedIds,
+            names: newCheckedNames
+        })
+    }
+
 
     const handleSort = event => {
         console.log(event.target.value)
         setSortBy(event.target.value)
         fetch("", event.target.value)
     }
+
+    const openDeleteConfirm = event => {
+        //setAnchorEl(event.currentTarget);
+
+        /*   setOpen({
+               speedDial: true,
+               anchorElDelete: event.currentTarget,
+               ids: selected.ids,
+               names: selected.names
+           })*/
+        setStates({
+            ...states,
+            anchorElDelete: event.currentTarget,
+        })
+    };
+    const handleClose = () => {
+        console.log('CLOSE')
+        /*   setOpen({
+               speedDial: false,
+               anchorEl: null,
+               anchorElDelete: null,
+           })*/
+        setStates({
+            ...states,
+            openSpeedDial: false,
+            anchorElDelete: false,
+            anchorElPrice: false,
+            openNew: false,
+            ids: [],
+            names: []
+        })
+    };
+    const openPrice = (value, id) => {
+        console.log('open', id)
+        // setOpen({ anchorEl: value, data: id, speedDial: false })
+        setStates({
+            ...states,
+            anchorElPrice: value,
+        })
+    }
+
+
+    const deleteVinyl = (ids) => {
+        console.log('DELETE VINYL', ids)
+        handleClose()
+    }
     if (data.length === 0) { return <Loading open={true} /> }
-    console.log('DATA', data)
+    //  console.log('DATA', states)
 
 
     return (
@@ -242,6 +332,15 @@ const Vinyls = React.memo(function Vinyls(props) {
 
                                     expandIcon={<ExpandMoreIcon />}
                                 >
+                                    <FormControlLabel
+                                        aria-label="Acknowledge"
+                                        onClick={event => {
+                                            event.stopPropagation()
+                                            handleCheckBox(row.id, event.target.checked, row.name)
+                                        }}
+                                        //onFocus={event => event.stopPropagation()}
+                                        control={<Checkbox checked={states.ids.indexOf(row.id) !== -1} />}
+                                    />
                                     <Grid container>
                                         <Grid item xs={12} md={2}>
                                             <Typography variant="h6" className={classes.center}>
@@ -318,11 +417,46 @@ const Vinyls = React.memo(function Vinyls(props) {
                     })}
                 </InfiniteScroll>
             </div>
-            <IconButton className={classes.add} onClick={openNew}>
-                <AddCircleIcon fontSize="large" />
-            </IconButton>
-            {open.anchorEl ? <AskPrice client={props.client} anchorEl={open.anchorEl} handleClose={closePrice} id={open.data} /> : null}
-            {open.new ? <NewVinyl open={open.new} handleClose={closeNew} setData={setData} data={data} /> : null}
+
+            {states.ids.length > 0
+                ? <SpeedDial
+                    ariaLabel="SpeedDial openIcon example"
+                    className={classes.add} hidden={states.hidden}
+                    icon={<EditIcon />}
+                    onMouseLeave={handleCloseSpeedDial}
+                    onOpen={handleOpenSpeedDial}
+                    open={states.openSpeedDial}
+                >
+                    <SpeedDialAction
+                        tooltipTitle={"Myy valitut"}
+                        icon={<EuroIcon />}
+                        onClick={event => { openPrice(event.currentTarget) }}
+                    />
+                    <SpeedDialAction
+                        tooltipTitle={"Poista valitut"}
+                        icon={<DeleteIcon />}
+                        onClick={openDeleteConfirm}
+                    />
+
+                </SpeedDial>
+                : <Fab className={classes.add} color="primary" onClick={openNew}>
+                    <SpeedDialIcon />
+                </Fab>}
+
+            {states.anchorElDelete ?
+                <DeleteConfirm
+                    handleClose={handleClose}
+                    anchorEl={states.anchorElDelete}
+                    ids={states.ids}
+                    names={states.names}
+                    title={"Haluatko varmasti poistaa"}
+                    warning={"Olet poistamassa levyjä pysyvästi!"}
+                    delete={deleteVinyl}
+                // deleteArtists={deleteArtists}
+                />
+                : null}
+            {states.anchorElPrice ? <AskPrice names={states.names} client={props.client} anchorEl={states.anchorElPrice} handleClose={handleClose} ids={states.ids} /> : null}
+            {states.openNew ? <NewVinyl open={states.openNew} handleClose={handleClose} setData={setData} data={data} /> : null}
         </div>
     )
 })
@@ -334,8 +468,6 @@ function AskPrice(props) {
     const id = open ? 'simple-popover' : undefined;
     const [price, setPrice] = React.useState('')
 
-    let editedIds = []
-    editedIds.push(props.id)
 
     const handlePrice = event => {
         setPrice(event.target.value)
@@ -345,7 +477,7 @@ function AskPrice(props) {
         props.client.mutate({
             mutation: ADD_TO_FORSALE,
             variables: {
-                vinyls: editedIds,
+                vinyls: props.ids,
                 price: price
             }
         })
@@ -358,7 +490,7 @@ function AskPrice(props) {
 
 
 
-    console.log('pop', editedIds)
+    console.log('pop', props.ids)
     return (
 
         <Popover
@@ -367,15 +499,29 @@ function AskPrice(props) {
             anchorEl={props.anchorEl}
             onClose={props.handleClose}
             anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
+                vertical: 'center',
+                horizontal: 'left',
             }}
             transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
+                vertical: 'center',
+                horizontal: 'right',
             }}
         >
-            <Grid container style={{ padding: 15 }}>
+            <Grid container style={{ padding: 15, textAlign: 'center', maxWidth: 500 }}>
+                <Grid item xs={12}>
+                    <Alert severity="warning" style={{ textAlign: 'center' }} >
+                        <strong>Olet myymässä seuraavia levyjä:</strong>
+                    </Alert>
+                </Grid>
+                {props.names.map(name => {
+                    return (
+                        <Grid item xs={12} key={name}>
+                            <Typography variant="subtitle1">
+                                {name}
+                            </Typography>
+                        </Grid>
+                    )
+                })}
                 <Grid item xs={12}>
                     <TextField
                         fullWidth
@@ -400,6 +546,7 @@ function AskPrice(props) {
                 </Grid>
                 <Grid item xs={6}>
                     <Button
+                        onClick={props.handleClose}
                         color="secondary"
                         variant="outlined"
                         fullWidth

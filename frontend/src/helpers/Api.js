@@ -1,5 +1,4 @@
 import { withApollo } from "react-apollo"
-import { ADD_TO_FORSALE } from "../graphql/resolvers/mutations"
 
 const AddForSale = (vinyls, price) => client => {
     /*  props.client.mutate({
