@@ -72,6 +72,8 @@ export default `
       id: ID!
       vinyls: [Vinyl]
       price: String
+      pricePcs: String
+      priceTotal: String
       createdAt: String
       updatedAt: String
     }

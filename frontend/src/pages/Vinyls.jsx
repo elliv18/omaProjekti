@@ -3,7 +3,7 @@ import { withApollo } from 'react-apollo'
 import { ALL_VINYLS } from '../graphql/resolvers/queries'
 import Loading from '../components/Loading'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails, ExpansionPanelActions, Button, Grid, makeStyles, Tooltip, TextField, Select, MenuItem, Popover, FormControlLabel, Checkbox, Fab } from '@material-ui/core';
+import { ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails, ExpansionPanelActions, Button, Grid, makeStyles, Tooltip, TextField, Select, MenuItem, Popover, FormControlLabel, Checkbox, Fab, Collapse } from '@material-ui/core';
 import helpers from '../helpers';
 import NewVinyl from '../components/NewVinyl';
 import LoadingSpinner from '@material-ui/core/CircularProgress';
@@ -20,9 +20,22 @@ import DeleteConfirm from '../components/DeleteConfirm';
 import EditIcon from '@material-ui/icons/Edit';
 import TextyAnim from 'rc-texty';
 import { Alert } from '@material-ui/lab';
+import Moment from 'react-moment';
 
 
 const styles = makeStyles(theme => ({
+    '@global': {
+        '*::-webkit-scrollbar': {
+            width: '0.4em'
+        },
+        '*::-webkit-scrollbar-track': {
+            '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+        },
+        '*::-webkit-scrollbar-thumb': {
+            backgroundColor: theme.palette.secondary.main,
+            outline: '1px solid slategrey'
+        }
+    },
     expansionPanel: {
         marginTop: theme.spacing(1),
         marginBottom: theme.spacing(1),
@@ -125,7 +138,7 @@ const Vinyls = React.memo(function Vinyls(props) {
             },
         })
             .then(res => {
-                //    console.log('res', res.data.allVinyls)
+                console.log('res', res.data.allVinyls)
                 setData(res.data.allVinyls)
             })
             .catch(e => console.log(e))
@@ -140,7 +153,8 @@ const Vinyls = React.memo(function Vinyls(props) {
             query: ALL_VINYLS,
             variables: {
                 first: 30,
-                after: data[data.length - 1].id
+                after: data[data.length - 1].id,
+                sortBy: sortBy
             }
         })
             .then(res => {
@@ -257,7 +271,6 @@ const Vinyls = React.memo(function Vinyls(props) {
         })
     };
     const openPrice = (value, id) => {
-        console.log('open', id)
         // setOpen({ anchorEl: value, data: id, speedDial: false })
         setStates({
             ...states,
@@ -303,6 +316,8 @@ const Vinyls = React.memo(function Vinyls(props) {
                             <MenuItem value={"year_DESC"}>Uusin levy</MenuItem>
                             <MenuItem value={"name_ASC"}>Nimi (a-ö)</MenuItem>
                             <MenuItem value={"name_DESC"}>Nimi (ö-a)</MenuItem>
+                            <MenuItem value={"forSale_DESC"}>Myynnissä</MenuItem>
+
                         </Select>
                     </Grid>
                 </Grid>
@@ -324,11 +339,11 @@ const Vinyls = React.memo(function Vinyls(props) {
                     }
                 >
                     {data.map((row, i) => {
-                        const backColor = row.forSale ? '#82ed91' : 'none'
+
                         return (
                             <ExpansionPanel elevation={3} key={i} className={classes.expansionPanel}>
                                 <ExpansionPanelSummary
-                                    style={{ backgroundColor: backColor }}
+                                    style={{ backgroundColor: row.forSale ? '#82ed91' : '#fff' }}
 
                                     expandIcon={<ExpandMoreIcon />}
                                 >
@@ -348,9 +363,15 @@ const Vinyls = React.memo(function Vinyls(props) {
                                             </Typography>
                                         </Grid>
 
-                                        <Grid item xs={12} md={10}>
+                                        <Grid item xs={12} md={8}>
                                             <Typography variant="h6">
                                                 {row.name}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} md={2}>
+                                            <Typography variant="h6">
+
+                                                {row.sale ? 'hinta:' + row.sale.pricePcs : ''}
                                             </Typography>
                                         </Grid>
                                     </Grid>
@@ -359,12 +380,12 @@ const Vinyls = React.memo(function Vinyls(props) {
 
                                 <ExpansionPanelDetails>
                                     <Grid container>
-                                        <Grid item xs={12} md={2}>
+                                        <Grid item xs={12} md={3}>
                                             <Typography variant="subtitle1">
                                                 <b>Tyyppi:</b> {row.type}
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={12} md={2}>
+                                        <Grid item xs={12} md={3}>
                                             <Typography variant="subtitle1">
                                                 <b>Kunto: </b>{row.condition}
                                             </Typography>
@@ -376,14 +397,13 @@ const Vinyls = React.memo(function Vinyls(props) {
                                         </Grid>
                                         <Grid item xs={12} md={3}>
                                             <Typography variant="subtitle1">
-                                                <b>Vuosi </b>  {row.year}
+                                                <b>Vuosi </b>
+                                                <Moment format="MM/YYYY">
+                                                    {row.year}
+                                                </Moment>
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={12} md={2}>
-                                            <Typography variant="subtitle1">
-                                                <b>Myynnissä: </b>  {row.forSale.toString()}
-                                            </Typography>
-                                        </Grid>
+
                                         <Grid item xs={12}>
                                             <br />
 
@@ -396,8 +416,9 @@ const Vinyls = React.memo(function Vinyls(props) {
                                                 })}
                                             </Typography>
                                             <hr />
-
                                         </Grid>
+
+
                                     </Grid>
                                 </ExpansionPanelDetails>
                                 <ExpansionPanelActions>
@@ -455,7 +476,16 @@ const Vinyls = React.memo(function Vinyls(props) {
                 // deleteArtists={deleteArtists}
                 />
                 : null}
-            {states.anchorElPrice ? <AskPrice names={states.names} client={props.client} anchorEl={states.anchorElPrice} handleClose={handleClose} ids={states.ids} /> : null}
+            {states.anchorElPrice
+                ? <AskPrice
+                    names={states.names}
+                    client={props.client}
+                    anchorEl={states.anchorElPrice}
+                    handleClose={handleClose}
+                    ids={states.ids}
+                    data={data}
+                    setData={setData}
+                /> : null}
             {states.openNew ? <NewVinyl open={states.openNew} handleClose={handleClose} setData={setData} data={data} /> : null}
         </div>
     )
@@ -463,14 +493,28 @@ const Vinyls = React.memo(function Vinyls(props) {
 
 export default withApollo(Vinyls)
 
-function AskPrice(props) {
+const AskPrice = React.memo(function AskPrice(props) {
     const open = Boolean(props.anchorEl);
     const id = open ? 'simple-popover' : undefined;
-    const [price, setPrice] = React.useState('')
+    const [price, setPrice] = React.useState({
+        pcs: "",
+        total: ""
+    })
 
 
-    const handlePrice = event => {
-        setPrice(event.target.value)
+    const handlePricePcs = event => {
+        setPrice({ pcs: event.target.value })
+    }
+    const handlePriceTotal = event => {
+        setPrice({ total: event.target.value })
+    }
+    function getIndex(value, arr) {
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i].id === value) {
+                return i;
+            }
+        }
+        return -1; //to handle the case where the value doesn't exist
     }
 
     const addForSale = () => {
@@ -478,11 +522,21 @@ function AskPrice(props) {
             mutation: ADD_TO_FORSALE,
             variables: {
                 vinyls: props.ids,
-                price: price
+                pricePcs: price.pcs,
+                priceTotal: price.total,
+                isSale: true
             }
         })
             .then(res => {
                 console.log('froSale res', res.data.createForSale.forSale)
+                let tempData = [...props.data]
+                props.ids.map(row => {
+                    const i = getIndex(row, props.data)
+                    tempData[i] = { ...tempData[i], forSale: true }
+                })
+
+                console.log('reeeeee', tempData)
+                props.setData(tempData)
                 props.handleClose()
             })
             .catch(e => console.log(e))
@@ -527,8 +581,18 @@ function AskPrice(props) {
                         fullWidth
                         variant="outlined"
                         margin="dense"
-                        label="hinta levyille"
-                        onChange={handlePrice}
+                        label="hinta levyille (kpl)"
+                        onChange={handlePricePcs}
+                    />
+                </Grid>
+                <br />
+                <Grid item xs={12}>
+                    <TextField
+                        fullWidth
+                        variant="outlined"
+                        margin="dense"
+                        label="hinta levyille (kaikki)"
+                        onChange={handlePriceTotal}
                     />
                 </Grid>
                 <br />
@@ -558,4 +622,4 @@ function AskPrice(props) {
 
         </Popover>
     )
-}
+})

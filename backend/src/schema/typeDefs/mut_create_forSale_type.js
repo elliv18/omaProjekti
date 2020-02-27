@@ -4,8 +4,10 @@ export default `
     }
 
     input CreateForSaleInput {
-        price: String
+        pricePcs: String
+        priceTotal: String
         vinyls: [String]
+        isSale: Boolean
     }
     type CreateForSalePayload {
         forSale: ForSale

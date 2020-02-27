@@ -44,7 +44,8 @@ type Category {
 type ForSale {
   id: ID! @id
   vinyls: [Vinyl] @relation(name: "VinylSale")
-  price: String
+  pricePcs: String
+  priceTotal: String
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

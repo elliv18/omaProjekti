@@ -5,6 +5,7 @@ import createVinyl from './createVinyl'
 import createCategory from './createCategory'
 import createForSale from './createForSale'
 import deleteArtists from './deleteArtists'
+import updateVinyls from './updateVinyl'
 export {
     signUp,
     login,
@@ -12,5 +13,6 @@ export {
     createVinyl,
     createCategory,
     createForSale,
-    deleteArtists
+    deleteArtists,
+    updateVinyls
 }
