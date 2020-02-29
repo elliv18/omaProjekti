@@ -11,7 +11,7 @@ var faker = require("faker");
 
 createRootAdmin();
 
-generateData(100);
+generateData(1000);
 
 //console.log('---ENV -- ', process.env.JWT_SECRET)
 const server = new GraphQLServer({

@@ -8,7 +8,7 @@ import helpers from '../helpers';
 import NewVinyl from '../components/NewVinyl';
 import LoadingSpinner from '@material-ui/core/CircularProgress';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { ADD_TO_FORSALE } from '../graphql/resolvers/mutations';
+import { ADD_TO_FORSALE, DELETE_VINYLS } from '../graphql/resolvers/mutations';
 
 
 import SpeedDial from '@material-ui/lab/SpeedDial';
@@ -18,7 +18,6 @@ import EuroIcon from '@material-ui/icons/EuroSymbol';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteConfirm from '../components/DeleteConfirm';
 import EditIcon from '@material-ui/icons/Edit';
-import TextyAnim from 'rc-texty';
 import { Alert } from '@material-ui/lab';
 import Moment from 'react-moment';
 
@@ -123,7 +122,8 @@ const Vinyls = React.memo(function Vinyls(props) {
         openSpeedDial: false,
         hidden: false,
         ids: [],
-        names: []
+        names: [],
+        error: null
     })
 
 
@@ -174,17 +174,10 @@ const Vinyls = React.memo(function Vinyls(props) {
         //  setOpen({ new: true, speedDial: false })
         setStates({ ...states, openNew: true })
     }
-    /*   const closeNew = () => {
-          // setOpen({ new: false, speedDial: false })
-   
-       }*/
 
-
-    /*
-        const handleVisibility = () => {
-            setOpen({ hidden: prevHidden => !open.prevHidden });
-        };
-    */
+    const setError = (e) => {
+        setStates({ ...states, error: e })
+    }
     const handleOpenSpeedDial = () => {
         //  setOpen({ speedDial: true });
         setStates({ ...states, openSpeedDial: true })
@@ -281,7 +274,27 @@ const Vinyls = React.memo(function Vinyls(props) {
 
     const deleteVinyl = (ids) => {
         console.log('DELETE VINYL', ids)
-        handleClose()
+        props.client.mutate({
+            mutation: DELETE_VINYLS,
+            variables: {
+                ids: states.ids
+            }
+        })
+            .then(res => {
+                console.log(res.data)
+                const data2 = data
+                states.ids.forEach(rowId => {
+                    const index = data2.findIndex(row => row.id === rowId);
+                    if (index > -1) {
+                        data2.splice(index, 1);
+                    }
+                });
+
+                setData(data2)
+                handleClose()
+
+            })
+            .catch(e => console.log(e))
     }
     if (data.length === 0) { return <Loading open={true} /> }
     //  console.log('DATA', states)
@@ -324,6 +337,11 @@ const Vinyls = React.memo(function Vinyls(props) {
 
             </div>
             <div className={classes.content}>
+                <Collapse in={states.error !== null}>
+                    <Typography variant="h4" style={{ color: 'red', textAlign: 'center' }}>
+                        {states.error}
+                    </Typography>
+                </Collapse>
                 <InfiniteScroll
                     className={classes.infiniteScroll}
                     height={'calc(100vh - 125px)'}
@@ -370,7 +388,6 @@ const Vinyls = React.memo(function Vinyls(props) {
                                         </Grid>
                                         <Grid item xs={12} md={2}>
                                             <Typography variant="h6">
-
                                                 {row.sale ? 'hinta:' + row.sale.pricePcs : ''}
                                             </Typography>
                                         </Grid>
@@ -473,7 +490,6 @@ const Vinyls = React.memo(function Vinyls(props) {
                     title={"Haluatko varmasti poistaa"}
                     warning={"Olet poistamassa levyjä pysyvästi!"}
                     delete={deleteVinyl}
-                    delete={deleteVinyl}
                 />
                 : null}
             {states.anchorElPrice
@@ -485,6 +501,7 @@ const Vinyls = React.memo(function Vinyls(props) {
                     ids={states.ids}
                     data={data}
                     setData={setData}
+                    setError={setError}
                 /> : null}
             {states.openNew ? <NewVinyl open={states.openNew} handleClose={handleClose} setData={setData} data={data} /> : null}
         </div>
@@ -500,15 +517,33 @@ const AskPrice = React.memo(function AskPrice(props) {
         pcs: "",
         total: "",
         name: "",
-        desc: ""
+        desc: "",
+        error: false
     })
+    function isFloat(val) {
+        var floatRegex = /^-?\d+(?:[.,]\d*?)?$/;
+        if (!floatRegex.test(val))
+            return false;
 
+        val = parseFloat(val);
+        if (isNaN(val))
+            return false;
+        return true;
+    }
 
     const handlePricePcs = event => {
-        setPrice({ ...price, pcs: event.target.value })
+        const value = event.target.value
+        if (isFloat(value))
+            setPrice({ ...price, pcs: value, error: false })
+        else
+            setPrice({ ...price, pcs: "", error: true })
     }
     const handlePriceTotal = event => {
-        setPrice({ ...price, total: event.target.value })
+        const value = event.target.value
+        if (isFloat(value))
+            setPrice({ ...price, total: value, error: false })
+        else
+            setPrice({ ...price, total: "", error: true })
     }
     const handleName = event => {
         setPrice({ ...price, name: event.target.value })
@@ -541,7 +576,7 @@ const AskPrice = React.memo(function AskPrice(props) {
             .then(res => {
                 console.log('froSale res', res.data.createForSale.forSale)
                 let tempData = [...props.data]
-                props.ids.map(row => {
+                props.ids.forEach(row => {
                     const i = getIndex(row, props.data)
                     tempData[i] = { ...tempData[i], forSale: true }
                 })
@@ -550,12 +585,20 @@ const AskPrice = React.memo(function AskPrice(props) {
                 props.setData(tempData)
                 props.handleClose()
             })
-            .catch(e => console.log(e))
+            .catch(e => {
+                const error = e.message.replace('GraphQL error:', '').trim()
+                console.log(e)
+                props.setError(error)
+            })
     }
 
 
 
     console.log('pop', props.ids)
+    const disabled = price.pcs.length === 0 && price.total.length === 0
+    const disablePcs = price.total.length > 0
+    const disableTotal = price.pcs.length > 0
+    const showTotalText = props.ids.length > 1
     return (
 
         <Popover
@@ -607,24 +650,41 @@ const AskPrice = React.memo(function AskPrice(props) {
                     />
                 </Grid>
                 <br />
+                <Collapse in={showTotalText}>
+                    <Typography variant="subtitle1">
+                        Anna vain toinen hinta
+                </Typography>
+                    <br />
+                </Collapse>
                 <Grid item xs={12}>
+
                     <TextField
                         fullWidth
                         variant="outlined"
                         margin="dense"
                         label="hinta levyille (kpl)"
                         onChange={handlePricePcs}
+                        disabled={disablePcs}
+                        error={price.error}
+                        helperText={price.error ? "Hinta ei kelpaa!" : ""}
                     />
                 </Grid>
                 <br />
                 <Grid item xs={12}>
-                    <TextField
-                        fullWidth
-                        variant="outlined"
-                        margin="dense"
-                        label="hinta levyille (kaikki)"
-                        onChange={handlePriceTotal}
-                    />
+                    <Collapse in={showTotalText}>
+
+                        <TextField
+                            fullWidth
+                            variant="outlined"
+                            margin="dense"
+                            label="hinta levyille (kaikki)"
+                            onChange={handlePriceTotal}
+                            disabled={disableTotal}
+                            error={price.error}
+                            helperText={price.error ? "Hinta ei kelpaa!" : ""}
+                        />
+                    </Collapse>
+
                 </Grid>
                 <br />
                 <Grid item xs={6}>
@@ -634,6 +694,7 @@ const AskPrice = React.memo(function AskPrice(props) {
                         color="primary"
                         disabled={price.length === 0}
                         onClick={addForSale}
+                        disabled={disabled}
                     >
 
                         Vahvista

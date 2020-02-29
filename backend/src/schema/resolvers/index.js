@@ -1,5 +1,5 @@
 import relations from './relations'
-import { signUp, login, createArtist, createVinyl, createCategory, createForSale, deleteArtists, updateVinyls } from './mutations'
+import { signUp, login, createArtist, createVinyl, createCategory, createForSale, deleteArtists, updateVinyls, deleteVinyls } from './mutations'
 import { getUserById, validateJwt, getCurrentUser, allVinyls, allCategories, allArtists, getCounts, allForSale } from './queries'
 const { mergeResolvers } = require('merge-graphql-schemas')
 
@@ -23,6 +23,7 @@ const resolvers = [
     createForSale,
 
     deleteArtists,
+    deleteVinyls,
 
     updateVinyls
 

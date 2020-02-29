@@ -368,7 +368,9 @@ const Artists = React.memo(function Artists(props) {
                 ? <DeleteConfirm
                     warning={"Huom! Poistaminen poistaa myös kaikki tämän artistin levyt!"}
                     title={"Haluatko varmasti poistaa"}
-                    states={popOverStates}
+                    ids={popOverStates.ids}
+                    names={popOverStates.names}
+                    anchorEl={popOverStates.anchorElDelete}
                     handleClose={closeDeleteConfirm}
                     delete={deleteArtists}
                 />

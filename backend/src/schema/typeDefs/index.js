@@ -19,6 +19,7 @@ import createVinyl from './mut_createVinyl_type'
 import createForSale from './mut_create_forSale_type'
 import deleteArtists from './mut_DeleteArtists'
 import updateVinyls from './mut_updateVinyls_type'
+import deleteVinyls from './mut_deleteVinyls_type'
 const types = [
     tables,
     getUserById,
@@ -36,7 +37,8 @@ const types = [
     createForSale,
     deleteArtists,
     updateVinyls,
-    allForSale
+    allForSale,
+    deleteVinyls
 ]
 
 export default mergeTypes(types, { all: true })

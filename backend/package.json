@@ -8,7 +8,8 @@
     "dev-prisma": "nodemon -w datamodel.prisma --exec 'yarn prisma reset --force && yarn prisma generate && yarn prisma deploy --force'",
     "dev-prettier": "onchange 'src/**/*.{ts,tsx}' -- prettier --write {{changed}}",
     "dev-serve": "sleep 5 && tsc-watch -w --noClear --onSuccess 'node --max-old-space-size=2048 dist/src/index.js'",
-    "build": "rm -rf dist && mkdir dist && yarn prisma generate && tsc"
+    "build": "rm -rf dist && mkdir dist && yarn prisma generate && tsc",
+    "start": "yarn prisma generate && yarn prisma deploy && node dist/src/index.js"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.2",

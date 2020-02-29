@@ -6,7 +6,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import drawerStyle from '../styles/drawerStyle'
 import Cookies from 'js-cookie'
 import { setAuthStates } from '../redux/actions'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
     appbar: {
