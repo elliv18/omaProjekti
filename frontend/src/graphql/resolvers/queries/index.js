@@ -4,6 +4,7 @@ import ALL_VINYLS from './allVinyls'
 import GET_COUNTS from './getCounts'
 import ALL_ARTISTS from './allArtists'
 import ALL_CATEGORIES from './allCategories'
+import ALL_FOR_SALE from './allForSale'
 
 export {
     GET_USER_BY_ID,
@@ -11,5 +12,6 @@ export {
     ALL_VINYLS,
     GET_COUNTS,
     ALL_ARTISTS,
-    ALL_CATEGORIES
+    ALL_CATEGORIES,
+    ALL_FOR_SALE
 }

@@ -26,6 +26,7 @@ class App extends React.PureComponent {
       <BrowserRouter>
         <CustomAppBar
           authenticated={authenticated}
+          currentUser={currentUser}
         >
 
           {!authenticated ? <Redirect to="/login" />

@@ -74,6 +74,8 @@ export default `
       price: String
       pricePcs: String
       priceTotal: String
+      name: String
+      description: String
       createdAt: String
       updatedAt: String
     }

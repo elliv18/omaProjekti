@@ -473,7 +473,7 @@ const Vinyls = React.memo(function Vinyls(props) {
                     title={"Haluatko varmasti poistaa"}
                     warning={"Olet poistamassa levyjä pysyvästi!"}
                     delete={deleteVinyl}
-                // deleteArtists={deleteArtists}
+                    delete={deleteVinyl}
                 />
                 : null}
             {states.anchorElPrice
@@ -498,15 +498,23 @@ const AskPrice = React.memo(function AskPrice(props) {
     const id = open ? 'simple-popover' : undefined;
     const [price, setPrice] = React.useState({
         pcs: "",
-        total: ""
+        total: "",
+        name: "",
+        desc: ""
     })
 
 
     const handlePricePcs = event => {
-        setPrice({ pcs: event.target.value })
+        setPrice({ ...price, pcs: event.target.value })
     }
     const handlePriceTotal = event => {
-        setPrice({ total: event.target.value })
+        setPrice({ ...price, total: event.target.value })
+    }
+    const handleName = event => {
+        setPrice({ ...price, name: event.target.value })
+    }
+    const handleDesc = event => {
+        setPrice({ ...price, desc: event.target.value })
     }
     function getIndex(value, arr) {
         for (var i = 0; i < arr.length; i++) {
@@ -518,13 +526,16 @@ const AskPrice = React.memo(function AskPrice(props) {
     }
 
     const addForSale = () => {
+        console.log('add', price.desc, price.name)
         props.client.mutate({
             mutation: ADD_TO_FORSALE,
             variables: {
                 vinyls: props.ids,
                 pricePcs: price.pcs,
                 priceTotal: price.total,
-                isSale: true
+                isSale: true,
+                name: price.name,
+                description: price.desc
             }
         })
             .then(res => {
@@ -576,6 +587,26 @@ const AskPrice = React.memo(function AskPrice(props) {
                         </Grid>
                     )
                 })}
+                <Grid item xs={12}>
+                    <TextField
+                        fullWidth
+                        variant="outlined"
+                        margin="dense"
+                        label="Nimi myynnille"
+                        onChange={handleName}
+                    />
+                </Grid>
+                <br />
+                <Grid item xs={12}>
+                    <TextField
+                        fullWidth
+                        variant="outlined"
+                        margin="dense"
+                        label="kuvaus"
+                        onChange={handleDesc}
+                    />
+                </Grid>
+                <br />
                 <Grid item xs={12}>
                     <TextField
                         fullWidth

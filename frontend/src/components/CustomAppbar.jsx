@@ -6,7 +6,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import drawerStyle from '../styles/drawerStyle'
 import Cookies from 'js-cookie'
 import { setAuthStates } from '../redux/actions'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 const useStyles = makeStyles(theme => ({
     appbar: {
@@ -45,6 +45,8 @@ function CustomAppBar(props) {
         Cookies.remove('jwt')
         localStorage.clear()
         dispatch(setAuthStates(false, null))
+        window.location.reload('/login');
+
     }
 
     return (
@@ -65,34 +67,40 @@ function CustomAppBar(props) {
                         </Grid>
                     </Hidden>
 
-                    <Hidden xsDown>
-                        <Grid item xs={6} sm={9} className={classes.pages}>
-                            {props.authenticated
-                                ? <React.Fragment>
-                                    <Link to="/">
-                                        <Button>
-                                            Home
-                                    </Button>
-                                    </Link>
-                                    <Link to="/artists">
-                                        <Button>
-                                            Artists
-                                    </Button>
-                                    </Link>
-                                    <Link to="/vinyls">
-                                        <Button>
-                                            Vinyls
-                                    </Button>
-                                    </Link>
-                                    <Link to="/categories">
-                                        <Button>
-                                            Categories
-                                    </Button>
-                                    </Link>
-                                </React.Fragment>
-                                : null}
-                        </Grid>
-                    </Hidden>
+                    {props.currentUser
+                        ? props.currentUser.type === 'ADMIN'
+                            ? <Hidden xsDown>
+                                <Grid item xs={6} sm={9} className={classes.pages}>
+                                    {props.authenticated
+                                        ? <React.Fragment>
+                                            <Link to="/">
+                                                <Button>
+                                                    Home
+                                        </Button>
+                                            </Link>
+                                            <Link to="/artists">
+                                                <Button>
+                                                    Artists
+                                        </Button>
+                                            </Link>
+                                            <Link to="/vinyls">
+                                                <Button>
+                                                    Vinyls
+                                        </Button>
+                                            </Link>
+                                            <Link to="/categories">
+                                                <Button>
+                                                    Categories
+                                        </Button>
+                                            </Link>
+                                        </React.Fragment>
+                                        : null}
+                                </Grid>
+                            </Hidden>
+                            : null
+                        : null}
+
+
                     <Grid item xs={6} sm={3} className={classes.logOut}>
                         {props.authenticated
                             ? <Button

@@ -10,7 +10,7 @@ export default {
         },
 
         async sale(vinyl) {
-            console.log('*** RELATIONS ***', vinyl)
+            // console.log('*** RELATIONS ***', vinyl)
             return await prisma.vinyl({ id: vinyl.id }).sale()
         }
     },

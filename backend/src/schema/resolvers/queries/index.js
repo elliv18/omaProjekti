@@ -5,6 +5,7 @@ import allVinyls from './allVinyls'
 import allCategories from './allCategories'
 import allArtists from './allArtists'
 import getCounts from './getCounts'
+import allForSale from './allForSale'
 export {
     getUserById,
     validateJwt,
@@ -12,5 +13,6 @@ export {
     allVinyls,
     allCategories,
     allArtists,
-    getCounts
+    getCounts,
+    allForSale
 }

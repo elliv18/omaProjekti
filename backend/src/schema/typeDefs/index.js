@@ -8,6 +8,7 @@ import allVinyls from './query_allVinyls_type'
 import allCategories from './query_allCategories'
 import allArtists from './query_allArtists_type'
 import getCounts from './query_getCounts_type'
+import allForSale from './query_allForSale_type'
 
 //Mutations
 import signUp from './mut_signUp_type'
@@ -34,7 +35,8 @@ const types = [
     getCurrentUser,
     createForSale,
     deleteArtists,
-    updateVinyls
+    updateVinyls,
+    allForSale
 ]
 
 export default mergeTypes(types, { all: true })

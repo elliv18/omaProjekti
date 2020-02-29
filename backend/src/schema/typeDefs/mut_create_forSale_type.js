@@ -8,6 +8,8 @@ export default `
         priceTotal: String
         vinyls: [String]
         isSale: Boolean
+        name: String
+        description: String
     }
     type CreateForSalePayload {
         forSale: ForSale

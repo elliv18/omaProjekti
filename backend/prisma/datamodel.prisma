@@ -46,6 +46,8 @@ type ForSale {
   vinyls: [Vinyl] @relation(name: "VinylSale")
   pricePcs: String
   priceTotal: String
+  name: String
+  description: String
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

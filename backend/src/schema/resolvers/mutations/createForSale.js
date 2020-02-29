@@ -5,7 +5,7 @@ import { USE_AUTH } from "../../../environments";
 
 export default {
     Mutation: {
-        createForSale: async (_, { input: { vinyls, pricePcs, priceTotal, isSale } }, { currentUser }) => {
+        createForSale: async (_, { input: { vinyls, pricePcs, priceTotal, isSale, name, description } }, { currentUser }) => {
 
             if (USE_AUTH == 'true') {
                 mustBeLoggedIn(currentUser)
@@ -37,11 +37,13 @@ export default {
 
 
 
-
+            console.log(' *** CREATE FOR SALE ***', name, description)
             vinylsTemp = { connect: temp }
             const total = priceTotal ? priceTotal : tempTotal.toString()
 
             const forSale = await prisma.createForSale({
+                name: name,
+                description: description,
                 vinyls: vinylsTemp,
                 pricePcs: pricePcs,
                 priceTotal: total
