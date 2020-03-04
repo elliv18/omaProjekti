@@ -12,3 +12,6 @@ export const ROOT_ADMIN_NAME = process.env.ROOT_ADMIN_NAME || "Root";
 
 export const DEVELOPMENT = "development";
 export const PRODUCTION = "production";
+export const NODE_ENV = process.env.NODE_ENV || DEVELOPMENT;
+export const BACKEND_PORT = NODE_ENV === PRODUCTION ? process.env.REACT_APP_BACKEND_PORT_PROD : process.env.REACT_APP_BACKEND_PORT_DEV
+

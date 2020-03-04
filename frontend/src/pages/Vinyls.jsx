@@ -692,7 +692,6 @@ const AskPrice = React.memo(function AskPrice(props) {
                         variant="outlined"
                         fullWidth
                         color="primary"
-                        disabled={price.length === 0}
                         onClick={addForSale}
                         disabled={disabled}
                     >

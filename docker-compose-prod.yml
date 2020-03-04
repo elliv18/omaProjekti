@@ -30,6 +30,7 @@ services:
     restart: always
     environment: 
       NODE_ENV: production
+      BACKEND_PORT: ${REACT_APP_BACKEND_PORT_DEV}
       SALT_ROUNDS: ${SALT_ROUNDS}
       JWT_SECRET: ${JWT_SECRET}
       USE_AUTH: ${USE_AUTH}
@@ -56,6 +57,9 @@ services:
 
     environment:
       NODE_ENV: production
+      REACT_APP_BACKEND_PORT_DEV: ${REACT_APP_BACKEND_PORT_DEV}
+      REACT_APP_BACKEND_PORT_PROD: ${REACT_APP_BACKEND_PORT_PROD}
+      REACT_APP_PUBLIC_URL: ${REACT_APP_PUBLIC_URL}
 
     restart: always
 

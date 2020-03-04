@@ -3,10 +3,14 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { HttpLink } from 'apollo-link-http';
 import Cookies from 'js-cookie'
 import { setContext } from "apollo-link-context";
+import { NODE_ENV, PUBLIC_URL, BACKEND_PORT_DEV, BACKEND_PORT_PROD, PRODUCTION, } from '../../environments'
 
 const cache = new InMemoryCache();
+const URL = NODE_ENV === PRODUCTION ? 'http://elliv18.hopto.org:4000' : `http://localhost:${BACKEND_PORT_DEV}`
+console.log('*** SETUP2 ***', URL, PUBLIC_URL, PRODUCTION, BACKEND_PORT_PROD, BACKEND_PORT_DEV)
+
 const link = new HttpLink({
-    uri: process.env.NODE_ENV === 'production' ? 'http://192.168.8.109:4000' : 'http://localhost:4000'
+    uri: URL
 })
 const authLink = setContext((_) => {
     // get the authentication token from local storage if it exists

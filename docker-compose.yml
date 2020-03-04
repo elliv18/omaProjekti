@@ -24,7 +24,7 @@ services:
       context: ./
       dockerfile: .dockerfiles/backendDev
     ports:
-      - "4000:4000"
+      - "${REACT_APP_BACKEND_PORT_DEV}:${REACT_APP_BACKEND_PORT_DEV}"
     volumes:
       - ./backend:/opt/app
     depends_on:
@@ -32,6 +32,7 @@ services:
     restart: always
     environment: 
       NODE_ENV: development
+      BACKEND_PORT: ${REACT_APP_BACKEND_PORT_DEV}
       SALT_ROUNDS: ${SALT_ROUNDS}
       JWT_SECRET: ${JWT_SECRET}
       USE_AUTH: ${USE_AUTH}
@@ -60,6 +61,9 @@ services:
       - /opt/app/node_modules/.cache/
     environment:
       NODE_ENV: development
+      REACT_APP_BACKEND_PORT_DEV: ${REACT_APP_BACKEND_PORT_DEV}
+      REACT_APP_BACKEND_PORT_PROD: ${REACT_APP_BACKEND_PORT_PROD}
+      REACT_APP_PUBLIC_URL: ${REACT_APP_PUBLIC_URL}
 
     restart: always
 
