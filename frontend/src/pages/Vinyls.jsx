@@ -127,18 +127,18 @@ const Vinyls = React.memo(function Vinyls(props) {
     })
 
 
-    const fetch = React.useCallback(async (filter, orderBy) => {
+    const fetch = React.useCallback(async (filter) => {
         console.log('Fetch', sortBy)
         await props.client.query({
             query: ALL_VINYLS,
             variables: {
                 first: 30,
                 filter: filter,
-                sortBy: orderBy
+                sortBy: sortBy
             },
         })
             .then(res => {
-                console.log('res', res.data.allVinyls)
+                console.log('res', sortBy, res.data.allVinyls)
                 setData(res.data.allVinyls)
             })
             .catch(e => console.log(e))
@@ -229,7 +229,7 @@ const Vinyls = React.memo(function Vinyls(props) {
     const handleSort = event => {
         console.log(event.target.value)
         setSortBy(event.target.value)
-        fetch("", event.target.value)
+        fetch()
     }
 
     const openDeleteConfirm = event => {
