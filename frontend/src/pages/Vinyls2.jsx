@@ -15,6 +15,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteConfirmation from '../components/DeleteConfirm2';
 import { DELETE_VINYLS } from '../graphql/resolvers/mutations';
 import AskPrice from '../components/AskPrice';
+import NewVinyl from '../components/NewVinyl';
 
 
 const styles = theme => ({
@@ -62,6 +63,7 @@ class Vinyls extends React.PureComponent {
         openSpeedDial: false,
         openDeleteConfirm: false,
         openAskPrice: false,
+        openNew: false
 
     };
 
@@ -169,11 +171,15 @@ class Vinyls extends React.PureComponent {
     handleOpenAskPrice = () => {
         this.setState({ openAskPrice: true })
     }
+    handleOpenNew = () => {
+        this.setState({ openNew: true })
+    }
     handleClose = () => {
         this.setState({
             openSpeedDial: false,
             openDeleteConfirm: false,
             openAskPrice: false,
+            openNew: false,
             ids: [],
             names: []
         })
@@ -227,9 +233,16 @@ class Vinyls extends React.PureComponent {
         this.handleClose()
     }
 
+    addNew = (newData) => {
+        console.log('newData', newData)
+        const data = [...newData, ...this.state.data]
+        this.setState({ data: data })
+        this.handleClose()
+    }
+
     // *************** RENDER ********************
     render() {
-        const { data, loading, ids, names, sortBy, hasMore, openSpeedDial, openDeleteConfirm, openAskPrice } = this.state
+        const { data, loading, ids, names, sortBy, hasMore, openSpeedDial, openDeleteConfirm, openAskPrice, openNew } = this.state
         const { classes } = this.props;
         console.log('vinyls2', sortBy)
         if (loading) return <div>LOADING...</div>
@@ -309,9 +322,7 @@ class Vinyls extends React.PureComponent {
 
                                                 <Grid item xs={6}>
                                                     <Typography gutterBottom variant="subtitle2" className={classes.center}>
-                                                        <Moment format="YYYY">
-                                                            {vinyl.year}
-                                                        </Moment>
+                                                        {1950 + i}
                                                     </Typography>
                                                 </Grid>
 
@@ -374,7 +385,7 @@ class Vinyls extends React.PureComponent {
                         />
 
                     </SpeedDial>
-                    : <Fab className={classes.add} color="primary" >
+                    : <Fab className={classes.add} color="primary" onClick={this.handleOpenNew}>
                         <SpeedDialIcon />
                     </Fab>}
 
@@ -394,6 +405,8 @@ class Vinyls extends React.PureComponent {
                     ids={ids}
                     update={this.updateSale}
                 />
+
+                <NewVinyl open={openNew} handleClose={this.handleClose} addNew={this.addNew} />
             </div>
 
         )

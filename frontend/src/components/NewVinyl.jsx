@@ -190,8 +190,8 @@ function NewVinyl(props) {
                 console.log('TEMP*', temp)
                 //                props.setData({ data: [...temp, ...props.data] })
 
-                props.setData([...temp, ...props.data])
-                props.handleClose()
+                props.addNew(temp)
+                //props.handleClose()
             })
             .catch(e => console.log(e))
     }
