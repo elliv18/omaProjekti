@@ -12,8 +12,8 @@ import { ADD_TO_FORSALE, DELETE_VINYLS } from '../graphql/resolvers/mutations';
 
 
 import SpeedDial from '@material-ui/lab/SpeedDial';
-import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
+import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import EuroIcon from '@material-ui/icons/EuroSymbol';
 import DeleteIcon from '@material-ui/icons/Delete';
 import DeleteConfirm from '../components/DeleteConfirm';
@@ -362,7 +362,6 @@ const Vinyls = React.memo(function Vinyls(props) {
                             <ExpansionPanel elevation={3} key={i} className={classes.expansionPanel}>
                                 <ExpansionPanelSummary
                                     style={{ backgroundColor: row.forSale ? '#82ed91' : '#fff' }}
-
                                     expandIcon={<ExpandMoreIcon />}
                                 >
                                     <FormControlLabel

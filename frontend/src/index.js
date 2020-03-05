@@ -14,12 +14,8 @@ import { client } from './graphql/apollo'
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/lib/integration/react";
 import { ThemeProvider, createMuiTheme } from '@material-ui/core';
+import { theme2 } from './theme';
 
-const theme2 = createMuiTheme({
-    palette: {
-    },
-
-});
 
 const persistConfig = {
     key: "root",

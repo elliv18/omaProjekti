@@ -7,7 +7,7 @@ import { withApollo } from 'react-apollo';
 import Signup from './pages/Signup';
 import CustomAppBar from './components/CustomAppbar'
 import Artists from './pages/Artists';
-import Vinyls from './pages/Vinyls';
+import Vinyls from './pages/Vinyls2';
 import { setAuthStates } from './redux/actions'
 import { connect } from 'react-redux'
 import ErrorPage from './pages/Errorpage';
