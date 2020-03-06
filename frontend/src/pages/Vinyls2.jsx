@@ -16,12 +16,13 @@ import DeleteConfirmation from '../components/DeleteConfirm2';
 import { DELETE_VINYLS } from '../graphql/resolvers/mutations';
 import AskPrice from '../components/AskPrice';
 import NewVinyl from '../components/NewVinyl';
+import VinylsImage from '../pictures/vinyls-logo.jpg'
 
 
 const styles = theme => ({
     root: {
         position: 'absolute',
-        left: 0, right: 0, top: 8, bottom: 8,
+        left: 0, right: 0, top: 0, bottom: 8,
 
     },
     right: {
@@ -31,7 +32,9 @@ const styles = theme => ({
         textAlign: 'center'
     },
     infiniteScroll: {
-        padding: theme.spacing(1)
+        padding: theme.spacing(1),
+        margin: 0,
+        padding: 0
     },
     add: {
         position: 'absolute',
@@ -39,6 +42,15 @@ const styles = theme => ({
         right: 32,
         // color: 'green'
     },
+    image: {
+        [theme.breakpoints.up('sm')]: {
+            width: '50%'
+        },
+
+        [theme.breakpoints.down('xs')]: {
+            width: '65%'
+        }
+    }
 
 })
 class Vinyls extends React.PureComponent {
@@ -85,7 +97,10 @@ class Vinyls extends React.PureComponent {
             },
         })
             .then(res => {
-                this.setState({ data: res.data.allVinyls, loading: false })
+                const data = res.data.allVinyls
+                if (data.length > 0)
+                    this.setState({ data: data, loading: false })
+
             })
             .catch(e => console.log(e))
     }
@@ -256,39 +271,71 @@ class Vinyls extends React.PureComponent {
                     next={this.onFetchMore}
                     hasMore={hasMore}
                     loader={<div style={{ textAlign: 'center' }}><LoadingSpinner /></div>}
-
                     endMessage={
                         <Typography variant="h6">
                             Jee, kaikki artistit on jo listattu
                         </Typography>
                     }
                 >
-                    <Grid container spacing={2} justify="center" alignItems="center" >
-                        <Grid item xs={6} >
-                            <TextField variant="outlined" placeholder="Search..." margin="dense" onChange={this.handleSearch} />
-                        </Grid>
-                        <Grid item xs={6} className={classes.right}>
-                            <Select
-                                value={sortBy}
-                                onChange={this.handleSort}
-                            >
-                                <MenuItem value={"createdAt_DESC"}>Uusin (lisätty)</MenuItem>
-                                <MenuItem value={"createdAt_ASC"}>Vanhin (lisätty)</MenuItem>
-                                <MenuItem value={"year_ASC"}>Vanhin levy</MenuItem>
-                                <MenuItem value={"year_DESC"}>Uusin levy</MenuItem>
-                                <MenuItem value={"name_ASC"}>Nimi (a-ö)</MenuItem>
-                                <MenuItem value={"name_DESC"}>Nimi (ö-a)</MenuItem>
-                                <MenuItem value={"forSale_DESC"}>Myynnissä</MenuItem>
 
-                            </Select>
+                    <div className={classes.center} style={{ overflow: 'hidden', backgroundColor: 'black', width: '100%' }}>
+                        <Typography variant="h2">
+                            VINYYLIT
+                        </Typography>
+                        <img className={classes.image} src={VinylsImage} />
+                    </div>
+                    <div
+                        style={{
+                            position: '-webkitSticky',
+                            position: 'sticky',
+                            top: 0,
+                            width: '100%',
+                            backgroundColor: 'black',
+                            height: 55,
+                            zIndex: 1
+                        }}
+                    >
+                        <Grid container justify="center" alignItems="center">
+                            <Grid item xs={6}>
+                                <TextField
+                                    variant="outlined"
+                                    placeholder="Search..."
+                                    margin="dense"
+                                    onChange={this.handleSearch}
+
+                                />
+                            </Grid>
+
+                            <Grid item xs={6} className={classes.right}>
+                                <Select
+                                    value={sortBy}
+                                    onChange={this.handleSort}
+                                >
+                                    <MenuItem value={"createdAt_DESC"}>Uusin (lisätty)</MenuItem>
+                                    <MenuItem value={"createdAt_ASC"}>Vanhin (lisätty)</MenuItem>
+                                    <MenuItem value={"year_ASC"}>Vanhin levy</MenuItem>
+                                    <MenuItem value={"year_DESC"}>Uusin levy</MenuItem>
+                                    <MenuItem value={"name_ASC"}>Nimi (a-ö)</MenuItem>
+                                    <MenuItem value={"name_DESC"}>Nimi (ö-a)</MenuItem>
+                                    <MenuItem value={"forSale_DESC"}>Myynnissä</MenuItem>
+
+                                </Select>
+                            </Grid>
                         </Grid>
+                    </div>
+                    <Grid container spacing={2} justify="center" alignItems="center"
+                        style={{
+                            width: '100%',
+                            margin: 'auto   '
+
+                        }} >
+
                         {data.map((vinyl, i) => {
                             const backColor = vinyl.forSale ? 'green' : '#fff'
                             return (
                                 <Grid item xs={12} md={6} xl={4} key={i}>
                                     <Card elevation={7} >
                                         <CardContent>
-
                                             <Grid container justify="center" alignItems="center" >
 
                                                 {vinyl.forSale &&
