@@ -94,9 +94,9 @@ const Styles = makeStyles(theme => ({
 function UserView(props) {
 
     const [data, setData] = React.useState([])
-    const [states, setStates] = React.useState({
-        sortBy: "createdAt_DESC",
-    })
+    /* const [states, setStates] = React.useState({
+         sortBy: "createdAt_DESC",
+     })*/
 
     const fetch = React.useCallback(() => {
         props.client.query({
@@ -114,7 +114,6 @@ function UserView(props) {
     }, [fetch])
 
     const classes = Styles()
-    const { sortBy } = states
     return (
         <div>
             <div className={classes.header}>
@@ -135,7 +134,7 @@ function UserView(props) {
 
                     <Grid item xs={5} className={classes.right}>
                         <Select
-                            value={sortBy}
+                            value={"createdAt_DESC"}
                         //   onChange={handleSort}
                         >
                             <MenuItem value={"createdAt_DESC"}>Uusin (lisätty)</MenuItem>

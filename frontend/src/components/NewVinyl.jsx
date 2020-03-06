@@ -254,10 +254,10 @@ function NewVinyl(props) {
                 </DialogContent>
 
                 <DialogActions>
-                    <Button variant="outlined" color="primary" onClick={addVinyl}>
+                    <Button variant="contained" color="primary" onClick={addVinyl}>
                         Lisää
                     </Button>
-                    <Button variant="outlined" color="secondary" onClick={props.handleClose}>
+                    <Button variant="contained" color="secondary" onClick={props.handleClose}>
                         Peruuta
                     </Button>
                 </DialogActions>

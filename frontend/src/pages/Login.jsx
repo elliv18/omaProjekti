@@ -1,27 +1,34 @@
 import React from 'react'
 import Paper from '@material-ui/core/Paper';
 import '../styles/Login.css'
-import { Button } from '@material-ui/core';
+import { Button, FormControl, TextField, Typography } from '@material-ui/core';
 import loginStyle from '../styles/login';
 import { withApollo } from "react-apollo";
 import { LOGIN_MUTATION } from '../graphql/resolvers/mutations';
 import Cookies from 'js-cookie'
 import { Link } from 'react-router-dom';
 import CustomAlert from '../components/CustomAlert';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setAuthStates } from '../redux/actions';
 import { GET_CURRENT_USER } from '../graphql/resolvers/queries';
-
+import { withRouter } from 'react-router';
 
 const initialStates = {
     email: '',
     pw: '',
     errorMsg: null
 }
-function Login({ client }) {
+function Login({ client, history }) {
     const [states, setStates] = React.useState(initialStates)
     const classes = loginStyle()
     const dispatch = useDispatch()
+    const CU = useSelector(state => state.authReduser.currentUser)
+
+    React.useEffect(() => {
+        if (CU) {
+            history.push('/')
+        }
+    })
 
     const handleUsername = ({ target: { value } }) => {
         console.log(value)
@@ -54,8 +61,11 @@ function Login({ client }) {
                     query: GET_CURRENT_USER
                 })
                     .then(res => {
+                        console.log('CU RES', res.data)
                         const cu = res.data.getCurrentUser
                         dispatch(setAuthStates(true, cu))
+                        history.push('/')
+
                     })
                     .catch(e => console.log(e))
             })
@@ -70,52 +80,62 @@ function Login({ client }) {
     return (
 
         <div className="root">
+            {states.errorMsg
+                ? <CustomAlert msg={states.errorMsg} status="error" isLogin={true} />
+                : null}
             <Paper elevation={7} className={classes.paper}>
-                {states.errorMsg
-                    ? <CustomAlert msg={states.errorMsg} status="error" isLogin={true} />
-                    : null}
-                <form className="form">
-                    <label >
-                        <strong className="labelText">Username</strong>
-                        <input
+                <Typography variant="h4" style={{ padding: 20 }}>
+                    Kirjaudu Sisään
+                    </Typography>
+                <form>
+                    <FormControl fullWidth>
+                        <TextField
                             type="text"
                             className="textField"
                             value={states.email}
                             onChange={handleUsername}
                             autoComplete="username"
+                            variant="outlined"
+                            margin="normal"
+                            label="Sähköposti"
                         />
-                    </label>
-                    <label >
-                        <strong className="labelText">Password</strong>
-                        <input
+                        <TextField
                             type="password"
                             className="textField"
                             value={states.pw}
                             onChange={handlePW}
                             autoComplete="current-password"
+                            variant="outlined"
+                            margin="normal"
+                            label="Salasana"
                         />
-                    </label>
-                    <Button
-                        className={classes.loginButton}
-                        variant="contained"
-                        color="secondary"
-                        fullWidth
-                        onClick={login}
-                        disabled={disabled}
-                    >
-                        click
+                        <Button
+                            className={classes.loginButton}
+                            variant="contained"
+                            color="primary"
+                            fullWidth
+                            onClick={login}
+                            disabled={disabled}
+                        >
+                            Kirjaudu sisään
+                    </Button>
 
+                        <Link to="signUp" className={classes.link}>
+                            <Button
+                                fullWidth
+                                variant="contained"
+                                color="default"
+                            >
+                                Rekisteröidy
                         </Button>
+                        </Link>
+
+                    </FormControl>
                 </form>
-                <hr />
-                <div >
-                    <Link to="/signup">
-                        Don't have an account? Sign up
-                    </Link>
-                </div>
             </Paper>
         </div>
     )
 }
 
-export default withApollo(Login)
+export default withRouter(withApollo(Login))
+

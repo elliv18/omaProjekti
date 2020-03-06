@@ -1,8 +1,7 @@
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from './pages/Login';
-import Home from './pages/Home';
 import { withApollo } from 'react-apollo';
 import Signup from './pages/Signup';
 import CustomAppBar from './components/CustomAppbar'
@@ -12,6 +11,8 @@ import { setAuthStates } from './redux/actions'
 import { connect } from 'react-redux'
 import ErrorPage from './pages/Errorpage';
 import Categories from './pages/Categories';
+import PrivateRoute from './components/PrivateRoute';
+import { AdminView, UserView } from './components/home';
 
 
 
@@ -20,7 +21,7 @@ class App extends React.PureComponent {
 
   render() {
     const { authenticated, currentUser } = this.props;
-    // console.log('App render', currentUser)
+    //console.log('App render', currentUser)
 
     return (
       <BrowserRouter>
@@ -28,13 +29,6 @@ class App extends React.PureComponent {
           authenticated={authenticated}
           currentUser={currentUser}
         >
-
-          {!authenticated ? <Redirect to="/login" />
-            : window.location.pathname === '/login'
-              ? <Redirect to="/" />
-              : <Redirect to={window.location.pathname} />}
-
-
           <CssBaseline />
           <Switch>
             <Route path="/login"
@@ -48,33 +42,15 @@ class App extends React.PureComponent {
               )}
             />
 
-            <Route exact path="/"
-              render={() => (
-                <Home currentUser={currentUser} />
+            <PrivateRoute exact path="/" componentUser={UserView} componentAdmin={AdminView} CU={currentUser} />
 
-              )}
-            />
+            <PrivateRoute path="/categories" componentAdmin={Categories} CU={currentUser} />
 
-            <Route path="/categories"
-              render={() => (
-                <Categories />
+            <PrivateRoute path="/artists" componentAdmin={Artists} CU={currentUser} />
 
-              )}
-            />
+            <PrivateRoute path="/vinyls" componentAdmin={Vinyls} CU={currentUser} />
 
-            <Route path="/artists"
-              render={() => (
-                < Artists />
-              )}
-            />
-
-            <Route path="/vinyls"
-              render={() => (
-                <Vinyls />
-              )}
-            />
-
-            <Route component={ErrorPage} />
+            <PrivateRoute componentAdmin={ErrorPage} componentUser={ErrorPage} CU={currentUser} />
           </Switch>
         </CustomAppBar>
 

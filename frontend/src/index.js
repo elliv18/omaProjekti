@@ -13,8 +13,8 @@ import rootReducer from './redux/redusers'
 import { client } from './graphql/apollo'
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/lib/integration/react";
-import { ThemeProvider, createMuiTheme } from '@material-ui/core';
-import { theme2 } from './theme';
+import { ThemeProvider } from '@material-ui/core';
+import { theme } from './theme';
 
 
 const persistConfig = {
@@ -31,7 +31,7 @@ ReactDOM.render(
     <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
             <ApolloProvider client={client}>
-                <ThemeProvider theme={theme2}>
+                <ThemeProvider theme={theme}>
                     <App />
                 </ThemeProvider>
             </ApolloProvider>

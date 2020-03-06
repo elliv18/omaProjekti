@@ -2,7 +2,6 @@ import React from 'react'
 import { withApollo } from 'react-apollo'
 import { ALL_VINYLS } from '../graphql/resolvers/queries';
 import { withStyles, Card, CardContent, Typography, Grid, FormControlLabel, Checkbox, TextField, Select, MenuItem, Fab, } from '@material-ui/core';
-import Moment from 'react-moment';
 import helpers from '../helpers';
 import LoadingSpinner from '@material-ui/core/CircularProgress';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -10,20 +9,20 @@ import { SpeedDial, SpeedDialAction } from '@material-ui/lab';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import EuroIcon from '@material-ui/icons/EuroSymbol';
 import DeleteIcon from '@material-ui/icons/Delete';
-import DeleteConfirm from '../components/DeleteConfirm';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteConfirmation from '../components/DeleteConfirm2';
 import { DELETE_VINYLS } from '../graphql/resolvers/mutations';
 import AskPrice from '../components/AskPrice';
 import NewVinyl from '../components/NewVinyl';
 import VinylsImage from '../pictures/vinyls-logo.jpg'
+import Background from '../pictures/background3.png'
 
 
 const styles = theme => ({
     root: {
         position: 'absolute',
-        left: 0, right: 0, top: 0, bottom: 8,
-
+        left: 0, right: 0, top: 0, bottom: 0,
+        backgroundColor: 'black'
     },
     right: {
         textAlign: 'right'
@@ -32,7 +31,6 @@ const styles = theme => ({
         textAlign: 'center'
     },
     infiniteScroll: {
-        padding: theme.spacing(1),
         margin: 0,
         padding: 0
     },
@@ -50,6 +48,11 @@ const styles = theme => ({
         [theme.breakpoints.down('xs')]: {
             width: '65%'
         }
+    },
+    card: {
+        backgroundImage: `url(${Background})`,
+        borderRadius: 10,
+        minHeight: 256
     }
 
 })
@@ -282,11 +285,10 @@ class Vinyls extends React.PureComponent {
                         <Typography variant="h2">
                             VINYYLIT
                         </Typography>
-                        <img className={classes.image} src={VinylsImage} />
+                        <img className={classes.image} src={VinylsImage} alt="Vinyls" />
                     </div>
                     <div
                         style={{
-                            position: '-webkitSticky',
                             position: 'sticky',
                             top: 0,
                             width: '100%',
@@ -326,15 +328,15 @@ class Vinyls extends React.PureComponent {
                     <Grid container spacing={2} justify="center" alignItems="center"
                         style={{
                             width: '100%',
-                            margin: 'auto   '
-
+                            margin: 'auto',
+                            padding: 10
                         }} >
 
                         {data.map((vinyl, i) => {
                             const backColor = vinyl.forSale ? 'green' : '#fff'
                             return (
                                 <Grid item xs={12} md={6} xl={4} key={i}>
-                                    <Card elevation={7} >
+                                    <Card elevation={7} className={classes.card}>
                                         <CardContent>
                                             <Grid container justify="center" alignItems="center" >
 
@@ -362,13 +364,13 @@ class Vinyls extends React.PureComponent {
 
                                                 <Grid item xs={6}>
 
-                                                    <Typography gutterBottom variant="subtitle2" className={classes.center}>
+                                                    <Typography gutterBottom variant="subtitle1" className={classes.center}>
                                                         {vinyl.type}
                                                     </Typography>
                                                 </Grid>
 
                                                 <Grid item xs={6}>
-                                                    <Typography gutterBottom variant="subtitle2" className={classes.center}>
+                                                    <Typography gutterBottom variant="subtitle1" className={classes.center}>
                                                         {1950 + i}
                                                     </Typography>
                                                 </Grid>
@@ -376,7 +378,7 @@ class Vinyls extends React.PureComponent {
 
                                                 <Grid item xs={6}>
 
-                                                    <Typography gutterBottom variant="subtitle2" className={classes.center}>
+                                                    <Typography gutterBottom variant="subtitle1" className={classes.center}>
                                                         Levyn kunto: {vinyl.condition}
                                                     </Typography>
                                                 </Grid>
@@ -384,7 +386,7 @@ class Vinyls extends React.PureComponent {
 
                                                 <Grid item xs={6}>
 
-                                                    <Typography gutterBottom variant="subtitle2" className={classes.center}>
+                                                    <Typography gutterBottom variant="subtitle1" className={classes.center}>
                                                         Kategoria: {vinyl.category.name}
                                                     </Typography>
                                                 </Grid>

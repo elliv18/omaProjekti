@@ -7,6 +7,7 @@ import drawerStyle from '../styles/drawerStyle'
 import Cookies from 'js-cookie'
 import { setAuthStates } from '../redux/actions'
 import { useDispatch } from 'react-redux'
+import { withApollo } from 'react-apollo';
 
 const useStyles = makeStyles(theme => ({
     appbar: {
@@ -26,7 +27,9 @@ const useStyles = makeStyles(theme => ({
     pages: {
         textAlign: 'left',
         paddingLeft: theme.spacing(4)
-
+    },
+    link: {
+        textDecoration: 'none'
     }
 }));
 
@@ -45,26 +48,33 @@ function CustomAppBar(props) {
         Cookies.remove('jwt')
         localStorage.clear()
         dispatch(setAuthStates(false, null))
-        window.location.reload('/login');
+        props.client.cache.reset()
+        // window.location.reload('/login');
 
     }
+
+    const logOutItemXs = props.currentUser && props.currentUser.type === 'ADMIN' ? 6 : 12
+    const logOutItemMd = props.currentUser && props.currentUser.type === 'ADMIN' ? 3 : 12
 
     return (
         <div>
             <AppBar position="static" className={classes.appbar}>
                 <Grid container alignItems="center" justify="center" className={classes.root}>
                     <Hidden smUp>
-                        <Grid item xs={6} className={classes.menuButton}>
-                            <IconButton
-                                edge="start"
+                        {props.currentUser && props.currentUser.type === 'ADMIN' ?
+                            < Grid item xs={6} className={classes.menuButton}>
+                                <IconButton
+                                    edge="start"
 
-                                color="inherit"
-                                aria-label="menu"
-                                onClick={openDrawer}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                        </Grid>
+                                    color="inherit"
+                                    aria-label="menu"
+                                    onClick={openDrawer}
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+                            </Grid>
+                            : null
+                        }
                     </Hidden>
 
                     {props.currentUser
@@ -73,25 +83,25 @@ function CustomAppBar(props) {
                                 <Grid item xs={6} sm={9} className={classes.pages}>
                                     {props.authenticated
                                         ? <React.Fragment>
-                                            <Link to="/">
+                                            <Link to="/" className={classes.link}>
                                                 <Button>
                                                     Home
-                                        </Button>
+                                                </Button>
                                             </Link>
-                                            <Link to="/artists">
+                                            <Link to="/artists" className={classes.link}>
                                                 <Button>
                                                     Artists
-                                        </Button>
+                                                </Button>
                                             </Link>
-                                            <Link to="/vinyls">
+                                            <Link to="/vinyls" className={classes.link}>
                                                 <Button>
                                                     Vinyls
-                                        </Button>
+                                                </Button>
                                             </Link>
-                                            <Link to="/categories">
-                                                <Button>
+                                            <Link to="/categories" className={classes.link}>
+                                                <Button >
                                                     Categories
-                                        </Button>
+                                                </Button>
                                             </Link>
                                         </React.Fragment>
                                         : null}
@@ -101,7 +111,7 @@ function CustomAppBar(props) {
                         : null}
 
 
-                    <Grid item xs={6} sm={3} className={classes.logOut}>
+                    <Grid item xs={logOutItemXs} sm={logOutItemMd} className={classes.logOut}>
                         {props.authenticated
                             ? <Button
                                 variant="contained"
@@ -119,11 +129,11 @@ function CustomAppBar(props) {
             </div>
             <CustomDrawer open={open} handleClose={closeDrawer} />
 
-        </div>
+        </div >
     )
 }
 
-export default CustomAppBar
+export default withApollo(CustomAppBar)
 
 
 

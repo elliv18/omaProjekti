@@ -44,11 +44,10 @@ function AskPrice(props) {
                 //props.handleClose()
             })
             .catch(e => {
-                const error = e.message.replace('GraphQL error:', '').trim()
+                //   const error = e.message.replace('GraphQL error:', '').trim()
                 console.log(e)
             })
     }
-    console.log('PRICE', state)
     return (
         <Dialog
             open={props.open}

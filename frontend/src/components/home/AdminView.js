@@ -21,7 +21,6 @@ class AdminView extends React.PureComponent {
             .then(res => {
                 const data = res.data.getCounts
                 this.setState({ data: data, loading: false })
-                console.log(data)
             })
             .catch(e => console.log(e))
         /*
@@ -38,7 +37,9 @@ class AdminView extends React.PureComponent {
 
     render() {
         const { loading, data } = this.state
-        console.log('ADMIN VIEW')
+
+        if (loading) return <Loading open={loading} />
+        console.log('ADMIN VIEW', data)
 
         return (
             <div>
