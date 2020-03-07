@@ -17,9 +17,34 @@ const styles = makeStyles(theme => ({
     form: {
         overflow: 'auto'
     },
-    dialogPaper: { overflow: 'visible' }
-
+    dialogPaper: { overflow: 'visible' },
 }))
+
+const customStyles = {
+    control: (base, state) => ({
+        ...base,
+        background: "grey",
+        // match with the menu
+        borderRadius: state.isFocused ? "3px 3px 0 0" : 3,
+        // Overwrittes the different states of border
+        /*  borderColor: state.isFocused ? "yellow" : "green",
+          // Removes weird border around container
+          boxShadow: state.isFocused ? null : null,
+          "&:hover": {
+              // Overwrittes the different states of border
+              borderColor: state.isFocused ? "red" : "blue"
+          }*/
+
+    }),
+
+    menuList: base => ({
+        ...base,
+        // kill the white space on first and last option
+        padding: 0,
+        backgroundColor: 'black',
+        color: '#007b80'
+    }),
+}
 function NewVinyl(props) {
     const classes = styles()
 
@@ -209,18 +234,19 @@ function NewVinyl(props) {
                 <DialogTitle>Lisää uusi levy</DialogTitle>
                 <DialogContent className={classes.dialogPaper}>
                     <form>
-
-                        <Select placeholder="Levyn tyyppi" options={types} onChange={handleTypeChange} />
-                        <br />
                         <TextField margin="dense" label="Levyn nimi" fullWidth variant="outlined" onChange={handleNameChange} />
                         <br />
                         <br />
-                        <Select placeholder="Levyn kunto" options={conditions} onChange={handleConditionChange} />
+                        <Select styles={customStyles} placeholder="Levyn tyyppi" options={types} onChange={handleTypeChange} />
+
                         <br />
-                        <Select placeholder="Levyn vuosi" options={years} onChange={handleYearChange} />
+                        <Select styles={customStyles} placeholder="Levyn kunto" options={conditions} onChange={handleConditionChange} />
+                        <br />
+                        <Select styles={customStyles} placeholder="Levyn vuosi" options={years} onChange={handleYearChange} />
                         <br />
 
                         <Select
+                            styles={customStyles}
                             isMulti
                             placeholder="Artisti(t)"
                             options={artists}
@@ -230,6 +256,7 @@ function NewVinyl(props) {
                         <br />
 
                         <Select
+                            styles={customStyles}
                             placeholder="Category"
                             options={categories}
                             onChange={handleCategoryChange}

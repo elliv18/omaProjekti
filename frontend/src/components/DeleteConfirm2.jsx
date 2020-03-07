@@ -29,7 +29,7 @@ export default function DeleteConfirmation(props) {
                 <Button variant="contained" color="primary" onClick={props.delete}>
                     Vahvista
                 </Button>
-                <Button variant="contained" color="secondary">
+                <Button variant="contained" color="secondary" onClick={props.handleClose}>
                     Peruuta
                 </Button>
             </DialogActions>

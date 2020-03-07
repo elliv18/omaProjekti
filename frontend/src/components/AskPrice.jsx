@@ -100,7 +100,7 @@ function AskPrice(props) {
                 <Button variant="contained" color="primary" onClick={addForSale} >
                     Vahvista
                 </Button>
-                <Button variant="contained" color="secondary">
+                <Button variant="contained" color="secondary" onClick={props.handleClose}>
                     Peruuta
                 </Button>
             </DialogActions>

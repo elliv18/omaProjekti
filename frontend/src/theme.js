@@ -7,7 +7,7 @@ export const theme = createMuiTheme({
             main: '#1bb350'
         },
         secondary: {
-            main: '#c71c10'
+            main: '#007b80'
         },
         loginBack: {
             main: '#007b80'

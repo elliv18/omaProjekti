@@ -16,7 +16,7 @@ import AskPrice from '../components/AskPrice';
 import NewVinyl from '../components/NewVinyl';
 import VinylsImage from '../pictures/vinyls-logo.jpg'
 import Background from '../pictures/background3.png'
-
+import Loading from '../components/Loading'
 
 const styles = theme => ({
     root: {
@@ -25,10 +25,15 @@ const styles = theme => ({
         backgroundColor: 'black'
     },
     right: {
-        textAlign: 'right'
+        textAlign: 'right',
+        paddingRight: theme.spacing(3)
     },
     center: {
         textAlign: 'center'
+    },
+    left: {
+        paddingLeft: theme.spacing(3)
+
     },
     infiniteScroll: {
         margin: 0,
@@ -42,7 +47,7 @@ const styles = theme => ({
     },
     image: {
         [theme.breakpoints.up('sm')]: {
-            width: '50%'
+            width: '35%'
         },
 
         [theme.breakpoints.down('xs')]: {
@@ -94,7 +99,7 @@ class Vinyls extends React.PureComponent {
         this.props.client.query({
             query: ALL_VINYLS,
             variables: {
-                first: 15,
+                first: 30,
                 sortBy: sortBy,
                 filter: filter
             },
@@ -263,10 +268,11 @@ class Vinyls extends React.PureComponent {
         const { data, loading, ids, names, sortBy, hasMore, openSpeedDial, openDeleteConfirm, openAskPrice, openNew } = this.state
         const { classes } = this.props;
         console.log('vinyls2', sortBy)
-        if (loading) return <div>LOADING...</div>
         return (
 
             <div className={classes.root}>
+                <Loading open={loading} />
+
                 <InfiniteScroll
                     className={classes.infiniteScroll}
                     height={'calc(100vh - 65px)'}
@@ -298,13 +304,13 @@ class Vinyls extends React.PureComponent {
                         }}
                     >
                         <Grid container justify="center" alignItems="center">
-                            <Grid item xs={6}>
+                            <Grid item xs={6} className={classes.left}>
                                 <TextField
                                     variant="outlined"
                                     placeholder="Search..."
                                     margin="dense"
                                     onChange={this.handleSearch}
-
+                                    fullWidth
                                 />
                             </Grid>
 
