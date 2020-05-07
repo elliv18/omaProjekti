@@ -2,18 +2,16 @@ import React from 'react'
 import { withApollo } from 'react-apollo'
 import { ALL_ARTISTS } from '../graphql/resolvers/queries'
 import Loading from '../components/Loading'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { ExpansionPanel, ExpansionPanelSummary, Typography, ExpansionPanelDetails, ExpansionPanelActions, Button, Grid, makeStyles, IconButton, TextField, Tooltip } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Typography, Grid, makeStyles, IconButton, TextField, Tooltip } from '@material-ui/core';
+//import DeleteIcon from '@material-ui/icons/Delete';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import helpers from '../helpers'
-import Moment from 'react-moment';
 import LoadingSpinner from '@material-ui/core/CircularProgress';
-import ShowDataDialog from '../components/ShowDataDialog';
 import { DELETE_ARTISTS } from '../graphql/resolvers/mutations';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import NewArtist from '../components/NewArtist';
-import DeleteConfirm from '../components/DeleteConfirm';
+import ArtistCard from '../components/ArtistCard'
+import DeleteConfirmation from '../components/DeleteConfirm2';
 
 const styles = makeStyles(theme => ({
     '@global': {
@@ -39,7 +37,7 @@ const styles = makeStyles(theme => ({
             position: 'absolute',
             top: 55, bottom: 0, right: 0, left: 0,
             overflow: 'auto',
-            backgroundColor: 'lightGrey',
+            //    backgroundColor: 'lightGrey',
         },
         [theme.breakpoints.down('sm')]: {
 
@@ -47,13 +45,13 @@ const styles = makeStyles(theme => ({
             position: 'absolute',
             top: 55, bottom: 0, right: 0, left: 0,
             overflow: 'auto',
-            backgroundColor: 'lightGrey',
+            //    backgroundColor: 'lightGrey',
         }
     },
     header: {
         position: 'relative',
         height: 55,
-        backgroundColor: 'grey',
+        //     backgroundColor: 'grey',
 
     },
     title: {
@@ -127,13 +125,16 @@ const Artists = React.memo(function Artists(props) {
      })*/
     const [data, setData] = React.useState([])
     const [hasMore, setHasMore] = React.useState(true)
-    const [popOverStates, setPopOverStates] = React.useState({
-        anchorElDelete: null
-    })
+
     const [open, setOpen] = React.useState({
-        dataDialog: false,
         data: [],
-        newArtist: false
+        newArtist: false,
+        openDelete: false
+    })
+
+    const [nameID, setNameID] = React.useState({
+        names: [],
+        ids: []
     })
     const classes = styles()
 
@@ -161,13 +162,6 @@ const Artists = React.memo(function Artists(props) {
 
     // **************** FUNCTIONS **********************
 
-    const openDataDialog = (data) => {
-        setOpen({ dataDialog: true, data: data })
-    }
-    const closeDataDialog = () => {
-        setOpen({ dataDialog: false, data: [] })
-    }
-
     const openNewDialog = (data) => {
         setOpen({ newArtist: true })
     }
@@ -175,21 +169,17 @@ const Artists = React.memo(function Artists(props) {
         setOpen({ newArtist: false })
     }
 
-    const openDeleteConfirm = (event, name, id) => {
+    const openDeleteConfirm = (id, name) => {
         //setAnchorEl(event.currentTarget);
-        let names = [name]
-
-        setPopOverStates({
-            anchorElDelete: event.currentTarget,
-            ids: id,
-            names: names
+        setOpen({ ...open, openDelete: true })
+        setNameID({
+            names: [name],
+            ids: [id]
         })
     };
     const closeDeleteConfirm = () => {
-        console.log('CLOSE')
-        setPopOverStates({
-            anchorElDelete: null,
-        })
+        setOpen({ ...open, openDelete: false })
+
     };
     const handleSearch = ({ target: { value } }) => {
         /*  let newList = data.allArtists.filter(filter => {
@@ -225,22 +215,25 @@ const Artists = React.memo(function Artists(props) {
             .catch(e => console.log(e))
     }
 
-    const deleteArtists = (id) => {
-        console.log('delete', id)
-
+    const deleteArtists = () => {
+        console.log('delete', nameID.ids)
+        const id = nameID.ids
         props.client.mutate({
             mutation: DELETE_ARTISTS,
             variables: { ids: id }
         })
             .then(res => {
                 console.log(res.data)
+                const ids = nameID.ids
                 const data2 = data
-                const index = data2.findIndex(row => row.id === id);
-                if (index > -1) {
-                    data2.splice(index, 1);
-                    setData(data2)
-                }
+                ids.forEach(rowId => {
+                    const index = data2.findIndex(row => row.id === rowId);
+                    if (index > -1) {
+                        data2.splice(index, 1);
+                    }
+                });
 
+                setData(data2)
                 closeDeleteConfirm()
 
             })
@@ -256,7 +249,7 @@ const Artists = React.memo(function Artists(props) {
           console.log(error)
       }*/
 
-    console.log('length', data.length)
+    console.log('data', data)
     return (
         <div>
             <div className={classes.header}>
@@ -292,250 +285,45 @@ const Artists = React.memo(function Artists(props) {
                     }
                 >
 
-                    {data.map((row, i) => {
-                        const name = helpers.Capitalize(row.firstName) + " " + helpers.Capitalize(row.lastName)
-                        return (
-
-                            <ExpansionPanel key={i} classes={{ expanded: classes.expanded }} elevation={3} className={classes.expansionPanel}>
-                                <ExpansionPanelSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                >
-                                    <Typography variant="h5">
-                                        {name}
-                                    </Typography>
-
-                                </ExpansionPanelSummary>
-                                <ExpansionPanelDetails>
-
-                                    <Grid container justify="center" alignItems="center">
-                                        <Grid item md={3} xs={12} >
-                                            <Typography variant="subtitle2">
-                                                <strong>Artisti lisätty: </strong>
-                                                <Moment format="DD-MM-YYYY HH:mm">
-                                                    {row.createdAt}
-                                                </Moment>
-                                            </Typography>
-                                        </Grid>
-
-                                        <Grid item md={3} xs={12} >
-                                            <Typography variant="subtitle2">
-                                                <strong>Artisti päivitetty: </strong>
-                                                <Moment format="DD-MM-YYYY HH:mm">
-                                                    {row.updatedAt}
-                                                </Moment>
-                                            </Typography>
-                                        </Grid>
-
-                                        <Grid item md={6} xs={12}>
-                                            <Button
-                                                fullWidth
-                                                variant="contained"
-                                                color="secondary"
-                                                onClick={() => openDataDialog((row.vinyls))}
-                                            >
-                                                Näytä artistin levyt
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                </ExpansionPanelDetails>
-
-                                <ExpansionPanelActions>
-
-                                    <Grid container>
-                                        <Grid item xs={12} className={classes.gridLeft}>
-                                            <IconButton
-                                                onClick={event => openDeleteConfirm(event, name, row.id)}
-                                            >
-                                                <DeleteIcon style={{ color: 'red' }} />
-                                            </IconButton>
-                                        </Grid>
-                                    </Grid>
-
-                                </ExpansionPanelActions>
-
-                            </ExpansionPanel>
-
-                        )
-                    })}
+                    <Grid container spacing={2} justify="center" alignItems="flex-start"
+                        style={{
+                            width: '100%',
+                            margin: 'auto',
+                            padding: 10
+                        }}
+                    >
+                        {data.map((row, i) => {
+                            const name = helpers.Capitalize(row.firstName) + " " + helpers.Capitalize(row.lastName)
+                            return (
+                                <ArtistCard
+                                    key={i}
+                                    id={row.id}
+                                    name={name}
+                                    created={row.createdAt}
+                                    updated={row.updatedAt}
+                                    vinyls={row.vinyls}
+                                    openDelete={openDeleteConfirm}
+                                />
+                            )
+                        })}
+                    </Grid>
                 </InfiniteScroll>
                 <IconButton className={classes.add} onClick={openNewDialog}>
                     <AddCircleIcon fontSize="large" style={{ color: 'green' }} />
                 </IconButton>
             </div>
-            {open.dataDialog ? <ShowDataDialog open={open.dataDialog} data={open.data} handleClose={closeDataDialog} /> : null}
             {open.newArtist ? <NewArtist open={open.newArtist} handleClose={closeNewDialog} /> : null}
-            {popOverStates.anchorElDelete !== null
-                ? <DeleteConfirm
-                    warning={"Huom! Poistaminen poistaa myös kaikki tämän artistin levyt!"}
-                    title={"Haluatko varmasti poistaa"}
-                    ids={popOverStates.ids}
-                    names={popOverStates.names}
-                    anchorEl={popOverStates.anchorElDelete}
-                    handleClose={closeDeleteConfirm}
-                    delete={deleteArtists}
-                />
-                : null}
+
+            <DeleteConfirmation
+                open={open.openDelete}
+                handleClose={closeDeleteConfirm}
+                title={"Haluatko varmasti poistaa seuraavat artistit"}
+                warning={"Huom! Poistaminen poistaa myös kaikki tämän artistin levyt!"}
+                delete={deleteArtists}
+                names={nameID.names}
+            />
         </div>
     )
 })
 
 export default withApollo(Artists)
-
-
-
-
-
-/*<Popover
-            open={open}
-            id={id}
-            anchorEl={props.states.anchorEl}
-            onClose={props.handleClose}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-            }}
-            transformOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
-            }}
-        >
-            <div className={classes.popOver}>
-                <Grid container justify="center" alignItems="center">
-                    <Grid item xs={12}>
-                        <Grid container justify="center" alignItems="center" className={classes.title}>
-                            <Grid item xs={2}>
-                                <WarningIcon />
-                            </Grid>
-                            <Grid item xs={10}>
-                                <Typography variant="h6" >
-                                    {props.title}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={2} />
-                            <hr />
-
-                            <Grid item xs={10}>
-                                <Typography variant="subtitle1" >
-                                    <strong>{props.states.name}</strong>
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography variant="subtitle1" style={{ color: 'red' }} >
-                                    <TextyAnim >
-                                        Huom! Poistaminen poistaa myös kaikki tämän artistin levyt!
-                                    </TextyAnim>
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-
-
-                    <Grid item xs={6} className={classes.buttonGrid}>
-                        <Button
-                            fullWidth
-                            variant="outlined"
-                            color="primary"
-                            onClick={() => props.deleteArtists(props.states.id)}
-                            disabled={disabled}
-                        >
-                            Kyllä
-                        </Button>
-                    </Grid>
-
-                    <Grid item xs={6} className={classes.buttonGrid}>
-                        <Button
-                            fullWidth
-                            variant="outlined"
-                            color="secondary"
-                            onClick={props.handleClose}
-                        >
-                            Peruuta
-                        </Button>
-                    </Grid>
-                </Grid>
-
-
-
-
-            </div>
-
-        </Popover >*/
-
-/*
-<Grid container>
-                                        {row.vinyls.map((vinyl, i) => {
-                                            return (
-                                                <React.Fragment key={i}>
-                                                    <Grid item xs={12}>
-                                                        <Typography variant="subtitle1">
-                                                            <b>Levyn nimi: </b>                                                            {i + 1 === row.vinyls.length ? vinyl.name : vinyl.name + ", "}
-                                                            {i + 1 === row.vinyls.length ? vinyl.name : vinyl.name + ", "}
-
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid item xs={6}>
-                                                        <Typography variant="subtitle1">
-                                                            <b>Levyn tyyppi</b>  {vinyl.type}
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid item xs={12}>
-                                                        <Typography variant="subtitle1">
-
-                                                            <b>Kategoria</b> {vinyl.category.name}
-                                                        </Typography>
-                                                    </Grid>
-                                                    <hr />
-                                                </React.Fragment>
-                                            )
-                                        })}
-
-                                    </Grid>
-
-
-
-                                        <Show show={showVinyls.id === row.id} >
-                                            <br />
-                                            {showVinyls.data.map((vinyl, i) => {
-                                                return (
-                                                    <Grid item xs={12} key={i} className={classes.vinyls} >
-                                                        <Grid container >
-                                                            <Grid item xs={12} md={2}  >
-                                                                <Typography variant="h6">
-                                                                    <b>Levyn nimi: </b>
-                                                                </Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12} md={10}>
-                                                                <Typography variant="subtitle1">
-                                                                    {i + 1 === row.vinyls.length ? vinyl.name : vinyl.name + ", "}
-                                                                </Typography>
-                                                            </Grid>
-
-                                                            <Grid item xs={12} md={2}>
-                                                                <Typography variant="h6">
-                                                                    <b>Levyn tyyppi</b>
-                                                                </Typography>
-                                                            </Grid>
-                                                            <Grid item xs={12} md={10}>
-                                                                <Typography variant="subtitle1">
-                                                                    {vinyl.type}
-                                                                </Typography>
-                                                            </Grid>
-
-                                                            <Grid item xs={12} md={2} >
-                                                                <Typography variant="h6">
-                                                                    <b>Kategoria</b>
-                                                                </Typography>
-
-                                                            </Grid>
-                                                            <Grid item xs={12} md={10} >
-                                                                <Typography variant="subtitle1">
-                                                                    {vinyl.category.name}
-                                                                </Typography>
-
-                                                            </Grid>
-                                                        </Grid>
-                                                    </Grid>
-                                                )
-                                            })}
-                                        </Show>
-*/

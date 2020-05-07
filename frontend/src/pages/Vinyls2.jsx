@@ -15,14 +15,14 @@ import { DELETE_VINYLS } from '../graphql/resolvers/mutations';
 import AskPrice from '../components/AskPrice';
 import NewVinyl from '../components/NewVinyl';
 import VinylsImage from '../pictures/vinyls-logo.jpg'
-import Background from '../pictures/background3.png'
+//import Background from '../pictures/background3.png'
 import Loading from '../components/Loading'
 
 const styles = theme => ({
     root: {
         position: 'absolute',
         left: 0, right: 0, top: 0, bottom: 0,
-        backgroundColor: 'black'
+        //  backgroundColor: 'black'
     },
     right: {
         textAlign: 'right',
@@ -55,7 +55,7 @@ const styles = theme => ({
         }
     },
     card: {
-        backgroundImage: `url(${Background})`,
+        //    backgroundImage: `url(${Background})`,
         borderRadius: 10,
         minHeight: 256
     }
@@ -287,7 +287,7 @@ class Vinyls extends React.PureComponent {
                     }
                 >
 
-                    <div className={classes.center} style={{ overflow: 'hidden', backgroundColor: 'black', width: '100%' }}>
+                    <div className={classes.center} style={{ overflow: 'hidden', width: '100%' }}>
                         <Typography variant="h2">
                             VINYYLIT
                         </Typography>
@@ -298,7 +298,7 @@ class Vinyls extends React.PureComponent {
                             position: 'sticky',
                             top: 0,
                             width: '100%',
-                            backgroundColor: 'black',
+                            backgroundColor: 'white',
                             height: 55,
                             zIndex: 1
                         }}

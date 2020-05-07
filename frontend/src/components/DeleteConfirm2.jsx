@@ -4,6 +4,7 @@ import { Alert, AlertTitle } from '@material-ui/lab'
 import TextyAnim from 'rc-texty'
 
 export default function DeleteConfirmation(props) {
+    //  console.log("delete", props.names, props.ids)
     return (
         <Dialog
             open={props.open}
