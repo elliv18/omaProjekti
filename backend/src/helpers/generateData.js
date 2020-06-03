@@ -30,7 +30,7 @@ export default async (amount) => {
             process.stdout.write(".");
 
             const category = await prisma.createCategory({
-                name: faker.commerce.product(),
+                name: faker.commerce.product().toLowerCase(),
             })
 
 

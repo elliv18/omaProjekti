@@ -1,7 +1,7 @@
 import React from 'react'
 import { withApollo } from 'react-apollo'
 import { Dialog, DialogContent, DialogTitle, FormControl, TextField, DialogActions, Button } from '@material-ui/core'
-import { ADD_ARTIST } from '../graphql/resolvers/mutations'
+import API from '../services/api'
 
 function NewArtist(props) {
 
@@ -21,22 +21,22 @@ function NewArtist(props) {
         setStates({ ...states, lastName: value })
     }
 
-    const addArtist = async () => {
-
-        console.log('ADD', states.firstName, states.lastName)
-        await props.client.mutate({
-            mutation: ADD_ARTIST,
-            variables: {
-                firstName: states.firstName,
-                lastName: states.lastName
-            }
-        })
-            .then(res => {
-                console.log(res.data)
-                props.handleClose()
-            })
-            .catch(e => console.log(e))
-    }
+    /*  const addArtist = async () => {
+  
+          console.log('ADD', states.firstName, states.lastName)
+          await props.client.mutate({
+              mutation: ADD_ARTIST,
+              variables: {
+                  firstName: states.firstName,
+                  lastName: states.lastName
+              }
+          })
+              .then(res => {
+                  console.log(res.data)
+                  props.handleClose()
+              })
+              .catch(e => console.log(e))
+      }*/
 
     const disabled = !canAdd()
     return (
@@ -57,7 +57,12 @@ function NewArtist(props) {
 
                 <DialogActions>
 
-                    <Button disabled={disabled} variant="outlined" color="primary" onClick={addArtist}>
+                    <Button
+                        disabled={disabled}
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => API.createArtist(props.client, states.firstName, states.lastName, props.handleClose)}
+                    >
                         Lisää
                 </Button>
                     <Button variant="outlined" color="secondary" onClick={props.handleClose}>

@@ -4,7 +4,7 @@ import Select from 'react-select'
 import { withApollo } from 'react-apollo'
 import { ALL_ARTISTS, ALL_CATEGORIES } from '../graphql/resolvers/queries'
 import helpers from '../helpers'
-import { ADD_VINYL, ADD_TO_FORSALE } from '../graphql/resolvers/mutations'
+import API from '../services/api'
 
 const styles = makeStyles(theme => ({
     root: {
@@ -107,8 +107,8 @@ function NewVinyl(props) {
             })
     }
 
-    const fetchCategories = async (filter) => {
-        await props.client.query({
+    const fetchCategories = (filter) => {
+        props.client.query({
             query: ALL_CATEGORIES,
             variables: {
                 filter: filter,
@@ -166,6 +166,7 @@ function NewVinyl(props) {
     }
 
     const handleCategoryInput = event => {
+        console.log('cat', event)
         fetchCategories(event, 10)
     }
 
@@ -173,55 +174,7 @@ function NewVinyl(props) {
         setNewVinylStates({ ...newVinylStates, category: event.value })
     }
 
-    const addVinyl = async () => {
-        const { name, year, condition, category, artists, type, price, forSale } = newVinylStates
-        await props.client.mutate({
-            mutation: ADD_VINYL,
-            variables: {
-                name: name,
-                year: year.toString(),
-                condition: condition,
-                category: category,
-                artists: artists,
-                type: type,
-                forSale: forSale
-            }
-        })
-            .then(res => {
-                const data = res.data.createVinyl.vinyl
-
-                if (newVinylStates.forSale) {
-                    let tempVinyls = []
-                    tempVinyls.push(data.id)
-                    console.log('** ON SALE **', tempVinyls)
-                    props.client.mutate({
-                        mutation: ADD_TO_FORSALE,
-                        variables: {
-                            price: price,
-                            vinyls: tempVinyls
-                        }
-                    })
-                        .then(res => {
-                            console.log('SALE', res)
-                        })
-                        .catch(e => console.log(e))
-                }
-                const temp = [
-                    {
-                        id: data.id, name: data.name, year: data.year, type: data.type,
-                        condition: data.condition, category: data.category, artists: data.artists, forSale: data.forSale
-                    }
-                ]
-                console.log('TEMP*', temp)
-                //                props.setData({ data: [...temp, ...props.data] })
-
-                props.addNew(temp)
-                //props.handleClose()
-            })
-            .catch(e => console.log(e))
-    }
-
-
+    const { name, year, condition, category, type, price, forSale } = newVinylStates
 
     return (
         <Dialog
@@ -281,7 +234,7 @@ function NewVinyl(props) {
                 </DialogContent>
 
                 <DialogActions>
-                    <Button variant="contained" color="primary" onClick={addVinyl}>
+                    <Button variant="contained" color="primary" onClick={() => API.createVinyl(props.client, name, year, condition, category, newVinylStates.artists, type, price, forSale, props.addNew)}>
                         Lisää
                     </Button>
                     <Button variant="contained" color="secondary" onClick={props.handleClose}>

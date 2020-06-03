@@ -95,7 +95,6 @@ class Vinyls extends React.PureComponent {
 
     fetchData(filter) {
         const { sortBy } = this.state
-        console.log('FETCH', sortBy)
         this.props.client.query({
             query: ALL_VINYLS,
             variables: {

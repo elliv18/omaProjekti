@@ -1,18 +1,16 @@
 import React from 'react'
 import { withApollo } from 'react-apollo'
-import { ALL_ARTISTS } from '../graphql/resolvers/queries'
 import Loading from '../components/Loading'
-import { Typography, Grid, makeStyles, IconButton, TextField, Tooltip, Fab } from '@material-ui/core';
+import { Typography, Grid, makeStyles, TextField, Fab } from '@material-ui/core';
 //import DeleteIcon from '@material-ui/icons/Delete';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import helpers from '../helpers'
 import LoadingSpinner from '@material-ui/core/CircularProgress';
-import { DELETE_ARTISTS } from '../graphql/resolvers/mutations';
 import NewArtist from '../components/NewArtist';
 import ArtistCard from '../components/ArtistCard'
 import DeleteConfirmation from '../components/DeleteConfirm2';
 import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
-
+import API from '../services/api'
 
 const styles = makeStyles(theme => ({
     /* '@global': {
@@ -78,10 +76,7 @@ const styles = makeStyles(theme => ({
     input1: {
         height: 2
     },
-    infiniteScroll: {
-        width: '100%',
-        padding: theme.spacing(1)
-    },
+
     timeGridContainer: {
         width: 300
     },
@@ -130,7 +125,8 @@ const Artists = React.memo(function Artists(props) {
     const [open, setOpen] = React.useState({
         data: [],
         newArtist: false,
-        openDelete: false
+        openDelete: false,
+        openMenuArc: null
     })
 
     const [nameID, setNameID] = React.useState({
@@ -140,34 +136,21 @@ const Artists = React.memo(function Artists(props) {
     const classes = styles()
 
     // **************** FETCH **********************
-    const fetch = React.useCallback(async (filter) => {
-        console.log('Fetch')
-        await props.client.query({
-            query: ALL_ARTISTS,
-            variables: {
-                first: 30,
-                filter: filter
-            },
-        })
-            .then(res => {
-                if (res.data.allArtists.length > 0)
-                    setData(res.data.allArtists)
-            })
-    }, [props.client])
+
 
     // **************** EFFECT **********************
 
     React.useEffect(() => {
-        fetch()
-    }, [fetch])
+        API.fetchArtists(props.client, "", setData)
+    }, [props.client])
 
     // **************** FUNCTIONS **********************
 
     const openNewDialog = (data) => {
-        setOpen({ newArtist: true })
+        setOpen({ ...open, newArtist: true })
     }
     const closeNewDialog = () => {
-        setOpen({ newArtist: false })
+        setOpen({ ...open, newArtist: false })
     }
 
     const openDeleteConfirm = (id, name) => {
@@ -182,63 +165,23 @@ const Artists = React.memo(function Artists(props) {
         setOpen({ ...open, openDelete: false })
 
     };
+
+    const handleOpenMenu = (event) => {
+        setOpen({ ...open, openMenuArc: event.currentTarget })
+    }
     const handleSearch = ({ target: { value } }) => {
         /*  let newList = data.allArtists.filter(filter => {
               return filter.name.toLowerCase().includes(value)
           })*/
 
-        if (value.length >= 3) {
-            fetch(value)
+        if (value.length === 0) {
+            API.fetchArtists(props.client, "", setData)
+
         }
         else {
-            fetch()
+            API.fetchArtists(props.client, value, setData)
         }
 
-    }
-    const onFetchMore = () => {
-        props.client.query({
-            query: ALL_ARTISTS,
-            variables: {
-                first: 30,
-                after: data[data.length - 1].id
-            }
-        })
-            .then(res => {
-
-                let temp = data.slice()
-                const data2 = res.data.allArtists
-                console.log(data2)
-                temp.push(...data2)
-                setData(temp)
-                if (data2.length === 0)
-                    setHasMore(false)
-            })
-            .catch(e => console.log(e))
-    }
-
-    const deleteArtists = () => {
-        console.log('delete', nameID.ids)
-        const id = nameID.ids
-        props.client.mutate({
-            mutation: DELETE_ARTISTS,
-            variables: { ids: id }
-        })
-            .then(res => {
-                console.log(res.data)
-                const ids = nameID.ids
-                const data2 = data
-                ids.forEach(rowId => {
-                    const index = data2.findIndex(row => row.id === rowId);
-                    if (index > -1) {
-                        data2.splice(index, 1);
-                    }
-                });
-
-                setData(data2)
-                closeDeleteConfirm()
-
-            })
-            .catch(e => console.log(e))
     }
 
 
@@ -258,7 +201,7 @@ const Artists = React.memo(function Artists(props) {
                 className={classes.infiniteScroll}
                 height={'calc(100vh - 65px)'}
                 dataLength={data.length}
-                next={onFetchMore}
+                next={() => API.fetchMoreArtists(props.client, data, setData, setHasMore)}
                 hasMore={hasMore}
                 loader={<div style={{ textAlign: 'center' }}><LoadingSpinner /></div>}
 
@@ -319,13 +262,13 @@ const Artists = React.memo(function Artists(props) {
                 <SpeedDialIcon />
             </Fab>
             {open.newArtist ? <NewArtist open={open.newArtist} handleClose={closeNewDialog} /> : null}
-
+            {console.log(open.openDelete)}
             <DeleteConfirmation
                 open={open.openDelete}
                 handleClose={closeDeleteConfirm}
                 title={"Haluatko varmasti poistaa seuraavat artistit"}
                 warning={"Huom! Poistaminen poistaa myös kaikki tämän artistin levyt!"}
-                delete={deleteArtists}
+                delete={() => API.deleteArtists(props.client, data, nameID, setData, closeDeleteConfirm)}
                 names={nameID.names}
             />
         </div>

@@ -4,7 +4,7 @@ export default {
     Query: {
 
         allCategories: async (_, { input: { first, after, filter, sortBy } }) => {
-            console.log('categories', sortBy)
+            console.log('categories', filter)
             const where = filter ? {
                 name_contains: filter.toLowerCase()
             } : {}
