@@ -124,7 +124,7 @@ function CustomAppBar(props) {
                         : null}
 
 
-                    <Hidden smDown>
+                    <Hidden xsDown>
                         <Grid item sm={logOutItemMd} className={classes.logOut}>
                             {props.authenticated
                                 ? <Button
