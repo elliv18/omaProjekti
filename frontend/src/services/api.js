@@ -91,7 +91,7 @@ const deleteArtists = (client, data, nameID, setData, closeDeleteConfirm) => {
 
 // CREATE VINYL
 
-const createVinyl = (client, name, year, condition, category, artists, type, price, forSale, addNew) => {
+const createVinyl = (client, name, year, condition, category, artists, type, price, forSale, saleName, saleDesc, addNew) => {
     client.mutate({
         mutation: ADD_VINYL,
         variables: {
@@ -108,22 +108,25 @@ const createVinyl = (client, name, year, condition, category, artists, type, pri
             console.log('res createVinyl')
             const data = res.data.createVinyl.vinyl
 
-            /* if (forSale) {
-                 let tempVinyls = []
-                 tempVinyls.push(data.id)
-                 console.log('** ON SALE **', tempVinyls)
-                 client.mutate({
-                     mutation: ADD_TO_FORSALE,
-                     variables: {
-                         price: price,
-                         vinyls: tempVinyls
-                     }
-                 })
-                     .then(res => {
-                         console.log('SALE', res)
-                     })
-                     .catch(e => console.log(e))
-             }*/
+            if (forSale) {
+                let tempVinyls = []
+                tempVinyls.push(data.id)
+                console.log('** ON SALE **', tempVinyls)
+                client.mutate({
+                    mutation: ADD_TO_FORSALE,
+                    variables: {
+                        vinyls: tempVinyls,
+                        pricePcs: price,
+                        isSale: true,
+                        name: saleName,
+                        description: saleDesc
+                    }
+                })
+                    .then(res => {
+                        console.log('SALE', res)
+                    })
+                    .catch(e => console.log(e))
+            }
             const temp = [
                 {
                     id: data.id, name: data.name, year: data.year, type: data.type,

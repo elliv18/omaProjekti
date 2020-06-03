@@ -166,9 +166,7 @@ const Artists = React.memo(function Artists(props) {
 
     };
 
-    const handleOpenMenu = (event) => {
-        setOpen({ ...open, openMenuArc: event.currentTarget })
-    }
+
     const handleSearch = ({ target: { value } }) => {
         /*  let newList = data.allArtists.filter(filter => {
               return filter.name.toLowerCase().includes(value)

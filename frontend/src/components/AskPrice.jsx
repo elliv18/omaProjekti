@@ -16,7 +16,7 @@ function AskPrice(props) {
         setState({ ...state, name: value })
     }
     const descChange = ({ target: { value } }) => {
-        setState({ ...state, name: value })
+        setState({ ...state, desc: value })
     }
     const pricePcsChange = ({ target: { value } }) => {
         setState({ ...state, pricePcs: value })
@@ -86,13 +86,13 @@ function AskPrice(props) {
                         fullWidth
                         onChange={pricePcsChange}
                     />
-                    <TextField
+                    {props.ids.length > 1 && <TextField
                         variant="outlined"
                         margin="dense"
                         label="Hinta (kaikki)"
                         fullWidth
                         onChange={priceTotalChange}
-                    />
+                    />}
                 </FormControl>
             </DialogContent>
 

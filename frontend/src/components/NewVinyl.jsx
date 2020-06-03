@@ -1,5 +1,5 @@
 import React from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, makeStyles, Switch, Typography, Collapse } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, makeStyles, Switch, Typography, Collapse, FormControl } from '@material-ui/core'
 import Select from 'react-select'
 import { withApollo } from 'react-apollo'
 import { ALL_ARTISTS, ALL_CATEGORIES } from '../graphql/resolvers/queries'
@@ -18,6 +18,12 @@ const styles = makeStyles(theme => ({
         overflow: 'auto'
     },
     dialogPaper: { overflow: 'visible' },
+    nameBox: {
+        border: '0.3px solid lightGrey'
+    },
+    left: {
+        textAlign: 'left'
+    }
 }))
 
 const customStyles = {
@@ -51,6 +57,12 @@ function NewVinyl(props) {
     const [artists, setArtists] = React.useState([{
         value: '', label: ''
     }])
+
+    const [state, setState] = React.useState({
+        name: '',
+        desc: '',
+        price: '',
+    })
 
     const [categories, setCategories] = React.useState([])
 
@@ -117,7 +129,7 @@ function NewVinyl(props) {
         })
             .then(res => {
                 const data = res.data.allCategories
-                console.log(data)
+                //  console.log(data)
                 let editetCategories = []
                 data.map(row => (
                     editetCategories.push({ label: row.name, value: row.id })
@@ -166,7 +178,6 @@ function NewVinyl(props) {
     }
 
     const handleCategoryInput = event => {
-        console.log('cat', event)
         fetchCategories(event, 10)
     }
 
@@ -174,7 +185,18 @@ function NewVinyl(props) {
         setNewVinylStates({ ...newVinylStates, category: event.value })
     }
 
+    const nameChange = ({ target: { value } }) => {
+        setState({ ...state, name: value })
+    }
+    const descChange = ({ target: { value } }) => {
+        setState({ ...state, desc: value })
+    }
+    const priceChange = ({ target: { value } }) => {
+        setState({ ...state, pricePcs: value })
+    }
+
     const { name, year, condition, category, type, price, forSale } = newVinylStates
+    const addedArtists = props.artist ? props.artist : newVinylStates.artists
 
     return (
         <Dialog
@@ -198,14 +220,20 @@ function NewVinyl(props) {
                         <Select styles={customStyles} placeholder="Levyn vuosi" options={years} onChange={handleYearChange} />
                         <br />
 
-                        <Select
-                            styles={customStyles}
-                            isMulti
-                            placeholder="Artisti(t)"
-                            options={artists}
-                            onChange={handleArtistChange}
-                            onInputChange={handleArtistInput}
-                        />
+                        {props.artist
+                            ? <div className={classes.nameBox}>
+                                <Typography variant="subtitle1" className={classes.left}>
+                                    Artisti: <b>{props.name}</b>
+                                </Typography>
+                            </div>
+                            : <Select
+                                styles={customStyles}
+                                isMulti
+                                placeholder="Artisti(t)"
+                                options={artists}
+                                onChange={handleArtistChange}
+                                onInputChange={handleArtistInput}
+                            />}
                         <br />
 
                         <Select
@@ -227,14 +255,37 @@ function NewVinyl(props) {
                         </Typography>
                         <Collapse in={newVinylStates.forSale}>
 
-                            <TextField margin="dense" label="Levyn hinta" fullWidth variant="outlined" onChange={handlePriceChange} />
+                            <FormControl fullWidth>
+                                <TextField
+                                    variant="outlined"
+                                    margin="dense"
+                                    label="Nimi myynnille"
+                                    fullWidth
+                                    onChange={nameChange}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="dense"
+                                    label="Kuvaus myynnille"
+                                    fullWidth
+                                    onChange={descChange}
+                                />
+                                <TextField
+                                    variant="outlined"
+                                    margin="dense"
+                                    label="Hinta (kpl)"
+                                    fullWidth
+                                    onChange={priceChange}
+                                />
+
+                            </FormControl>
                         </Collapse>
 
                     </form>
                 </DialogContent>
 
                 <DialogActions>
-                    <Button variant="contained" color="primary" onClick={() => API.createVinyl(props.client, name, year, condition, category, newVinylStates.artists, type, price, forSale, props.addNew)}>
+                    <Button variant="contained" color="primary" onClick={() => API.createVinyl(props.client, name, year, condition, category, addedArtists, type, state.price, forSale, state.name, state.desc, props.addNew)}>
                         Lisää
                     </Button>
                     <Button variant="contained" color="secondary" onClick={props.handleClose}>

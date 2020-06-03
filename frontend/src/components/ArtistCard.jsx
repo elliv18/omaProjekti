@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, CardContent, Grid, Typography, Collapse, CardActions, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Tooltip, makeStyles, Menu, MenuItem } from '@material-ui/core'
+import { Card, CardContent, Grid, Typography, Collapse, CardActions, Button, TableContainer, Table, TableHead, TableRow, TableCell, TableBody, IconButton, makeStyles, Menu, MenuItem } from '@material-ui/core'
 import Moment from 'react-moment';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -21,10 +21,11 @@ const styles = makeStyles(theme => ({
 
 function ArtistCard(props) {
     const classes = styles()
-    const { id, name, created, updated, vinyls, openDelete } = props
+    const { id, name, created, updated, openDelete } = props
     const [show, setShow] = React.useState(false)
     const [openMenu, setOpenMenu] = React.useState(null)
     const [openNewVinyl, setOpenNewVinyl] = React.useState(false)
+    const [vinyls, setVinyls] = React.useState(props.vinyls)
     const toggleShow = () => {
         setShow(!show)
     }
@@ -41,6 +42,14 @@ function ArtistCard(props) {
     }
     const handleCloseMenu = () => {
         setOpenMenu(null)
+    }
+    const addNewVinyl = (newData) => {
+        handleCloseNewVinyl()
+        handleCloseMenu()
+        console.log('add new', newData)
+        const newVinyls = [...newData, ...vinyls]
+        setVinyls(newVinyls)
+
     }
 
     //  console.log('vinyls', vinyls)
@@ -102,7 +111,7 @@ function ArtistCard(props) {
             </Card>
 
             <Menu22 openMenu={openMenu} handleClose={handleCloseMenu} openDelete={() => openDelete(id, name)} openNewVinyl={handleOpenNewVinyl} />
-            {openNewVinyl && <NewVinyl open={openNewVinyl} handleClose={handleCloseNewVinyl} artist={id} />}
+            {openNewVinyl && <NewVinyl open={openNewVinyl} handleClose={handleCloseNewVinyl} artist={id} name={name} addNew={addNewVinyl} />}
 
         </Grid>
     )
@@ -131,7 +140,7 @@ function VinylsTable(props) {
                             <TableCell>{row.name}</TableCell>
                             <TableCell>{row.type}</TableCell>
                             <TableCell>{row.condition}</TableCell>
-                            <TableCell>{row.category.name}</TableCell>
+                            <TableCell>{row.category && row.category.name}</TableCell>
                             <TableCell>
                                 {row.year}
                             </TableCell>

@@ -7,6 +7,7 @@ export default {
     Mutation: {
         createForSale: async (_, { input: { vinyls, pricePcs, priceTotal, isSale, name, description } }, { currentUser }) => {
 
+            // console.log('Create for sale ***', vinyls, 'PCS', pricePcs, 'TOTAL', priceTotal, 'Name', name, 'desc', description)
             if (USE_AUTH == 'true') {
                 mustBeLoggedIn(currentUser)
             }
@@ -20,13 +21,13 @@ export default {
             }
 
             //tarkistetaan onko levy jo myynnissä
-            for (var i = 0; i < vinyls.length; i++) {
-                const is = await prisma.vinyl({ id: vinyls[i] }).forSale()
-                if (is) {
-                    throw new Error("Osa levyistä on jo myynnissä")
-                }
-            }
-
+            /*  for (var i = 0; i < vinyls.length; i++) {
+                  const is = await prisma.vinyl({ id: vinyls[i] }).forSale()
+                  if (is) {
+                      throw new Error("Osa levyistä on jo myynnissä")
+                  }
+              }
+  */
 
             var vinylsTemp = []; // temp
             let temp = []
@@ -35,9 +36,6 @@ export default {
                 temp.push({ id: x });
             });
 
-
-
-            console.log(' *** CREATE FOR SALE ***', name, description)
             vinylsTemp = { connect: temp }
             const total = priceTotal ? priceTotal : tempTotal.toString()
 
