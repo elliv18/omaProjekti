@@ -4,13 +4,16 @@ export const theme = createMuiTheme({
     palette: {
         // type: 'dark',
         primary: {
-            main: '#1bb350'
+            main: '#5073B9'
         },
         secondary: {
-            main: '#007b80'
+            main: '#F7483B'
         },
-        loginBack: {
-            main: '#007b80'
+        background: {
+            main: '#06090F'
+        },
+        footer: {
+            main: '#8B97BB'
         }
     },
 

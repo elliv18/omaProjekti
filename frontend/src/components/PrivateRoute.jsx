@@ -7,9 +7,9 @@ const PrivateRoute = ({ componentUser: ComponentUser, componentAdmin: ComponentA
         <Route {...rest} render={(props) => (
             CU
                 ? CU.type === 'ADMIN'
-                    ? <ComponentAdmin {...props} />
+                    ? <ComponentAdmin {...props} CU={CU} />
                     : ComponentUser
-                        ? <ComponentUser {...props} />
+                        ? <ComponentUser {...props} CU={CU} />
                         : <Redirect to='/' />
                 : <Redirect to='/login' />
         )

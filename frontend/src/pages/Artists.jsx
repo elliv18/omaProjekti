@@ -256,7 +256,7 @@ const Artists = React.memo(function Artists(props) {
                     })}
                 </Grid>
             </InfiniteScroll>
-            <Fab className={classes.add} color="primary" onClick={openNewDialog}>
+            <Fab className={classes.add} onClick={openNewDialog}>
                 <SpeedDialIcon />
             </Fab>
             {open.newArtist ? <NewArtist open={open.newArtist} handleClose={closeNewDialog} /> : null}

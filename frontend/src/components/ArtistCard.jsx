@@ -6,6 +6,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import NewVinyl from './NewVinyl';
+import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 
 
 const styles = makeStyles(theme => ({
@@ -102,6 +103,7 @@ function ArtistCard(props) {
                     <Button
                         variant="outlined"
                         onClick={toggleShow}
+                        color="primary"
                         fullWidth
                     >
                         Levyt
@@ -163,7 +165,7 @@ function Menu22(props) {
                 onClose={props.handleClose}
             >
                 <MenuItem onClick={props.openNewVinyl}>
-                    Lisää levy
+                    <SpeedDialIcon /> Lisää levy
                 </MenuItem>
                 <MenuItem onClick={() => {
                     props.openDelete()

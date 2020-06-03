@@ -286,7 +286,7 @@ class Vinyls extends React.PureComponent {
                     }
                 >
 
-                    <div className={classes.center} style={{ overflow: 'hidden', width: '100%' }}>
+                    <div className={classes.center} style={{ overflow: 'hidden', width: '100%', backgroundColor: 'black' }}>
                         <Typography variant="h2">
                             VINYYLIT
                         </Typography>
