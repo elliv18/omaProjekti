@@ -121,13 +121,7 @@ function Login({ client, history }) {
                     </Button>
 
                         <Link to="signUp" className={classes.link}>
-                            <Button
-                                fullWidth
-                                variant="contained"
-                                color="default"
-                            >
-                                Rekisteröidy
-                        </Button>
+                            Rekisteröidy
                         </Link>
 
                     </FormControl>
