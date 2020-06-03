@@ -2,56 +2,45 @@ import React from 'react'
 import { withApollo } from 'react-apollo'
 import { ALL_ARTISTS } from '../graphql/resolvers/queries'
 import Loading from '../components/Loading'
-import { Typography, Grid, makeStyles, IconButton, TextField, Tooltip } from '@material-ui/core';
+import { Typography, Grid, makeStyles, IconButton, TextField, Tooltip, Fab } from '@material-ui/core';
 //import DeleteIcon from '@material-ui/icons/Delete';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import helpers from '../helpers'
 import LoadingSpinner from '@material-ui/core/CircularProgress';
 import { DELETE_ARTISTS } from '../graphql/resolvers/mutations';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import NewArtist from '../components/NewArtist';
 import ArtistCard from '../components/ArtistCard'
 import DeleteConfirmation from '../components/DeleteConfirm2';
+import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
+
 
 const styles = makeStyles(theme => ({
-    '@global': {
-        '*::-webkit-scrollbar': {
-            width: '0.4em'
-        },
-        '*::-webkit-scrollbar-track': {
-            '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
-        },
-        '*::-webkit-scrollbar-thumb': {
-            backgroundColor: theme.palette.secondary.main,
-            outline: '1px solid slategrey'
-        }
-    },
-    expansionPanel: {
-        marginTop: theme.spacing(1),
-        marginBottom: theme.spacing(1),
-        padding: theme.spacing(1)
-    },
-    content: {
-        [theme.breakpoints.up('sm')]: {
-
-            position: 'absolute',
-            top: 55, bottom: 0, right: 0, left: 0,
-            overflow: 'auto',
-            //    backgroundColor: 'lightGrey',
-        },
-        [theme.breakpoints.down('sm')]: {
-
-            padding: 6,
-            position: 'absolute',
-            top: 55, bottom: 0, right: 0, left: 0,
-            overflow: 'auto',
-            //    backgroundColor: 'lightGrey',
-        }
+    /* '@global': {
+         '*::-webkit-scrollbar': {
+             width: '0.4em'
+         },
+         '*::-webkit-scrollbar-track': {
+             '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)'
+         },
+         '*::-webkit-scrollbar-thumb': {
+             backgroundColor: theme.palette.secondary.main,
+             outline: '1px solid slategrey'
+         }
+     },
+     expansionPanel: {
+         marginTop: theme.spacing(1),
+         marginBottom: theme.spacing(1),
+         padding: theme.spacing(1)
+     },*/
+    root: {
+        position: 'absolute',
+        left: 0, right: 0, top: 0, bottom: 0,
+        //  backgroundColor: 'black'
     },
     header: {
-        position: 'relative',
-        height: 55,
-        //     backgroundColor: 'grey',
+        textAlign: 'center',
+        overflow: 'hidden',
+        width: '100%'
 
     },
     title: {
@@ -71,9 +60,7 @@ const styles = makeStyles(theme => ({
             fontSize: 30
         }
     },
-    expanded: {
-        backgroundColor: '#e8e8e8',
-    },
+
     gridLeft: {
         textAlign: 'left'
     },
@@ -108,8 +95,22 @@ const styles = makeStyles(theme => ({
     add: {
         position: 'absolute',
         bottom: 32,
-        left: 16,
-    }
+        right: 32,
+        color: 'green'
+    },
+
+    toolbar: {
+        position: 'sticky',
+        top: 0,
+        width: '100%',
+        backgroundColor: 'white',
+        height: 55,
+        zIndex: 1
+    },
+    infiniteScroll: {
+        margin: 0,
+        padding: 0
+    },
 
 
 }))
@@ -251,67 +252,72 @@ const Artists = React.memo(function Artists(props) {
 
     console.log('data', data)
     return (
-        <div>
-            <div className={classes.header}>
-                <Typography className={classes.title}>
-                    Artistit
-                </Typography>
-                <Tooltip title="Kirjoita vähintään 3 kirjainta hakeaksesi" arrow placement="left">
-                    <TextField
-                        className={classes.search}
-                        InputProps={{ classes: { input: classes.input1 } }}
-                        onChange={handleSearch}
-                        variant="outlined"
-                        placeholder="Search..."
-                    />
-                </Tooltip>
+        <div className={classes.root}>
 
+            <InfiniteScroll
+                className={classes.infiniteScroll}
+                height={'calc(100vh - 65px)'}
+                dataLength={data.length}
+                next={onFetchMore}
+                hasMore={hasMore}
+                loader={<div style={{ textAlign: 'center' }}><LoadingSpinner /></div>}
 
-            </div>
-            <div className={classes.content} >
-
-                <InfiniteScroll
-                    className={classes.infiniteScroll}
-                    height={'calc(100vh - 125px)'}
-                    dataLength={data.length}
-                    next={onFetchMore}
-                    hasMore={hasMore}
-                    loader={<div style={{ textAlign: 'center' }}><LoadingSpinner /></div>}
-
-                    endMessage={
-                        <Typography variant="h6">
-                            Jee, kaikki artistit on jo listattu
+                endMessage={
+                    <Typography variant="h6">
+                        Jee, kaikki artistit on jo listattu
                         </Typography>
-                    }
-                >
+                }
+            >
 
-                    <Grid container spacing={2} justify="center" alignItems="flex-start"
-                        style={{
-                            width: '100%',
-                            margin: 'auto',
-                            padding: 10
-                        }}
-                    >
-                        {data.map((row, i) => {
-                            const name = helpers.Capitalize(row.firstName) + " " + helpers.Capitalize(row.lastName)
-                            return (
-                                <ArtistCard
-                                    key={i}
-                                    id={row.id}
-                                    name={name}
-                                    created={row.createdAt}
-                                    updated={row.updatedAt}
-                                    vinyls={row.vinyls}
-                                    openDelete={openDeleteConfirm}
-                                />
-                            )
-                        })}
+                <div className={classes.header}>
+                    <Typography variant="h2">
+                        Artistit
+                    </Typography>
+                </div>
+
+                <div className={classes.toolbar}>
+                    <Grid container justify="center" alignItems="center">
+                        <Grid item xs={6} className={classes.left}>
+                            <TextField
+                                variant="outlined"
+                                placeholder="Search..."
+                                margin="dense"
+                                onChange={handleSearch}
+                                fullWidth
+                            />
+                        </Grid>
+
+                        <Grid item xs={6} className={classes.right}>
+
+                        </Grid>
                     </Grid>
-                </InfiniteScroll>
-                <IconButton className={classes.add} onClick={openNewDialog}>
-                    <AddCircleIcon fontSize="large" style={{ color: 'green' }} />
-                </IconButton>
-            </div>
+                </div>
+                <Grid container spacing={1} justify="center" alignItems="flex-start"
+                    style={{
+                        width: '100%',
+                        margin: 'auto',
+                        padding: 10
+                    }}
+                >
+                    {data.map((row, i) => {
+                        const name = helpers.Capitalize(row.firstName) + " " + helpers.Capitalize(row.lastName)
+                        return (
+                            <ArtistCard
+                                key={i}
+                                id={row.id}
+                                name={name}
+                                created={row.createdAt}
+                                updated={row.updatedAt}
+                                vinyls={row.vinyls}
+                                openDelete={openDeleteConfirm}
+                            />
+                        )
+                    })}
+                </Grid>
+            </InfiniteScroll>
+            <Fab className={classes.add} color="primary" onClick={openNewDialog}>
+                <SpeedDialIcon />
+            </Fab>
             {open.newArtist ? <NewArtist open={open.newArtist} handleClose={closeNewDialog} /> : null}
 
             <DeleteConfirmation

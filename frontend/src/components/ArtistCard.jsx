@@ -13,7 +13,7 @@ function ArtistCard(props) {
     //  console.log('vinyls', vinyls)
     return (
         <Grid item xs={12} md={4} >
-            <Card elevation={7}>
+            <Card elevation={7} >
                 <Typography variant="body2" color="textSecondary">
                     Lisätty: <Moment format="DD.MM.YYYY - hh:mm    ">
                         {created}
@@ -24,7 +24,7 @@ function ArtistCard(props) {
                     </Moment>
                 </Typography>
 
-                <CardContent>
+                <CardContent style={{ width: '100%', overflowX: 'hidden' }}>
                     <Grid
                         container
                         alignItems="center"
@@ -34,7 +34,7 @@ function ArtistCard(props) {
                                 <IconButton
                                     onClick={() => openDelete(id, name)}
                                 >
-                                    <DeleteIcon />
+                                    <DeleteIcon style={{ color: 'red' }} />
                                 </IconButton>
                             </Tooltip>
                         </Grid>
