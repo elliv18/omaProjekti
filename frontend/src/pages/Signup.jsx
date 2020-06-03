@@ -1,6 +1,6 @@
 import React from 'react'
 import '../styles/Login.css'
-import { Paper, Button, Tooltip } from '@material-ui/core'
+import { Paper, Button, Tooltip, TextField, Typography } from '@material-ui/core'
 import loginStyle from '../styles/login'
 import { Link } from 'react-router-dom'
 import { SIGNUP_MUTATION } from '../graphql/resolvers/mutations'
@@ -83,50 +83,57 @@ function Signup({ client }) {
                 {status
                     ? <CustomAlert status={status} msg={msg} reset={reset} error={errorDesc} />
                     : <form className="form">
-                        <label >
-                            <strong className="labelText">Nimi</strong>
-                            <input
-                                type="text"
-                                className="textField"
-                                value={name}
-                                onChange={handleChangeName}
-                                autoComplete="username"
-                                required={true}
-                            />
+                        <label>
+                            <Typography variant="h4">
+                                REKISTERÖIDY
+                            </Typography>
                         </label>
-                        <label >
-                            <strong className="labelText">Email</strong>
-                            <input
-                                type="email"
-                                className="textField"
-                                value={email}
-                                onChange={handleChangeEmail}
-                                autoComplete="current-password"
-                                required={true}
-                            />
-                        </label>
-                        <label >
-                            <strong className="labelText">Salasana</strong>
-                            <input
-                                type="password"
-                                className="textField"
-                                value={pw}
-                                onChange={handleChangePw}
-                                autoComplete="current-password"
-                                required={true}
-                            />
-                        </label>
-                        <label >
-                            <strong className="labelText">Salasana uudelleen</strong>
-                            <input
-                                type="password"
-                                className="textField"
-                                value={pw2}
-                                onChange={handleChangePw2}
-                                autoComplete="current-password"
-                                required={true}
-                            />
-                        </label>
+                        <TextField
+                            type="text"
+                            value={name}
+                            onChange={handleChangeName}
+                            autoComplete="username"
+                            required={true}
+                            margin="normal"
+                            variant="outlined"
+                            label="Username"
+                            fullWidth
+                        />
+
+                        <TextField
+                            margin="normal"
+                            type="email"
+                            className="textField"
+                            value={email}
+                            onChange={handleChangeEmail}
+                            required={true}
+                            label="Email"
+                            variant="outlined"
+                        />
+                        <TextField
+                            margin="normal"
+
+                            type="password"
+                            className="textField"
+                            value={pw}
+                            onChange={handleChangePw}
+                            autoComplete="current-password"
+                            required={true}
+                            label="Salasana"
+                            variant="outlined"
+                        />
+                        <TextField
+                            margin="normal"
+                            type="password"
+                            className="textField"
+                            value={pw2}
+                            onChange={handleChangePw2}
+                            autoComplete="current-password"
+                            required={true}
+                            label="Salasana uudeleen"
+                            variant="outlined"
+                        />
+
 
                         <Tooltip
                             title={disabled ? "Täytä kaikki kentät rekisteröityäksesi" : ''}

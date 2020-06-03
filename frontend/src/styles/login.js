@@ -7,13 +7,12 @@ const loginStyle = makeStyles(theme => ({
     },
     paper: {
         padding: 20,
-        backgroundColor: theme.palette.loginBack.main
+        // backgroundColor: theme.palette.loginBack.main
 
     },
     link: {
-        textDecoration: 'none',
-        color: 'white',
-        marginTop: theme.spacing(7),
+        //  textDecoration: 'none',
+        marginTop: theme.spacing(3),
     }
 }))
 
