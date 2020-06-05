@@ -51,3 +51,10 @@ type ForSale {
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
+
+type VinylImages {
+  id: ID! @id
+  filename: String!
+  mimetype: String!
+  encoding: String!
+}

@@ -7,6 +7,7 @@ import createForSale from './createForSale'
 import deleteArtists from './deleteArtists'
 import updateVinyls from './updateVinyl'
 import deleteVinyls from './deleteVinyls'
+import uploadImage from './uploadImage'
 export {
     signUp,
     login,
@@ -16,5 +17,6 @@ export {
     createForSale,
     deleteArtists,
     updateVinyls,
-    deleteVinyls
+    deleteVinyls,
+    uploadImage
 }

@@ -80,5 +80,11 @@ export default `
       updatedAt: String
     }
 
+    type VinylImages {
+      id: ID!
+      filename: String!
+      mimetype: String!
+      encoding: String!
+    }
  
 `;
