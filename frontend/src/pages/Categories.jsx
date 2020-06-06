@@ -1,5 +1,5 @@
 import React from 'react'
-import { withApollo, Mutation } from 'react-apollo'
+import { withApollo } from 'react-apollo'
 import { ALL_CATEGORIES } from '../graphql/resolvers/queries'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { Typography, Tooltip, TextField, Grid, Select, makeStyles, MenuItem, ExpansionPanel, ExpansionPanelSummary, ExpansionPanelActions, Button, ExpansionPanelDetails, Collapse, IconButton } from '@material-ui/core'
@@ -9,7 +9,6 @@ import Moment from 'react-moment';
 import Loading from '../components/Loading'
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import NewCategory from '../components/NewCategory'
-import { UPLOAD_IMAGE } from '../graphql/resolvers/mutations'
 
 const styles = makeStyles(theme => ({
     expansionPanel: {
@@ -115,7 +114,9 @@ const Categories = React.memo(function Categories(props) {
 
     React.useEffect(() => {
         fetch()
+
     }, [fetch])
+
 
 
 
@@ -165,9 +166,7 @@ const Categories = React.memo(function Categories(props) {
 
     return (
         <div>
-            <Mutation mutation={UPLOAD_IMAGE}>
-                {uploadFile => (<input type="file" required onChange={({ target: { validity, files: [file] } }) => validity.valid && uploadFile({ variables: { file } }).then(res => console.log(res.data.uploadImage))} />)}
-            </Mutation>
+
             <div className={classes.header}>
                 <Grid container justify="center" alignItems="center">
                     <Grid item xs={7}>

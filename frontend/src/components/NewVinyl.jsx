@@ -158,10 +158,7 @@ function NewVinyl(props) {
         setNewVinylStates({ ...newVinylStates, forSale: event.target.checked })
     }
 
-    const handlePriceChange = event => {
-        setNewVinylStates({ ...newVinylStates, price: event.target.value })
 
-    }
     const handleArtistChange = event => {
         let editedArtists = []
         event ? event.map(row => (
@@ -195,7 +192,7 @@ function NewVinyl(props) {
         setState({ ...state, pricePcs: value })
     }
 
-    const { name, year, condition, category, type, price, forSale } = newVinylStates
+    const { name, year, condition, category, type, forSale } = newVinylStates
     const addedArtists = props.artist ? props.artist : newVinylStates.artists
 
     return (

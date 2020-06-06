@@ -36,6 +36,7 @@ export default `
         artists: [Artist!]!
         forSale: Boolean
         sale: ForSale
+        image: String
         createdAt: String
         updatedAt: String
       }

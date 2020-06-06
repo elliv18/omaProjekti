@@ -1,7 +1,7 @@
 import React from 'react'
 import { withApollo } from 'react-apollo'
 import { ALL_VINYLS } from '../graphql/resolvers/queries';
-import { withStyles, Card, CardContent, Typography, Grid, FormControlLabel, Checkbox, TextField, Select, MenuItem, Fab, } from '@material-ui/core';
+import { withStyles, Card, CardContent, Typography, Grid, FormControlLabel, Checkbox, TextField, Select, MenuItem, Fab, Button } from '@material-ui/core';
 import helpers from '../helpers';
 import LoadingSpinner from '@material-ui/core/CircularProgress';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -17,6 +17,7 @@ import NewVinyl from '../components/NewVinyl';
 import VinylsImage from '../pictures/vinyls-logo.jpg'
 //import Background from '../pictures/background3.png'
 import Loading from '../components/Loading'
+import AddImage from '../components/AddImage';
 
 const styles = theme => ({
     root: {
@@ -58,6 +59,11 @@ const styles = theme => ({
         //    backgroundImage: `url(${Background})`,
         borderRadius: 10,
         minHeight: 256
+    },
+    ///////edit 
+    imageGrid: {
+        maxWidth: '70px',
+        maxHeight: '70px'
     }
 
 })
@@ -67,6 +73,8 @@ class Vinyls extends React.PureComponent {
         super(props);
         this.handleClose = this.handleClose.bind(this)
         this.deleteVinyl = this.deleteVinyl.bind(this)
+        this.handleChange = this.handleChange.bind(this)
+
         // this.updateSale = this.updateSale(this)
     }
 
@@ -83,14 +91,23 @@ class Vinyls extends React.PureComponent {
         openSpeedDial: false,
         openDeleteConfirm: false,
         openAskPrice: false,
-        openNew: false
+        openNew: false,
+        openAddImage: false,
+        file: null,
+        fileID: null,
 
     };
 
     componentDidMount() {
         this.fetchData()
+
     }
 
+    handleChange(event) {
+        this.setState({
+            file: URL.createObjectURL(event.target.files[0])
+        })
+    }
     // *************** FETCHING ********************
 
     fetchData(filter) {
@@ -196,12 +213,16 @@ class Vinyls extends React.PureComponent {
     handleOpenNew = () => {
         this.setState({ openNew: true })
     }
+    handleOpenAddImage = id => {
+        this.setState({ openAddImage: true, fileID: id })
+    }
     handleClose = () => {
         this.setState({
             openSpeedDial: false,
             openDeleteConfirm: false,
             openAskPrice: false,
             openNew: false,
+            openAddImage: false,
             ids: [],
             names: []
         })
@@ -338,10 +359,12 @@ class Vinyls extends React.PureComponent {
                         }} >
 
                         {data.map((vinyl, i) => {
+                            const id = vinyl.id
                             const backColor = vinyl.forSale ? 'green' : '#fff'
                             return (
                                 <Grid item xs={12} md={6} xl={4} key={i}>
                                     <Card elevation={7} className={classes.card}>
+
                                         <CardContent>
                                             <Grid container justify="center" alignItems="center" >
 
@@ -363,6 +386,19 @@ class Vinyls extends React.PureComponent {
                                                     <Typography gutterBottom variant="h6">
                                                         <strong>{vinyl.name}</strong>
                                                     </Typography>
+                                                </Grid>
+
+
+                                                <Grid item xs={12} style={{ textAlign: 'center' }}>
+                                                    {vinyl.image
+                                                        ? <img src={vinyl.image} style={{ width: 700, height: 200 }} alt="vinyl" />
+                                                        : <div style={{ width: 700, height: 200, border: '1px solid lightGrey', margin: 'auto' }}>
+                                                            <Button variant="outlined" onClick={() => this.handleOpenAddImage(id)} style={{ marginTop: 82 }}>
+                                                                Lisää kuva
+                                                            </Button>
+                                                        </div>
+
+                                                    }
                                                 </Grid>
 
                                                 <Grid item xs={12} style={{ height: 1, borderBottom: '1px solid grey', marginTop: 10, marginBottom: 10 }} />
@@ -409,6 +445,7 @@ class Vinyls extends React.PureComponent {
                                                         })}
                                                     </Typography>
                                                 </Grid>
+
                                             </Grid>
                                         </CardContent>
                                     </Card>
@@ -461,6 +498,7 @@ class Vinyls extends React.PureComponent {
                 />
 
                 <NewVinyl open={openNew} handleClose={this.handleClose} addNew={this.addNew} />
+                <AddImage open={this.state.openAddImage} handleClose={this.handleClose} id={this.state.fileID} />
             </div>
 
         )
