@@ -23,6 +23,7 @@ type Vinyl {
   artists: [Artist!]! @relation(name: "ArtistsVinyl")
   forSale: Boolean! @default(value: false)
   sale: ForSale @relation(name: "VinylSale")
+  image: String
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }
@@ -50,4 +51,11 @@ type ForSale {
   description: String
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
+}
+
+type VinylImages {
+  id: ID! @id
+  filename: String!
+  mimetype: String!
+  encoding: String!
 }

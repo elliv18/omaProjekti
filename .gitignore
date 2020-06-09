@@ -27,4 +27,6 @@ backend/logs/
 # backups folder
 backups/
 
+
+# credentials
 backend/credentials.json

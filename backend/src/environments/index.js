@@ -15,3 +15,6 @@ export const PRODUCTION = "production";
 export const NODE_ENV = process.env.NODE_ENV || DEVELOPMENT;
 export const BACKEND_PORT = NODE_ENV === PRODUCTION ? process.env.REACT_APP_BACKEND_PORT_PROD : process.env.REACT_APP_BACKEND_PORT_DEV
 
+export const accessKeyId = "AKIAJFG5GO3YJ5QZDOQA";
+export const secretAccessKey = "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";
+export const region = "eu--north-1";
