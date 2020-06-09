@@ -27,7 +27,6 @@ backend/logs/
 # backups folder
 backups/
 
-# tyk apis
-gateway/apps/
-!gateway/apps/API 1.json
-!gateway/apps/API 2.json
+
+# credentials
+backend/credentials.json
