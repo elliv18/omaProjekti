@@ -9,7 +9,9 @@
 - `docker-compose up - d`
 
 > ### Logs
-- > **All logs:** `docker-comspose logs -f`
-- > **Frontend logs:** `docker-comspose logs -f frontend`
-- > **Backend logs:** `docker-comspose logs -f backend`
+- **All logs:** `docker-comspose logs -f`
+- **Frontend logs:** `docker-comspose logs -f frontend`
+- **Backend logs:** `docker-comspose logs -f backend`
+
+
  
