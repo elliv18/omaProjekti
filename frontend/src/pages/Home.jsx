@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+/*import React, { PureComponent } from 'react'
 import { withApollo } from 'react-apollo';
 import { withStyles } from '@material-ui/core';
 import { AdminView, UserView } from '../components/home'
@@ -50,3 +50,4 @@ export default withStyles(useStyles)(withApollo(Home))
 
 
 
+*/

@@ -1,13 +1,18 @@
 import React from 'react'
 import '../styles/AppbarStyle.css'
 import { Link, NavLink } from 'react-router-dom'
-import { IconButton, Drawer, List, ListItem, Divider, Button, AppBar, Typography, makeStyles, Hidden, Grid } from '@material-ui/core'
+import { IconButton, Drawer, List, ListItem, Divider, Button, AppBar, Typography, makeStyles, Hidden, Grid, Tooltip } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu';
 import drawerStyle from '../styles/drawerStyle'
 import Cookies from 'js-cookie'
 import { setAuthStates } from '../redux/actions'
 import { useDispatch } from 'react-redux'
 import { withApollo } from 'react-apollo';
+
+import HomeIcon from '@material-ui/icons/Home';
+import AlbumIcon from '@material-ui/icons/Album';
+import PeopleIcon from '@material-ui/icons/People';
+import CategoryIcon from '@material-ui/icons/Category';
 
 const useStyles = makeStyles(theme => ({
     appbar: {
@@ -62,7 +67,7 @@ function CustomAppBar(props) {
                 <Grid container alignItems="center" justify="center" className={classes.root}>
                     <Hidden smUp>
                         {props.currentUser && props.currentUser.type === 'ADMIN' ?
-                            < Grid item xs={6} className={classes.menuButton}>
+                            < Grid item xs={12} className={classes.menuButton}>
                                 <IconButton
                                     edge="start"
 
@@ -84,24 +89,32 @@ function CustomAppBar(props) {
                                     {props.authenticated
                                         ? <React.Fragment>
                                             <Link to="/" className={classes.link}>
-                                                <Button>
-                                                    Home
-                                                </Button>
+                                                <Tooltip title="Siirry etusivulle">
+                                                    <IconButton>
+                                                        <HomeIcon />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </Link>
                                             <Link to="/artists" className={classes.link}>
-                                                <Button>
-                                                    Artists
-                                                </Button>
+                                                <Tooltip title="Artistit">
+                                                    <IconButton>
+                                                        <PeopleIcon />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </Link>
                                             <Link to="/vinyls" className={classes.link}>
-                                                <Button>
-                                                    Vinyls
-                                                </Button>
+                                                <Tooltip title="Levyt">
+                                                    <IconButton>
+                                                        <AlbumIcon />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </Link>
                                             <Link to="/categories" className={classes.link}>
-                                                <Button >
-                                                    Categories
-                                                </Button>
+                                                <Tooltip title="Kategoriat">
+                                                    <IconButton >
+                                                        <CategoryIcon />
+                                                    </IconButton>
+                                                </Tooltip>
                                             </Link>
                                         </React.Fragment>
                                         : null}
@@ -111,23 +124,25 @@ function CustomAppBar(props) {
                         : null}
 
 
-                    <Grid item xs={logOutItemXs} sm={logOutItemMd} className={classes.logOut}>
-                        {props.authenticated
-                            ? <Button
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => logOut()}
-                            >
-                                Log out
+                    <Hidden xsDown>
+                        <Grid item sm={logOutItemMd} className={classes.logOut}>
+                            {props.authenticated
+                                ? <Button
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => logOut()}
+                                >
+                                    Kirjaudu ulos
                         </Button>
-                            : null}
-                    </Grid>
+                                : null}
+                        </Grid>
+                    </Hidden>
                 </Grid>
             </AppBar>
             <div className="content">
                 {props.children}
             </div>
-            <CustomDrawer open={open} handleClose={closeDrawer} />
+            <CustomDrawer open={open} handleClose={closeDrawer} logOut={logOut} />
 
         </div >
     )
@@ -152,39 +167,69 @@ function CustomDrawer(props) {
             onClick={props.handleClose}
         >
 
-            <div style={{ height: 56, backgroundColor: 'red' }}>
-                PAGES
+            <div className={classes.header}>
+                <Button variant="contained" onClick={props.logOut} className={classes.logOutButton} color="secondary">
+                    Kirjaudu ulos
+                </Button>
             </div>
 
-            <List>
+            <List className={classes.list}>
 
                 <ListItem component={NavLink} to="/" button={true}>
-                    <Typography variant="h6">
-                        Home
-                    </Typography>
+                    <Grid container>
+                        <Grid item xs={3}>
+                            <HomeIcon />
+                        </Grid>
+                        <Grid item xs={9}>
+                            <Typography variant="subtitle1">
+                                Etusivu
+                            </Typography>
+                        </Grid>
+                    </Grid>
                 </ListItem>
 
                 <Divider />
 
                 <ListItem component={NavLink} to="/artists" button={true}>
-                    <Typography variant="h6">
-                        Artists
-                    </Typography>
+                    <Grid container>
+                        <Grid item xs={3}>
+                            <PeopleIcon />
+                        </Grid>
+                        <Grid item xs={9}>
+                            <Typography variant="subtitle1">
+                                Artistit
+                            </Typography>
+                        </Grid>
+                    </Grid>
                 </ListItem>
 
                 <Divider />
 
                 <ListItem component={NavLink} to="/vinyls" button={true}>
-                    <Typography variant="h6">
-                        Vinyls
-                    </Typography>
+                    <Grid container>
+                        <Grid item xs={3}>
+                            <AlbumIcon />
+                        </Grid>
+                        <Grid item xs={9}>
+                            <Typography variant="subtitle1">
+                                Levyt
+                            </Typography>
+                        </Grid>
+                    </Grid>
                 </ListItem>
                 <Divider />
 
                 <ListItem component={NavLink} to="/categories" button={true}>
-                    <Typography variant="h6">
-                        Categories
-                    </Typography>
+                    <Grid container>
+                        <Grid item xs={3}>
+                            <CategoryIcon />
+                        </Grid>
+                        <Grid item xs={9}>
+                            <Typography variant="subtitle1">
+                                Kategoriat
+                            </Typography>
+                        </Grid>
+                    </Grid>
                 </ListItem>
                 <Divider />
 
