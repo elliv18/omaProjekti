@@ -114,7 +114,9 @@ const Categories = React.memo(function Categories(props) {
 
     React.useEffect(() => {
         fetch()
+
     }, [fetch])
+
 
 
 
@@ -164,6 +166,7 @@ const Categories = React.memo(function Categories(props) {
 
     return (
         <div>
+
             <div className={classes.header}>
                 <Grid container justify="center" alignItems="center">
                     <Grid item xs={7}>

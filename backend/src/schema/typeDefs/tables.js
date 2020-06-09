@@ -36,6 +36,7 @@ export default `
         artists: [Artist!]!
         forSale: Boolean
         sale: ForSale
+        image: String
         createdAt: String
         updatedAt: String
       }
@@ -80,5 +81,11 @@ export default `
       updatedAt: String
     }
 
+    type VinylImages {
+      id: ID!
+      filename: String!
+      mimetype: String!
+      encoding: String!
+    }
  
 `;

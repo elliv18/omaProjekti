@@ -7,7 +7,8 @@ query allVinyls($first: Int, $after: String, $filter: String, $sortBy: String) {
       name
       year
       type
-      condition
+      condition,
+      image
       category {
         id
         name
