@@ -262,6 +262,11 @@
   resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.13.tgz#92cc06b1cc88b5d0b327d2671dcf3daea96923a5"
   integrity sha512-a1sC60Bqll4N2RYnd4+XuynrVd8LO+uZrgwCVaAER0ldMQ00LRM4iTjU2ulPoQF6P5bHZK5hL/6IF9088VJhUA==
 
+"@types/aws-lambda@^8.10.31":
+  version "8.10.53"
+  resolved "https://registry.yarnpkg.com/@types/aws-lambda/-/aws-lambda-8.10.53.tgz#ad8d52a5f264f96b80a0d8c2e5cda1de30f2364b"
+  integrity sha512-zHIgKKqwcdeHkPMPKd47DedJ4b+Tv01VGosWtJDMa8s6cnx03IeNagFWEpoxVI+H34fOvxtbqecJddpuVFbU2w==
+
 "@types/bcryptjs@^2.4.2":
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/@types/bcryptjs/-/bcryptjs-2.4.2.tgz#e3530eac9dd136bfdfb0e43df2c4c5ce1f77dfae"
@@ -918,6 +923,34 @@ apollo-server-core@^2.14.2:
     subscriptions-transport-ws "^0.9.11"
     ws "^6.0.0"
 
+apollo-server-core@^2.14.3:
+  version "2.14.3"
+  resolved "https://registry.yarnpkg.com/apollo-server-core/-/apollo-server-core-2.14.3.tgz#64028d2faec17fc94d9d9c275f4da790b6ce57ce"
+  integrity sha512-A9RkWuHFZ04uEnXof5V02T7wfhUel7Hx9LpEN4N59mXTpb7ewW+cb0u+J+SP+Y4vDhVqaHCGoveRVKy6X2kLhw==
+  dependencies:
+    "@apollographql/apollo-tools" "^0.4.3"
+    "@apollographql/graphql-playground-html" "1.6.24"
+    "@types/graphql-upload" "^8.0.0"
+    "@types/ws" "^7.0.0"
+    apollo-cache-control "^0.11.0"
+    apollo-datasource "^0.7.1"
+    apollo-engine-reporting "^2.0.0"
+    apollo-server-caching "^0.5.1"
+    apollo-server-env "^2.4.4"
+    apollo-server-errors "^2.4.1"
+    apollo-server-plugin-base "^0.9.0"
+    apollo-server-types "^0.5.0"
+    apollo-tracing "^0.11.0"
+    fast-json-stable-stringify "^2.0.0"
+    graphql-extensions "^0.12.2"
+    graphql-tag "^2.9.2"
+    graphql-tools "^4.0.0"
+    graphql-upload "^8.0.2"
+    loglevel "^1.6.7"
+    sha.js "^2.4.11"
+    subscriptions-transport-ws "^0.9.11"
+    ws "^6.0.0"
+
 apollo-server-env@^2.4.4:
   version "2.4.4"
   resolved "https://registry.yarnpkg.com/apollo-server-env/-/apollo-server-env-2.4.4.tgz#12d2d0896dcb184478cba066c7a683ab18689ca1"
@@ -981,6 +1014,18 @@ apollo-server-lambda@1.3.6:
   dependencies:
     apollo-server-core "^1.3.6"
     apollo-server-module-graphiql "^1.3.4"
+
+apollo-server-lambda@^2.14.3:
+  version "2.14.3"
+  resolved "https://registry.yarnpkg.com/apollo-server-lambda/-/apollo-server-lambda-2.14.3.tgz#a2c01ca6fdb13dce327e069743e9177857f971f1"
+  integrity sha512-LDhBOnFuqG8BTdj2ksgF28bd1AVkM+DjbC37j7HPsoftJCqn5PrY/fPVchrbWl2nijivCBEkauYebLmMPdJ8Uw==
+  dependencies:
+    "@apollographql/graphql-playground-html" "1.6.24"
+    "@types/aws-lambda" "^8.10.31"
+    apollo-server-core "^2.14.3"
+    apollo-server-env "^2.4.4"
+    apollo-server-types "^0.5.0"
+    graphql-tools "^4.0.0"
 
 apollo-server-module-graphiql@^1.3.4, apollo-server-module-graphiql@^1.4.0:
   version "1.4.0"
@@ -1916,7 +1961,7 @@ command-exists@^1.2.8:
   resolved "https://registry.yarnpkg.com/command-exists/-/command-exists-1.2.8.tgz#715acefdd1223b9c9b37110a149c6392c2852291"
   integrity sha512-PM54PkseWbiiD/mMsbvW351/u+dafwTJ0ye2qB60G1aGQP9j3xK2gmMDc+R34L3nDtx4qMCitXT75mkbkGJDLw==
 
-commander@^2.11.0, commander@^2.12.1, commander@^2.7.1, commander@^2.9.0:
+commander@^2.11.0, commander@^2.12.1, commander@^2.20.3, commander@^2.7.1, commander@^2.9.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -2164,6 +2209,11 @@ crypto-random-string@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/crypto-random-string/-/crypto-random-string-1.0.0.tgz#a230f64f568310e1498009940790ec99545bca7e"
   integrity sha1-ojD2T1aDEOFJgAmUB5DsmVRbyn4=
+
+cssfilter@0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/cssfilter/-/cssfilter-0.0.10.tgz#c6d2672632a2e5c83e013e6864a42ce8defd20ae"
+  integrity sha1-xtJnJjKi5cg+AT5oZKQs6N79IK4=
 
 cucumber-html-reporter@^3.0.4:
   version "3.0.4"
@@ -3354,6 +3404,13 @@ graphql-playground-html@1.6.12:
   version "1.6.12"
   resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.12.tgz#8b3b34ab6013e2c877f0ceaae478fafc8ca91b85"
   integrity sha512-yOYFwwSMBL0MwufeL8bkrNDgRE7eF/kTHiwrqn9FiR9KLcNIl1xw9l9a+6yIRZM56JReQOHpbQFXTZn1IuSKRg==
+
+graphql-playground-html@^1.6.25:
+  version "1.6.25"
+  resolved "https://registry.yarnpkg.com/graphql-playground-html/-/graphql-playground-html-1.6.25.tgz#2d8fa250cec4036a4f5b7f8ad069c86d6d64c95f"
+  integrity sha512-wMNvGsQ0OwBVhn72VVi7OdpI85IxiIZT43glRx7gQIwQ6NvhFnzMYBIVmcJAJ4UlXRYiWtrQhuOItDXObiR3kg==
+  dependencies:
+    xss "^1.0.6"
 
 graphql-playground-middleware-express@1.7.11:
   version "1.7.11"
@@ -4753,6 +4810,11 @@ marked@^0.5.1:
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.5.2.tgz#3efdb27b1fd0ecec4f5aba362bddcd18120e5ba9"
   integrity sha512-fdZvBa7/vSQIZCi4uuwo2N3q+7jJURpMVCcbaX0S1Mg65WZ5ilXvC67MviJAsdjqqgD+CEq4RKo5AYGgINkVAA==
 
+marked@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-1.1.0.tgz#62504ad4d11550c942935ccc5e39d64e5a4c4e50"
+  integrity sha512-EkE7RW6KcXfMHy2PA7Jg0YJE1l8UPEZE8k45tylzmZM30/r1M1MUXWQfJlrSbsTeh7m/XTwHbWUENvAJZpp1YA==
+
 md5@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/md5/-/md5-2.2.1.tgz#53ab38d5fe3c8891ba465329ea23fac0540126f9"
@@ -4900,6 +4962,11 @@ minimist@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.0.tgz#a35008b20f41383eec1fb914f4cd5df79a264284"
   integrity sha1-o1AIsg9BOD7sH7kU9M1d95omQoQ=
+
+minimist@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
+  integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
 
 minipass@^3.0.0:
   version "3.1.1"
@@ -7768,6 +7835,14 @@ xmlbuilder@~9.0.1:
   version "9.0.7"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-9.0.7.tgz#132ee63d2ec5565c557e20f4c22df9aca686b10d"
   integrity sha1-Ey7mPS7FVlxVfiD0wi35rKaGsQ0=
+
+xss@^1.0.6:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/xss/-/xss-1.0.7.tgz#a554cbd5e909324bd6893fb47fff441ad54e2a95"
+  integrity sha512-A9v7tblGvxu8TWXQC9rlpW96a+LN1lyw6wyhpTmmGW+FwRMactchBR3ROKSi33UPCUcUHSu8s9YP6F+K3Mw//w==
+  dependencies:
+    commander "^2.20.3"
+    cssfilter "0.0.10"
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"
