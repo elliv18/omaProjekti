@@ -57,7 +57,7 @@ const styles = theme => ({
     card: {
         //    backgroundImage: `url(${Background})`,
         borderRadius: 10,
-        minHeight: 256
+        minHeight: 500
     },
     ///////edit 
     vinylImage: {
@@ -327,7 +327,7 @@ class Vinyls extends React.PureComponent {
                 >
 
                     <div className={classes.center} style={{ overflow: 'hidden', width: '100%', backgroundColor: 'black' }}>
-                        <Typography variant="h2">
+                        <Typography variant="h2" style={{ color: 'white' }}>
                             VINYYLIT
                         </Typography>
                         <img className={classes.image} src={VinylsImage} alt="Vinyls" />
@@ -412,16 +412,18 @@ class Vinyls extends React.PureComponent {
                                                     {vinyl.image && <img src={vinyl.image} className={classes.vinylImage} alt="vinyl" />}
 
                                                     {!vinyl.image
-                                                        ? <Button fullWidth variant="contained" onClick={() => this.handleOpenAddImage(id)}>
-                                                            Lisää kuva
+                                                        ? <div style={{ paddingTop: 87, paddingBottom: 87 }}>
+                                                            <Button variant="contained" onClick={() => this.handleOpenAddImage(id)}>
+                                                                Lisää kuva
                                                         </Button>
+                                                        </div>
 
                                                         : vinyl.image === "https://ladatutkuvat.s3.eu-north-1.amazonaws.com/noImage.png"
 
                                                             ? <Button fullWidth variant="contained" onClick={() => this.handleOpenAddImage(id)}>
                                                                 Lisää kuva
                                                                 </Button>
-                                                            : null
+                                                            : <div style={{ height: 36 }} />
 
                                                     }
                                                 </Grid>

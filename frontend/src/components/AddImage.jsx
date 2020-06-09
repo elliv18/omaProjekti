@@ -124,12 +124,7 @@ function AddImage(props) {
         <Dialog
             open={open}
             onClose={handleClose}
-            style={{
-                position: 'absolute', top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-            }}
+
             fullScreen
         >
             <DialogTitle style={{ backgroundColor: 'lightGrey' }}>
@@ -157,17 +152,17 @@ function AddImage(props) {
 
                         <div style={{
                             margin: 'auto',
-                            width: '70%',
+                            width: '100%',
                             display: 'flex',
                             alignItems: 'center',
                         }}>
-                            <Grid container spacing={1} justify="center" alignItems="center"
+                            <Grid container justify="center" alignItems="baseline"
                                 style={{
                                     marginTop: '10px',
                                     width: '100%'
                                 }}>
 
-                                <Grid item xs={12}>
+                                <Grid item xs={3} style={{ height: 66 }}>
                                     <Button
                                         color="secondary"
                                         variant="contained"
@@ -176,7 +171,7 @@ function AddImage(props) {
                                         poista kuva
                                     </Button>
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={9} style={{ height: 66 }}>
                                     <Grid container spacing={1} justify="center" alignItems="center"
                                         style={{
                                             marginTop: '20px'
