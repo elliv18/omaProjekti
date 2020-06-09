@@ -28,6 +28,8 @@
     SALT_ROUNDS=10
     JWT_SECRET=123
 
+    AWS_BUCKET_NAME=your bucket name here
+
     USE_AUTH=true
 
     ROOT_ADMIN_EMAIL=1

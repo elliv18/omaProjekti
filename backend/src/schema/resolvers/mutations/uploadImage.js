@@ -1,5 +1,5 @@
 import { prisma } from "../../../generated/prisma-client";
-import { USE_AUTH, accessKeyId, awsSecretKey, region } from "../../../environments";
+import { USE_AUTH, AWS_BUCKET_NAME  } from "../../../environments";
 //import { mustBeLoggedIn } from "../../../helpers/auth";
 const { createWriteStream } = require('fs');
 const AWS = require('aws-sdk')
@@ -20,19 +20,15 @@ export default {
             const { createReadStream, filename, mimetype } = await file
             const fileStream = createReadStream()
             
-            const bucketName = 'ladatutkuvat'
 
             // Muuttaa tiedoston nimen id.png/jpg
             const end = mimetype.replace("image/", ".")
             const key = id + end
 
-            console.log('*** TYPE ***', key)
-
-            const uploadParams = { Bucket: bucketName, Key: key, Body: fileStream };
-
+            const uploadParams = { Bucket: AWS_BUCKET_NAME, Key: key, Body: fileStream };
             const result = await s3.upload(uploadParams).promise()
 
-            console.log('** LOCATION **', result.Location)
+         //   console.log('** LOCATION **', result.Location)
 
             await prisma.updateVinyl({
                 data: {
