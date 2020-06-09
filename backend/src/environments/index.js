@@ -14,3 +14,7 @@ export const DEVELOPMENT = "development";
 export const PRODUCTION = "production";
 export const NODE_ENV = process.env.NODE_ENV || DEVELOPMENT;
 export const BACKEND_PORT = NODE_ENV === PRODUCTION ? process.env.REACT_APP_BACKEND_PORT_PROD : process.env.REACT_APP_BACKEND_PORT_DEV
+
+export const accessKeyId = process.env.AWS_ACCESS_KEY || null;
+export const secretAccessKey = process.env.AWS_SECRET || null;
+export const region = "eu--north-1";
