@@ -42,7 +42,7 @@ export default {
            // console.log(result)
 
 
-            return file;
+            return result.Location;
         }
     }
 }

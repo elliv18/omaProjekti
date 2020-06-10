@@ -130,7 +130,8 @@ const createVinyl = (client, name, year, condition, category, artists, type, pri
             const temp = [
                 {
                     id: data.id, name: data.name, year: data.year, type: data.type,
-                    condition: data.condition, category: data.category, artists: data.artists, forSale: data.forSale
+                    condition: data.condition, category: data.category, artists: data.artists, forSale: data.forSale,
+                    image: "https://ladatutkuvat.s3.eu-north-1.amazonaws.com/noImage.png"
                 }
             ]
             console.log('TEMP*', temp)

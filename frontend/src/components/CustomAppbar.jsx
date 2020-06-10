@@ -13,6 +13,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import AlbumIcon from '@material-ui/icons/Album';
 import PeopleIcon from '@material-ui/icons/People';
 import CategoryIcon from '@material-ui/icons/Category';
+import LogOutIcon from '@material-ui/icons/ExitToAppOutlined';
 
 const useStyles = makeStyles(theme => ({
     appbar: {
@@ -127,13 +128,13 @@ function CustomAppBar(props) {
                     <Hidden xsDown>
                         <Grid item sm={logOutItemMd} className={classes.logOut}>
                             {props.authenticated
-                                ? <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={() => logOut()}
-                                >
-                                    Kirjaudu ulos
-                        </Button>
+                                ? <Tooltip title="Kirjaudu ulos">
+                                    <IconButton
+                                        onClick={() => logOut()}
+                                    >
+                                        <LogOutIcon />
+                                    </IconButton>
+                                </Tooltip>
                                 : null}
                         </Grid>
                     </Hidden>
@@ -168,7 +169,8 @@ function CustomDrawer(props) {
         >
 
             <div className={classes.header}>
-                <Button variant="contained" onClick={props.logOut} className={classes.logOutButton} color="secondary">
+                <Button variant="contained" onClick={props.logOut} className={classes.logOutButton} color="default">
+                    <LogOutIcon style={{ marginRight: '3px' }} />
                     Kirjaudu ulos
                 </Button>
             </div>

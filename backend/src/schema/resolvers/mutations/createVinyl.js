@@ -33,6 +33,7 @@ export default {
                 condition: condition,
                 artists: artistsTemp,
                 forSale: forSale,
+                image: "https://ladatutkuvat.s3.eu-north-1.amazonaws.com/noImage.png"
             })
 
             return { vinyl }

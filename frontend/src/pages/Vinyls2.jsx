@@ -47,24 +47,28 @@ const styles = theme => ({
         // color: 'green'
     },
     image: {
-        [theme.breakpoints.up('sm')]: {
-            width: '35%'
+        [theme.breakpoints.up('md')]: {
+            width: '40%'
         },
-
-        [theme.breakpoints.down('xs')]: {
-            width: '65%'
+        [theme.breakpoints.down('md')]: {
+            width: '55%'
         }
     },
     card: {
         //    backgroundImage: `url(${Background})`,
         borderRadius: 10,
-        minHeight: 256
+        minHeight: 500
     },
     ///////edit 
-    imageGrid: {
-        maxWidth: '70px',
-        maxHeight: '70px'
+    vinylImage: {
+        width: '50%',
+        [theme.breakpoints.down('xs')]: {
+            width: '70%',
+        }
+        //  border: '1px solid lightGray'
+
     }
+
 
 })
 class Vinyls extends React.PureComponent {
@@ -283,11 +287,26 @@ class Vinyls extends React.PureComponent {
         this.handleClose()
     }
 
+    renderImage = (id, url) => {
+        const { data } = this.state
+        let tempVinyls = {}
+        tempVinyls = data.map(row => {
+            if (row.id === id) {
+                let temp = {}
+                temp = { ...row, image: url }
+                return temp
+            }
+            return row
+        })
+
+        this.setState({ data: tempVinyls })
+    }
+
     // *************** RENDER ********************
     render() {
         const { data, loading, ids, names, sortBy, hasMore, openSpeedDial, openDeleteConfirm, openAskPrice, openNew } = this.state
         const { classes } = this.props;
-        console.log('vinyls2', sortBy)
+        console.log('vinyls2')
         return (
 
             <div className={classes.root}>
@@ -308,7 +327,7 @@ class Vinyls extends React.PureComponent {
                 >
 
                     <div className={classes.center} style={{ overflow: 'hidden', width: '100%', backgroundColor: 'black' }}>
-                        <Typography variant="h2">
+                        <Typography variant="h2" style={{ color: 'white' }}>
                             VINYYLIT
                         </Typography>
                         <img className={classes.image} src={VinylsImage} alt="Vinyls" />
@@ -390,13 +409,21 @@ class Vinyls extends React.PureComponent {
 
 
                                                 <Grid item xs={12} style={{ textAlign: 'center' }}>
-                                                    {vinyl.image
-                                                        ? <img src={vinyl.image} style={{ width: 700, height: 200 }} alt="vinyl" />
-                                                        : <div style={{ width: 700, height: 200, border: '1px solid lightGrey', margin: 'auto' }}>
-                                                            <Button variant="outlined" onClick={() => this.handleOpenAddImage(id)} style={{ marginTop: 82 }}>
+                                                    {vinyl.image && <img src={vinyl.image} className={classes.vinylImage} alt="vinyl" />}
+
+                                                    {!vinyl.image
+                                                        ? <div style={{ paddingTop: 87, paddingBottom: 87 }}>
+                                                            <Button variant="contained" onClick={() => this.handleOpenAddImage(id)}>
                                                                 Lisää kuva
-                                                            </Button>
+                                                        </Button>
                                                         </div>
+
+                                                        : vinyl.image === "https://ladatutkuvat.s3.eu-north-1.amazonaws.com/noImage.png"
+
+                                                            ? <Button fullWidth variant="contained" onClick={() => this.handleOpenAddImage(id)}>
+                                                                Lisää kuva
+                                                                </Button>
+                                                            : <div style={{ height: 36 }} />
 
                                                     }
                                                 </Grid>
@@ -455,30 +482,32 @@ class Vinyls extends React.PureComponent {
                     </Grid>
                 </InfiniteScroll>
 
-                {ids.length > 0
-                    ? <SpeedDial
-                        ariaLabel="SpeedDial openIcon example"
-                        className={classes.add}
-                        icon={<EditIcon />}
-                        onMouseLeave={this.handleCloseSpeedDial}
-                        onOpen={this.handleOpenSpeedDial}
-                        open={openSpeedDial}
-                    >
-                        <SpeedDialAction
-                            tooltipTitle={"Myy valitut"}
-                            icon={<EuroIcon />}
-                            onClick={this.handleOpenAskPrice}
-                        />
-                        <SpeedDialAction
-                            tooltipTitle={"Poista valitut"}
-                            icon={<DeleteIcon />}
-                            onClick={this.handleOpenDeleteConfirm}
-                        />
+                {
+                    ids.length > 0
+                        ? <SpeedDial
+                            ariaLabel="SpeedDial openIcon example"
+                            className={classes.add}
+                            icon={<EditIcon />}
+                            onMouseLeave={this.handleCloseSpeedDial}
+                            onOpen={this.handleOpenSpeedDial}
+                            open={openSpeedDial}
+                        >
+                            <SpeedDialAction
+                                tooltipTitle={"Myy valitut"}
+                                icon={<EuroIcon />}
+                                onClick={this.handleOpenAskPrice}
+                            />
+                            <SpeedDialAction
+                                tooltipTitle={"Poista valitut"}
+                                icon={<DeleteIcon />}
+                                onClick={this.handleOpenDeleteConfirm}
+                            />
 
-                    </SpeedDial>
-                    : <Fab className={classes.add} color="primary" onClick={this.handleOpenNew}>
-                        <SpeedDialIcon />
-                    </Fab>}
+                        </SpeedDial>
+                        : <Fab className={classes.add} color="primary" onClick={this.handleOpenNew}>
+                            <SpeedDialIcon />
+                        </Fab>
+                }
 
                 <DeleteConfirmation
                     open={openDeleteConfirm}
@@ -498,8 +527,8 @@ class Vinyls extends React.PureComponent {
                 />
 
                 <NewVinyl open={openNew} handleClose={this.handleClose} addNew={this.addNew} />
-                <AddImage open={this.state.openAddImage} handleClose={this.handleClose} id={this.state.fileID} />
-            </div>
+                <AddImage open={this.state.openAddImage} renderImage={this.renderImage} handleClose={this.handleClose} id={this.state.fileID} />
+            </div >
 
         )
     }

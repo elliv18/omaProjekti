@@ -1,6 +1,6 @@
 import React from 'react'
 import { withApollo } from 'react-apollo'
-import { Dialog, DialogTitle, DialogContent, Button, Typography, DialogActions, Slider } from '@material-ui/core'
+import { Dialog, DialogTitle, DialogContent, Button, Typography, DialogActions, Slider, Grid } from '@material-ui/core'
 import { UPLOAD_IMAGE } from '../graphql/resolvers/mutations'
 import { Alert } from '@material-ui/lab'
 import Cropper from 'react-easy-crop'
@@ -12,7 +12,7 @@ function AddImage(props) {
         imageSrc: null,
         crop: { x: 0, y: 0 },
         zoom: 1,
-        aspect: 16 / 3,
+        aspect: 4 / 3,
         croppedAreaPixels: null,
         croppedImage: null,
         isCropping: false,
@@ -40,7 +40,6 @@ function AddImage(props) {
     const onFileChange = async e => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0]
-            console.log('FILE', file)
             let imageDataUrl = await readFile(file)
 
 
@@ -83,7 +82,6 @@ function AddImage(props) {
                 isCropping: false,
             }))
         }
-        console.log('DONE FILE', file)
 
         // UPLOAD
         client.mutate({
@@ -91,9 +89,11 @@ function AddImage(props) {
             variables: { file, id }
         })
             .then(res => {
-                console.log(res.data.uploadImage)
+                const url = res.data.uploadImage
+                console.log(url)
                 const msg = "Kuvan lataus onnistui!"
                 setState(state => ({ ...state, success: msg, imageSrc: null, croppedImage: null }))
+                props.renderImage(id, url)
             })
             .catch(e => console.log(e))
 
@@ -124,12 +124,7 @@ function AddImage(props) {
         <Dialog
             open={open}
             onClose={handleClose}
-            style={{
-                position: 'absolute', top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-            }}
+
             fullScreen
         >
             <DialogTitle style={{ backgroundColor: 'lightGrey' }}>
@@ -148,7 +143,7 @@ function AddImage(props) {
                                 image={state.imageSrc}
                                 crop={state.crop}
                                 zoom={state.zoom}
-                                cropSize={{ width: 700, height: 200 }}
+                                aspect={state.aspect}
                                 onCropChange={onCropChange}
                                 onCropComplete={onCropComplete}
                                 onZoomChange={onZoomChange}
@@ -157,35 +152,73 @@ function AddImage(props) {
 
                         <div style={{
                             margin: 'auto',
-                            width: '70%',
+                            width: '100%',
                             display: 'flex',
                             alignItems: 'center',
                         }}>
-                            <Slider
+                            <Grid container justify="center" alignItems="baseline"
                                 style={{
-                                    padding: '30px 0px'
-                                }}
-                                value={state.zoom}
-                                min={1}
-                                max={3}
-                                step={0.1}
-                                aria-labelledby="Zoom"
-                                onChange={(e, zoom) => onZoomChange(zoom)}
-                            />
+                                    marginTop: '10px',
+                                    width: '100%'
+                                }}>
 
-                            <Button
-                                color="primary"
-                                variant="contained"
-                                onClick={removeImage}
-                            >
-                                poista
-                  </Button>
+                                <Grid item xs={3} style={{ height: 66 }}>
+                                    <Button
+                                        color="secondary"
+                                        variant="contained"
+                                        onClick={removeImage}
+                                    >
+                                        poista kuva
+                                    </Button>
+                                </Grid>
+                                <Grid item xs={9} style={{ height: 66 }}>
+                                    <Grid container spacing={1} justify="center" alignItems="center"
+                                        style={{
+                                            marginTop: '20px'
+                                        }}>
+                                        <Grid item xs={4} style={{ height: '42px' }} >
+                                            <Typography variant="h6">
+                                                Zoomaa kuvaa
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={8} style={{ height: '42px' }}>
+                                            <Slider
+                                                value={state.zoom}
+                                                min={1}
+                                                max={3}
+                                                step={0.1}
+                                                aria-labelledby="Zoom"
+                                                onChange={(e, zoom) => onZoomChange(zoom)}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
                         </div>
-
                     </React.Fragment>
 
                 )
-                    : <input type="file" onChange={onFileChange} />
+                    : state.success.length === 0
+                        ? <div style={{
+                            width: '100%',
+                            textAlign: 'center',
+                            paddingTop: '5%'
+                        }}>
+                            <input
+                                type="file"
+                                onChange={onFileChange}
+                                accept="image/*"
+                                id="raised-button-file"
+                                style={{ display: 'none' }}
+
+                            />
+                            <label htmlFor="raised-button-file">
+                                <Button variant="contained" component="span" color="primary" >
+                                    Valitse kuva
+                            </Button>
+                            </label>
+                        </div>
+                        : null
                 }
 
                 {state.success.length > 1 &&
