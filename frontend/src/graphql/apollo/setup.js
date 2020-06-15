@@ -9,7 +9,7 @@ import { setContext } from "apollo-link-context";
 import { NODE_ENV, PUBLIC_URL, BACKEND_PORT_DEV, BACKEND_PORT_PROD, PRODUCTION, } from '../../environments'
 
 const cache = new InMemoryCache();
-const URL = NODE_ENV === PRODUCTION ? 'http://elliv18.hopto.org:4000' : `http://192.168.8.117:${BACKEND_PORT_DEV}`
+const URL = NODE_ENV === PRODUCTION ? 'http://elliv18.hopto.org:4000' : `http://127.0.0.1:${BACKEND_PORT_DEV}`
 console.log('*** SETUP2 ***', URL, PUBLIC_URL, PRODUCTION, BACKEND_PORT_PROD, BACKEND_PORT_DEV)
 
 
