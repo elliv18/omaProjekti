@@ -1,3 +1,5 @@
+# Currently testing prisma 2.0 on other project!!
+
 # Vinyylien arkistointi sovellus
 
 ### Local development
